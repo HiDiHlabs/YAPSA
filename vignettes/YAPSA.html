@@ -70,7 +70,7 @@ img {
 <div id="TOC">
 <ul>
 <li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#YAPS_package"><span class="toc-section-number">2</span> The YAPSA package</a><ul>
+<li><a href="#YAPSA_package"><span class="toc-section-number">2</span> The YAPSA package</a><ul>
 <li><a href="#LCD"><span class="toc-section-number">2.1</span> Linear Combination Decomposition (LCD)</a></li>
 <li><a href="#stratification-of-the-mutational-catalogue-smc"><span class="toc-section-number">2.2</span> Stratification of the Mutational Catalogue (SMC)</a></li>
 </ul></li>
@@ -110,7 +110,7 @@ img {
 <p>Of course the whole concept only leads to a reduction in complexity if <span class="math">\(l &lt; n\)</span>, i.e. if the number of signatures is smaller than the number of features, as indicated in the above figure. Note that the NMF itself solves the above problem for a given number of signatures <span class="math">\(l\)</span>. The framework of Ludmil Alexandrov et al. <span class="citation">(Alexandrov, Nik-Zainal, Wedge, Aparicio, et al. 2013)</span> performs not only the NMF decomposition itself, but also identifies the appropriate number of signatures by an iterative procedure.</p>
 <p>Another package to perform analyses of mutational signatures is available <span class="citation">(Gehring et al. 2015)</span> which also allows the matrix decomposition to be performed by PCA (principal component analysis). Both methods have in common that they can be used for <strong>discovery</strong>, i.e. for the <strong>extraction of new signatures</strong>. However, they only work well if the analyzed data set has a minimum size, i.e. a minimum number of samples and minimum numbers of counts per feature per sample.</p>
 </div>
-<div id="YAPS_package" class="section level1">
+<div id="YAPSA_package" class="section level1">
 <h1><span class="header-section-number">2</span> The YAPSA package</h1>
 <p>In a context where mutational signatures <span class="math">\(W\)</span> are already known (because they were decribed and published as in <span class="citation">(Alexandrov, Nik-Zainal, Wedge, Aparicio, et al. 2013)</span> or they are available in a database as under <a href="http://cancer.sanger.ac.uk/cosmic/signatures">http://cancer.sanger.ac.uk/cosmic/signatures</a>), we might want to just find the exposures <span class="math">\(H\)</span> for these known signatures in the mutational catalogue <span class="math">\(V\)</span> of a given cohort. Mathematically, this is a different and simpler task.</p>
 <p>The <strong>YAPSA</strong>-package (Yet Another Package for Signature analysis) presented here provides the function <code>LCD</code> (<strong>l</strong>inear <strong>c</strong>ombination <strong>d</strong>ecomposition) to perform this task. The advantage of this method is that there are <strong>no constraints on the cohort size</strong>, so <code>LCD</code> can be run for as little as one sample and thus be used e.g. for signature analysis in personalized oncology. In contrast to NMF, <code>LCD</code> is very fast and requires very little computational resources. The YAPSA package provides additional functions for signature analysis, e.g. for stratifying the mutational catalogue to determine signature exposures in different strata, part of which will be discussed later in this vignette.</p>

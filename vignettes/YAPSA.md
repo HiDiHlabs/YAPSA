@@ -18,7 +18,7 @@ Of course the whole concept only leads to a reduction in complexity if $l < n$, 
 Another package to perform analyses of mutational signatures is available [@Gehring_article2015] which also allows the matrix decomposition to be performed by PCA (principal component analysis). Both methods have in common that they can be used for **discovery**, i.e. for the **extraction of new signatures**. However, they only work well if the analyzed data set has a minimum size, i.e. a minimum number of samples and minimum numbers of counts per feature per sample.
 
   
-# The YAPSA package {#YAPS_package}
+# The YAPSA package {#YAPSA_package}
 
 In a context where mutational signatures $W$ are already known (because they were decribed and published as in [@Alex2013] or they are available in a database as under <http://cancer.sanger.ac.uk/cosmic/signatures>), we might want to just find the exposures $H$ for these known signatures in the mutational catalogue $V$ of a given cohort. Mathematically, this is a different and simpler task. 
 
