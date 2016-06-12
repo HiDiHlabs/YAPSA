@@ -1,255 +1,6 @@
----
-title: "YAPSA"
-author: "Daniel Huebschmann"
-date: "26/08/2015"
-output:
-  html_document:
-    number_sections: yes
-    toc: yes
-    fig_caption: yes
-    keep_md: true
-  pdf_document:
-    number_sections: yes
-    toc: yes
-    fig_caption: yes
-references:
-- author:
-  - family: Alexandrov
-    given: LB
-  - family: Nik-Zainal
-    given: S
-  - family: Wedge
-    given: DC
-  - family: Aparicio
-    given: SA
-  - family: Behjati
-    given: S
-  - family: Biankin
-    given: AV
-  - family: Bignell
-    given: GR
-  - family: Bolli
-    given: N
-  - family: Borg
-    given: A
-  - family: Borresen-Dale
-    given: AL
-  - family: Boyault
-    given: S
-  - family: Burkhardt
-    given: B
-  - family: Butler
-    given: AP
-  - family: Caldas
-    given: C
-  - family: Davies
-    given: HR
-  - family: Desmedt
-    given: C
-  - family: Eils
-    given: R
-  - family: Eyfjörd
-    given: JE
-  - family: Greaves
-    given: M
-  - family: Hosoda
-    given: F
-  - family: Hutter
-    given: B
-  - family: Ilicic
-    given: T
-  - family: Imbeaud
-    given: S
-  - family: Imielinski
-    given: M
-  - family: Jäger
-    given: N
-  - family: Jones
-    given: DT
-  - family: Jones
-    given: D
-  - family: Knappskog
-    given: S
-  - family: Kool
-    given: M
-  - family: Lakhani
-    given: SR
-  - family: Lopez-Otin
-    given: C
-  - family: Martin
-    given: S
-  - family: Munshi
-    given: NC
-  - family: Nakamura
-    given: H
-  - family: Northcott
-    given: PA
-  - family: Pajic
-    given: M
-  - family: Papaemmanuil
-    given: E
-  - family: Paradiso
-    given: A
-  - family: Pearson
-    given: JV
-  - family: Puente
-    given: XS
-  - family: Raine
-    given: K
-  - family: Ramakrishna
-    given: M
-  - family: Richardson
-    given: AL
-  - family: Richter
-    given: J
-  - family: Rosenstiel
-    given: P
-  - family: Schlesner
-    given: M
-  - family: Schumacher
-    given: TN
-  - family: Span
-    given: PN
-  - family: Teague
-    given: JW
-  - family: Tokoti
-    given: Y
-  - family: Tutt
-    given: AN
-  - family: Valdes-Mas
-    given: R
-  - family: van Buuren
-    given: MM
-  - family: van't Veer
-    given: L
-  - family: Vincent-Salomon
-    given: A
-  - family: Waddell
-    given: N
-  - family: Yates
-    given: LR
-  - family: Australian Pancreatic Cancer Initiative
-    given: 
-  - family: ICGC Breast Cancer Consortium
-    given: 
-  - family: ICGC MMML-Seq Consortium
-    given: 
-  - family: ICGC PedBrain
-    given: 
-  - family: Zucman-Rossi
-    given: J
-  - family: Futreal
-    given: PA
-  - family: McDermott
-    given: U
-  - family: Lichter
-    given: P
-  - family: Meyerson
-    given: M
-  - family: Grimmond
-    given: SM
-  - family: Siebert
-    given: R
-  - family: Campo
-    given: E
-  - family: Shibata
-    given: T
-  - family: Pfister
-    given: SM
-  - family: Campbell
-    given: PJ
-  - family: Stratton
-    given: MR
-  container-title: Nature
-  id: Alex2013
-  issued:
-    month: August
-    volume: 500
-    year: 2013
-  publisher: Nature Publishing Group
-  title: 'Signatures of Mutational Processes in Cancer'
-- author:
-  - family: Alexandrov
-    given: LB
-  id: Alex_package2012
-  issued:
-    year: 2012
-  title: 'WTSI Mutational Signature Framework'
-- author:
-  - family: Alexandrov
-    given: LB
-  - family: Nik-Zainal
-    given: S
-  - family: Wedge
-    given: DC
-  - family: Campbell
-    given: PJ
-  - family: Stratton
-    given: MR
-  container-title: Cell Reports
-  id: Alex_CellRep2013
-  issued:
-    year: 2013
-  title: 'Deciphering signatures of mutational processes operative in human cancer'
-- author:
-  - family: Gehring
-    given: Julian
-  - family: Fischer
-    given: Bernd
-  - family: Lawrence
-    given: Michael
-  - family: Huber
-    given: Wolfgang
-  container-title: Bioinformatics
-  id: Gehring_article2015
-  issued:
-    year: 2015
-  publisher: Oxford Journals
-  title: 'SomaticSignatures: inferring mutational signatures from single-nucleotide
-    variants'
-- author:
-  - family: Soetaert
-    given: Karline
-  - family: Van den Meersche
-    given: Karel
-  - family: Van Oevelen
-    given: D
-  container-title: R-package version 1.5.1
-  id: limsolve_package2009
-  issued:
-    year: 2009
-  title: 'limSolve: Solving Linear Inverse Models'
-- author:
-  - family: Van den Meersche
-    given: Karel
-  - family: Soetaert
-    given: Karline
-  - family: Van Oevelen
-    given: D
-  container-title: Journal of Statistical Software, Code Snippets
-  id: limsolve2009
-  issued:
-    pages: 1-15
-    volume: 30
-    year: 2009
-  title: 'xsample(): An R Function for Sampling Linear Inverse Problems'
-- title: 'Genome Level Trellis Layout'
-  author:
-  - family: Gu
-    given: Zuguang
-  container-title: R package version 1.0.0
-  id: gtrellis2015
-  issued:
-    year: 2015
-- author:
-  - family: Gu 
-    given: Z
-  container-title: R package version 1.4.4
-  id: ComplexHeatmap2015
-  issued:
-    year: 2015
-  title: 'ComplexHeatmap: Making Complex Heatmaps'
----
+# YAPSA
+Daniel Huebschmann  
+26/08/2015  
 
   
 # Introduction {#introduction}
@@ -322,7 +73,8 @@ Applying `SMC` that way, the initial LCD decomposition of the unstratified mutat
 
 We will now apply some functions of the YAPSA package to Whole Genome Sequencing datasets published in Alexandrov et al. [-@Alex2013] First we have to load this data and get an overview ([first subsection](#example-data)). Then we will load data on published signatures ([second subsection](#loading-the-signature-information)). Only in the [third subsection](#performing-an-lcd-analysis) we will actually start using the YAPSA functions.
 
-```{r}
+
+```r
 library(knitr)
 opts_chunk$set(echo=TRUE)
 opts_chunk$set(fig.show='asis')
@@ -334,7 +86,8 @@ In the following, we will load and get an overview of the data used in the analy
 
 ### Loading example data
 
-```{r load_lymphoma}
+
+```r
 lymphoma_Nature2013_ftp_path <- paste0("ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/",
                                        "somatic_mutation_data/Lymphoma B-cell/",
                                        "Lymphoma B-cell_clean_somatic_mutations_",
@@ -343,9 +96,10 @@ lymphoma_Nature2013_raw_df <- read.csv(file=lymphoma_Nature2013_ftp_path,
                                        header=FALSE,sep="\t")
 ```
 
-This created a data frame with `r dim(lymphoma_Nature2013_raw_df)[1]` rows. The format is inspired by the vcf format with one line per called variant. Note that the files provided at that url have no header information, therefore we have to add some. We will also slightly adapt the data structure:
+This created a data frame with 128639 rows. The format is inspired by the vcf format with one line per called variant. Note that the files provided at that url have no header information, therefore we have to add some. We will also slightly adapt the data structure:
 
-```{r adapt_data}
+
+```r
 names(lymphoma_Nature2013_raw_df) <- c("PID","TYPE","CHROM","START",
                                        "STOP","REF","ALT","FLAG")
 lymphoma_Nature2013_df <- subset(lymphoma_Nature2013_raw_df,TYPE=="subs",
@@ -354,15 +108,44 @@ names(lymphoma_Nature2013_df)[2] <- "POS"
 kable(head(lymphoma_Nature2013_df))
 ```
 
-Here, we have selected only the variants characterized as `subs` (those are the single nucleotide variants we are interested in for the mutational signatures analysis, small indels are filtered out by this step), so we are left with `r dim(lymphoma_Nature2013_df)[1]` variants or rows. Note that there are `r length(unique(lymphoma_Nature2013_df$PID))` different samples:
 
-```{r PID_info}
+
+CHROM          POS  REF   ALT   PID      
+------  ----------  ----  ----  ---------
+1        183502381  G     A     07-35482 
+18        60985506  T     A     07-35482 
+18        60985748  G     T     07-35482 
+18        60985799  T     C     07-35482 
+2        242077457  A     G     07-35482 
+6         13470412  C     T     07-35482 
+
+Here, we have selected only the variants characterized as `subs` (those are the single nucleotide variants we are interested in for the mutational signatures analysis, small indels are filtered out by this step), so we are left with 128212 variants or rows. Note that there are 48 different samples:
+
+
+```r
 unique(lymphoma_Nature2013_df$PID)
+```
+
+```
+##  [1] 07-35482       1060           1061           1065          
+##  [5] 1093           1096           1102           4101316       
+##  [9] 4105105        4108101        4112512        4116738       
+## [13] 4119027        4121361        4125240        4133511       
+## [17] 4135350        4142267        4158726        4159170       
+## [21] 4163639        4175837        4177856        4182393       
+## [25] 4189200        4189998        4190495        4193278       
+## [29] 4194218        4194891        515            DLBCL-PatientA
+## [33] DLBCL-PatientB DLBCL-PatientC DLBCL-PatientD DLBCL-PatientE
+## [37] DLBCL-PatientF DLBCL-PatientG DLBCL-PatientH DLBCL-PatientI
+## [41] DLBCL-PatientJ DLBCL-PatientK DLBCL-PatientL DLBCL-PatientM
+## [45] EB2            FL009          FL-PatientA    G1            
+## 48 Levels: 07-35482 1060 1061 1065 1093 1096 1102 4101316 ... G1
 ```
 
 For convenience later on, we annotate subgroup information to every variant (indirectly through the sample it occurs in). For reasons of simplicity, we also restrict the analysis to the Whole Genome Sequencing (WGS) datasets:
 
-```{r annotate_subgroup, warning=FALSE, message=FALSE}
+
+```r
 library(YAPSA)
 lymphoma_Nature2013_df$SUBGROUP <- "unknown"
 DLBCL_ind <- grep("^DLBCL.*",lymphoma_Nature2013_df$PID)
@@ -379,12 +162,18 @@ lymphoma_Nature2013_df$SUBGROUP <- factor(lymphoma_Nature2013_df$SUBGROUP)
 unique(lymphoma_Nature2013_df$SUBGROUP)
 ```
 
+```
+## [1] WGS_D WGS_F WGS_B WGS_I
+## Levels: WGS_B WGS_D WGS_F WGS_I
+```
+
 
 ### Displaying example data
 
 Rainfall plots provide a quick overview of the mutational load of a sample. To this end we have to compute the intermutational distances. But first we still do some reformatting...
 
-```{r intermut_distances, warning=FALSE, message=FALSE, results="hide"}
+
+```r
 lymphoma_Nature2013_df <- translate_to_hg19(lymphoma_Nature2013_df,"CHROM")
 lymphoma_Nature2013_df$change <- attribute_nucleotide_exchanges(lymphoma_Nature2013_df)
 lymphoma_Nature2013_df <- lymphoma_Nature2013_df[order(lymphoma_Nature2013_df$PID,
@@ -399,12 +188,15 @@ lymphoma_Nature2013_df$col <- colour_vector[lymphoma_Nature2013_df$change]
 
 Now we can select one sample and make the rainfall plot. The plot function used here relies on the package [gtrellis](http://www.bioconductor.org/packages/release/bioc/html/gtrellis.html) by Zuguang Gu [@gtrellis2015].
 
-```{r make_rainfall_plot, fig.cap="Example rainfall plot in a trellis structure."}
+
+```r
 #choice_PID <- "4163639"
 choice_PID <- "4121361"
 PID_df <- subset(lymphoma_Nature2013_df,PID==choice_PID)
 trellis_rainfall_plot(PID_df,in_point_size=unit(0.5,"mm"))
 ```
+
+![Example rainfall plot in a trellis structure.](YAPSA_files/figure-html/make_rainfall_plot-1.png) 
 
 This shows a rainfall plot typical for a lymphoma sample with clusters of increased mutation density e.g. at the immunoglobulin loci.
 \newpage
@@ -414,7 +206,8 @@ This shows a rainfall plot typical for a lymphoma sample with clusters of increa
 
 As stated [above](#LCD), one of the functions in the YAPSA package (`LCD`) is designed to do mutational signatures analysis with known signatures. There are (at least) two possible sources for signature data: i) the ones published initially by Alexandrov et al. [@Alex2013], and ii) an updated and curated current set of mutational signatures is maintained by Ludmil Alexandrov at <http://cancer.sanger.ac.uk/cosmic/signatures>. The following three subsections describe how you can load the data from these resources. Alternatively, you can bypass the three following subsections because the signature datasets are also included in this package:
 
-```{r, load_stored_sig_data}
+
+```r
 data(sigs)
 ```
 
@@ -425,16 +218,32 @@ However, the curated set of signatures might change in the future, therefore it 
 
 We first load the (older) set of signatures as published in Alexandrov et al. [@Alex2013]:
 
-```{r process_old_sigs}
+
+```r
 Alex_signatures_path <- paste0("ftp://ftp.sanger.ac.uk/pub/cancer/",
                                "AlexandrovEtAl/signatures.txt")
 AlexInitialArtif_sig_df <- read.csv(Alex_signatures_path,header=TRUE,sep="\t")
 kable(AlexInitialArtif_sig_df[c(1:9),c(1:4)])
 ```
 
+
+
+Substitution.Type   Trinucleotide   Somatic.Mutation.Type    Signature.1A
+------------------  --------------  ----------------------  -------------
+C>A                 ACA             A[C>A]A                        0.0112
+C>A                 ACC             A[C>A]C                        0.0092
+C>A                 ACG             A[C>A]G                        0.0015
+C>A                 ACT             A[C>A]T                        0.0063
+C>A                 CCA             C[C>A]A                        0.0067
+C>A                 CCC             C[C>A]C                        0.0074
+C>A                 CCG             C[C>A]G                        0.0009
+C>A                 CCT             C[C>A]T                        0.0073
+C>A                 GCA             G[C>A]A                        0.0083
+
 We will now reformat the data frame:
 
-```{r reformat_old_sigs}
+
+```r
 Alex_rownames <- paste(AlexInitialArtif_sig_df[,1],AlexInitialArtif_sig_df[,2],sep=" ")
 select_ind <- grep("Signature",names(AlexInitialArtif_sig_df))
 AlexInitialArtif_sig_df <- AlexInitialArtif_sig_df[,select_ind]
@@ -445,22 +254,40 @@ kable(AlexInitialArtif_sig_df[c(1:9),c(1:6)],
       caption="Exemplary data from the initial Alexandrov signatures.")
 ```
 
-This results in a data frame for signatures, containing `r number_of_Alex_sigs` signatures as column vectors. It is worth noting that in the initial publication, only a subset of these `r number_of_Alex_sigs` signatures were validated by an orthogonal sequencing technology. So we can filter down:
 
-```{r filter_validated_signatures}
+
+Table: Exemplary data from the initial Alexandrov signatures.
+
+              A1A      A1B       A2       A3       A4       A5
+--------  -------  -------  -------  -------  -------  -------
+C>A ACA    0.0112   0.0104   0.0105   0.0240   0.0365   0.0149
+C>A ACC    0.0092   0.0093   0.0061   0.0197   0.0309   0.0089
+C>A ACG    0.0015   0.0016   0.0013   0.0019   0.0183   0.0022
+C>A ACT    0.0063   0.0067   0.0037   0.0172   0.0243   0.0092
+C>A CCA    0.0067   0.0090   0.0061   0.0194   0.0461   0.0097
+C>A CCC    0.0074   0.0047   0.0012   0.0161   0.0614   0.0050
+C>A CCG    0.0009   0.0013   0.0006   0.0018   0.0088   0.0028
+C>A CCT    0.0073   0.0098   0.0011   0.0157   0.0432   0.0111
+C>A GCA    0.0083   0.0169   0.0093   0.0107   0.0376   0.0119
+
+This results in a data frame for signatures, containing 27 signatures as column vectors. It is worth noting that in the initial publication, only a subset of these 27 signatures were validated by an orthogonal sequencing technology. So we can filter down:
+
+
+```r
 AlexInitialValid_sig_df <- AlexInitialArtif_sig_df[,grep("^A[0-9]+",
                                           names(AlexInitialArtif_sig_df))]
 number_of_Alex_validated_sigs <- dim(AlexInitialValid_sig_df)[2]
 ```
 
-We are left with `r number_of_Alex_validated_sigs` signatures.
+We are left with 22 signatures.
 
 
 ### Loading the updated set of mutational signatures
 
 An updated and curated set of mutational signatures is maintained by Ludmil Alexandrov at <http://cancer.sanger.ac.uk/cosmic/signatures>. We will use this set for the following analysis:
 
-```{r load_sigs}
+
+```r
 Alex_COSMIC_signatures_path <- paste0("http://cancer.sanger.ac.uk/cancergenome/",
                                       "assets/signatures_probabilities.txt")
 AlexCosmicValid_sig_df <- read.csv(Alex_COSMIC_signatures_path,
@@ -477,14 +304,47 @@ kable(AlexCosmicValid_sig_df[c(1:9),c(1:6)],
       caption="Exemplary data from the updated Alexandrov signatures.")
 ```
 
-This results in a data frame containing `r number_of_Alex_COSMIC_sigs` signatures as column vectors. For reasons of convenience and comparability with the initial signatures, we reorder the features. To this end, we adhere to the convention chosen in the initial publication by Alexandrov et al. [@Alex2013] for the initial signatures.
 
-```{r reorder_features}
+
+Table: Exemplary data from the updated Alexandrov signatures.
+
+                 AC1         AC2         AC3      AC4         AC5      AC6
+--------  ----------  ----------  ----------  -------  ----------  -------
+C>A ACA    0.0110983   0.0006827   0.0221723   0.0365   0.0149415   0.0017
+C>A ACC    0.0091493   0.0006191   0.0178717   0.0309   0.0089609   0.0028
+C>A ACG    0.0014901   0.0000993   0.0021383   0.0183   0.0022078   0.0005
+C>A ACT    0.0062339   0.0003239   0.0162651   0.0243   0.0092069   0.0019
+C>G ACA    0.0018011   0.0002635   0.0240026   0.0097   0.0116710   0.0013
+C>G ACC    0.0025809   0.0002699   0.0121603   0.0054   0.0072921   0.0012
+C>G ACG    0.0005925   0.0002192   0.0052754   0.0031   0.0023038   0.0000
+C>G ACT    0.0029640   0.0006110   0.0232777   0.0054   0.0116962   0.0018
+C>T ACA    0.0295145   0.0074416   0.0178722   0.0120   0.0218392   0.0312
+
+This results in a data frame containing 30 signatures as column vectors. For reasons of convenience and comparability with the initial signatures, we reorder the features. To this end, we adhere to the convention chosen in the initial publication by Alexandrov et al. [@Alex2013] for the initial signatures.
+
+
+```r
 COSMIC_order_ind <- match(Alex_rownames,Alex_COSMIC_rownames)
 AlexCosmicValid_sig_df <- AlexCosmicValid_sig_df[COSMIC_order_ind,]
 kable(AlexCosmicValid_sig_df[c(1:9),c(1:6)],
       caption="Exemplary data from the updated Alexandrov signatures, rows reordered.")
 ```
+
+
+
+Table: Exemplary data from the updated Alexandrov signatures, rows reordered.
+
+                 AC1         AC2         AC3      AC4         AC5      AC6
+--------  ----------  ----------  ----------  -------  ----------  -------
+C>A ACA    0.0110983   0.0006827   0.0221723   0.0365   0.0149415   0.0017
+C>A ACC    0.0091493   0.0006191   0.0178717   0.0309   0.0089609   0.0028
+C>A ACG    0.0014901   0.0000993   0.0021383   0.0183   0.0022078   0.0005
+C>A ACT    0.0062339   0.0003239   0.0162651   0.0243   0.0092069   0.0019
+C>A CCA    0.0065959   0.0006774   0.0187817   0.0461   0.0096749   0.0101
+C>A CCC    0.0073424   0.0002137   0.0157605   0.0614   0.0049523   0.0241
+C>A CCG    0.0008928   0.0000068   0.0019634   0.0088   0.0028006   0.0091
+C>A CCT    0.0071866   0.0004163   0.0147229   0.0432   0.0110135   0.0571
+C>A GCA    0.0082326   0.0003520   0.0096965   0.0376   0.0118922   0.0024
 
 Note that the order of the features, i.e. nucleotide exchanges in their trinucleotide content, is changed from the fifth line on as indicated by the row names.
 
@@ -493,7 +353,8 @@ Note that the order of the features, i.e. nucleotide exchanges in their trinucle
 
 For every set of signatures, the functions in the YAPSA package require an additional data frame containing meta information about the signatures. In that data frame you can specify the order in which the signatures are going to be plotted and the colours asserted to the different signatures. In the following subsection we will set up such a data frame. However, the respective data frames are also stored in the package. If loaded by `data(sigs)` the following code block can be bypassed.
 
-```{r, build_sig_ind_df}
+
+```r
 signature_colour_vector <- c("darkgreen","green","pink","goldenrod",
                              "lightblue","blue","orangered","yellow",
                              "orange","brown","purple","red",
@@ -551,11 +412,13 @@ Now we can start using the functions from the YAPSA package. We will start with 
 
 This section uses functions which are to a large extent wrappers for functions in the package SomaticSignatures by Julian Gehring [@Gehring_article2015].
 
-```{r load_libraries, warning=FALSE, message=FALSE}
+
+```r
 library(BSgenome.Hsapiens.UCSC.hg19)
 ```
 
-```{r build_mutational_catalogue, results="hide"}
+
+```r
 word_length <- 3
 
 lymphoma_Nature2013_mutation_catalogue_list <- create_mutation_catalogue_from_df(
@@ -569,12 +432,32 @@ lymphoma_Nature2013_mutation_catalogue_list <- create_mutation_catalogue_from_df
 
 The function `create_mutation_catalogue_from_df` returns a list object with several entries. We will use the one called `matrix`.
 
-```{r display_structure_mutation_catalogue_list}
+
+```r
 names(lymphoma_Nature2013_mutation_catalogue_list)
+```
+
+```
+## [1] "matrix" "frame"
+```
+
+```r
 lymphoma_Nature2013_mutation_catalogue_df <- as.data.frame(
   lymphoma_Nature2013_mutation_catalogue_list$matrix)
 kable(lymphoma_Nature2013_mutation_catalogue_df[c(1:9),c(5:10)])
 ```
+
+           4116738   4119027   4121361   4125240   4133511   4135350
+--------  --------  --------  --------  --------  --------  --------
+C>A ACA        127        31        72        34        49        75
+C>A ACC        104        36        39        19        36        80
+C>A ACG         13         2         2         1         6         8
+C>A ACT        102        33        48        22        47        56
+C>A CCA        139        43        47        29        51        70
+C>A CCC         66        34        35         7        25        42
+C>A CCG          9         7         6         3         7        11
+C>A CCT        167        47        50        32        58        84
+C>A GCA         90        47        66        29        45        66
 \newpage
 
 
@@ -582,36 +465,44 @@ kable(lymphoma_Nature2013_mutation_catalogue_df[c(1:9),c(5:10)])
 
 The `LCD` function performs the decomposition of a mutational catalogue into a priori known signatures and the respective exposures to these signatures as described in the second section of this vignette. We use the "new" signatures from the COSMIC website.
 
-```{r LCD, warning=FALSE}
+
+```r
 lymphoma_Nature2013_COSMIC_exposures_df <- LCD(lymphoma_Nature2013_mutation_catalogue_df,
                                                AlexCosmicValid_sig_df)
 ```
 
 Some adaptation (extracting and reformatting the information which sample belongs to which subgroup):
 
-```{r apply_make_subgroups_df}
+
+```r
 COSMIC_subgroups_df <- make_subgroups_df(lymphoma_Nature2013_COSMIC_exposures_df,
                                          lymphoma_Nature2013_df)
 ```
 
 The resulting signature exposures can be plotted using custom plotting functions. First as absolute exposures:
 
-```{r plot_abs_exposures_no_cutoff, fig.width=6, fig.height=4, fig.cap="Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition)."}
+
+```r
 abs_plot <- plot_exposures(lymphoma_Nature2013_COSMIC_exposures_df,
                            AlexCosmicValid_sigInd_df,
                            COSMIC_subgroups_df)
 abs_plot
 ```
 
+![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_abs_exposures_no_cutoff-1.png) 
+
 Second as relative exposures:
 
-```{r plot_rel_exposures_no_cutoff, fig.width=6, fig.height=4, fig.cap="Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition)."}
+
+```r
 rel_plot <- plot_relative_exposures(lymphoma_Nature2013_COSMIC_exposures_df,
                                     AlexCosmicValid_sigInd_df,
                                     COSMIC_subgroups_df,
                                     in_show_subgroups=FALSE)
 rel_plot
 ```
+
+![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_rel_exposures_no_cutoff-1.png) 
 
 We can see that all signatures are present in the exposures, even though some have a very small contribution.
 \newpage
@@ -621,13 +512,15 @@ We can see that all signatures are present in the exposures, even though some ha
 
 Now let's rerun the analysis with a cutoff to discard signatures with insufficient cohort-wide contribution. 
 
-```{r definition_of_cutoff}
+
+```r
 my_cutoff <- 0.05
 ```
 
-The cutoff of `r my_cutoff` means that a signature is kept if it's exposure represents at least `r my_cutoff*100`% of all SNVs in the cohort. We will use the function `LCD_cutoff` instead of `LCD`.
+The cutoff of 0.05 means that a signature is kept if it's exposure represents at least 5% of all SNVs in the cohort. We will use the function `LCD_cutoff` instead of `LCD`.
 
-```{r LCD_cutoff, warning=FALSE}
+
+```r
 COSMIC_LCD_cutoff_list <- LCD_cutoff(lymphoma_Nature2013_mutation_catalogue_df,
                                      AlexCosmicValid_sig_df,in_cutoff=my_cutoff,
                                      in_filename=NULL)
@@ -638,31 +531,52 @@ lymphoma_Nature2013_COSMIC_cutoff_exposure_order <- COSMIC_LCD_cutoff_list$order
 chosen_AlexInitialArtif_sigInd_df <- AlexCosmicValid_sigInd_df[lymphoma_Nature2013_COSMIC_cutoff_sig_ind,]
 ```
 
-At the chosen cutoff of `r my_cutoff`, we are left with `r length(lymphoma_Nature2013_COSMIC_cutoff_sig_ind)` signatures. We can look at these signatures in detail and their attributed biological processes:
+At the chosen cutoff of 0.05, we are left with 7 signatures. We can look at these signatures in detail and their attributed biological processes:
 
-```{r}
+
+```r
 kable(chosen_AlexInitialArtif_sigInd_df, row.names=FALSE,
       caption=paste0("Signatures with cohort-wide exposures > ",my_cutoff))
 ```
 
+
+
+Table: Signatures with cohort-wide exposures > 0.05
+
+sig     index  colour       process                            
+-----  ------  -----------  -----------------------------------
+AC1         1  green        spontaneous deamination            
+AC2         2  pink         APOBEC                             
+AC3         3  goldenrod    defect DNA DSB repair hom. recomb. 
+AC5         5  blue         unknown                            
+AC8         8  orange       unknown                            
+AC9         9  brown        POL eta and SHM                    
+AC17       17  lightgreen   unknown                            
+
 Again we can plot absolute exposures:
 
-```{r plot_abs_exposures_cutoff, fig.width=6, fig.height=4, fig.cap="Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition)."}
+
+```r
 abs_plot <- plot_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
               chosen_AlexInitialArtif_sigInd_df,
               COSMIC_subgroups_df)
 abs_plot
 ```
 
+![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_abs_exposures_cutoff-1.png) 
+
 And relative exposures:
 
-```{r plot_rel_exposures_cutoff, fig.width=6, fig.height=4, fig.cap="Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition)."}
+
+```r
 rel_plot <- plot_relative_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
               chosen_AlexInitialArtif_sigInd_df,
               COSMIC_subgroups_df,
               in_show_subgroups=FALSE)
 rel_plot
 ```
+
+![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_rel_exposures_cutoff-1.png) 
 \newpage
 
 
@@ -670,7 +584,8 @@ rel_plot
 
 To identify groups of samples which were exposed to similar mutational processes, the exposure vectors of the samples can be compared. The YAPSA package provides a custom function for this task: `complex_heatmap_exposures`, which uses the package [ComplexHeatmap](http://www.bioconductor.org/packages/release/bioc/html/ComplexHeatmap.html) by Zuguang Gu [@ComplexHeatmap2015]. It produces output as follows:
 
-```{r apply_heatmap_exposures, fig.width=6, fig.height=4, fig.cap="Clustering of Samples and Signatures based on the relative exposures of the COSMIC signatures in the lymphoma mutational catalogues."}
+
+```r
 rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df <-
   normalize_df_per_dim(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,2)
 library(circlize)
@@ -683,18 +598,24 @@ complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                           in_subgroup_column="subgroup")
 ```
 
+![Clustering of Samples and Signatures based on the relative exposures of the COSMIC signatures in the lymphoma mutational catalogues.](YAPSA_files/figure-html/apply_heatmap_exposures-1.png) 
+
 If you are interested only in the clustering and not in the heatmap information, you could also use `hclust_exposures`:
 
-```{r apply_hclust_exposures, fig.width=6, fig.height=3, fig.cap="Clustering of the Samples based on the relative exposures of the COSMIC signatures in the lymphoma mutational catalogues."}
+
+```r
 hclust_list <- hclust_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                                 COSMIC_subgroups_df,
                                 in_method="manhattan",
                                 in_subgroup_column="subgroup")
 ```
 
+![Clustering of the Samples based on the relative exposures of the COSMIC signatures in the lymphoma mutational catalogues.](YAPSA_files/figure-html/apply_hclust_exposures-1.png) 
+
 The dendrogram produced by either the function `complex_heatmap_exposures` or the function `hclust_exposures` can be cut to yield signature exposure specific subgroups of the PIDs.
 
-```{r cluster_PIDs_sig_info, fig.width=6, fig.height=4, fig.cap=paste0("PIDs labelled by the clusters extracted from the signature analysis.")}
+
+```r
 cluster_vector <- cutree(hclust_list$hclust,k=4)
 COSMIC_subgroups_df$cluster <- cluster_vector
 subgroup_colour_vector <- rainbow(length(unique(COSMIC_subgroups_df$cluster)))
@@ -707,6 +628,8 @@ complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                           in_method="manhattan",
                           in_subgroup_column="cluster")
 ```
+
+![PIDs labelled by the clusters extracted from the signature analysis.](YAPSA_files/figure-html/cluster_PIDs_sig_info-1.png) 
 \newpage
 
 
@@ -714,7 +637,8 @@ complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
 
 We will now use the intermutational distances computed above. We set cutoffs for the intermutational distance at 1000 and 100000 bp, leading to three strata. We annotate to every variant in which stratum it falls.
 
-```{r stratify_mut_density}
+
+```r
 lymphoma_Nature2013_df$density_cat <- cut(lymphoma_Nature2013_df$dist,
                                           c(0,1001,100001,Inf),
                                           right=FALSE,
@@ -723,15 +647,27 @@ lymphoma_Nature2013_df$density_cat <- cut(lymphoma_Nature2013_df$dist,
 
 The following table shows the distribution of variants over strata:
 
-```{r table_strata_mut_density}
+
+```r
 temp_df <- data.frame(table(lymphoma_Nature2013_df$density_cat))
 names(temp_df) <- c("Stratum","Cohort-wide counts")
 kable(temp_df, caption=paste0("Strata for the SMC of mutation density"))
 ```
 
+
+
+Table: Strata for the SMC of mutation density
+
+Stratum         Cohort-wide counts
+-------------  -------------------
+high                          6818
+intermediate                 62131
+background                   50675
+
 We now have everything at hand to carry out a stratified signature analysis:
 
-```{r SMC_mut_density, results="hide", warning=FALSE, fig.width=8, fig.height=7, fig.cap="SMC (Stratification of the Mutational Catalogue) based on mutation density."}
+
+```r
 strata_order_ind <- c(1,3,2)
 mut_density_list <- run_SMC(lymphoma_Nature2013_df,
                             lymphoma_Nature2013_COSMIC_cutoff_signatures_df,
@@ -743,21 +679,39 @@ mut_density_list <- run_SMC(lymphoma_Nature2013_df,
                             in_strata_order_ind=strata_order_ind)
 ```
 
-This produces a multi-panel figure with `r length(unique(lymphoma_Nature2013_df$density_cat))+1` rows of plots. The first row visualizes the signature distribution over the whole cohort without stratification, followed by one row of plots per stratum. Hence in our example we have four rows of graphs with three (exclusive) strata as input. Each row consists of three plots. The left plots show absolute exposures in the respective stratum as stacked barplots on a per sample basis. The middle plots show relative exposures in the respective stratum on a per sample basis as stacked barplots. The right plots shows cohort-wide averages of the relative exposures in the respective stratum. The error bars indicate the standard error of the mean (SEM).
+![SMC (Stratification of the Mutational Catalogue) based on mutation density.](YAPSA_files/figure-html/SMC_mut_density-1.png) 
+
+This produces a multi-panel figure with 4 rows of plots. The first row visualizes the signature distribution over the whole cohort without stratification, followed by one row of plots per stratum. Hence in our example we have four rows of graphs with three (exclusive) strata as input. Each row consists of three plots. The left plots show absolute exposures in the respective stratum as stacked barplots on a per sample basis. The middle plots show relative exposures in the respective stratum on a per sample basis as stacked barplots. The right plots shows cohort-wide averages of the relative exposures in the respective stratum. The error bars indicate the standard error of the mean (SEM).
 
 To test for statistical significance of potential differences in the signature exposures (i.e. signature enrichment and depletion patterns) between the different strata, we can use the Kruskal-Wallis test, as the data is grouped into (potentially more than two) categories and might not follow a normal distribution. As we are testing the different signatures on the same stratification, we have to correct for multiple testing. In order to control the false discovery rate (FDR), the Benjamini-Hochberg correction is appropriate.
 
-```{r stat_SMC_mut_density, warning=FALSE, message=FALSE}
+
+```r
 stat_mut_density_list <- stat_test_SMC(mut_density_list,in_flag="norm")
 kable(stat_mut_density_list$kruskal_df,
       caption=paste0("Results of Kruskal tests for cohort-wide exposures over strata ",
                      "per signature without and with correction for multiple testing."))
 ```
 
+
+
+Table: Results of Kruskal tests for cohort-wide exposures over strata per signature without and with correction for multiple testing.
+
+        Kruskal_statistic   df   Kruskal_p_val   Kruskal_p_val_BH
+-----  ------------------  ---  --------------  -----------------
+AC1             50.109358    2       0.0000000          0.0000000
+AC2              3.968018    2       0.1375168          0.1604363
+AC3              1.098077    2       0.5775047          0.5775047
+AC5             13.013503    2       0.0014933          0.0034844
+AC8             19.651074    2       0.0000541          0.0001892
+AC9              5.917688    2       0.0518788          0.0726304
+AC17             6.914406    2       0.0315178          0.0551561
+
 In the following paragraph we perform post-hoc tests for those signatures where the Kruskal-Wallis test, as evaluated above, has given a significant result.
 \newpage
 
-```{r post_hoc_mut_density}
+
+```r
 significance_level <- 0.05
 for(i in seq_len(dim(stat_mut_density_list$kruskal_df)[1])){
   if(stat_mut_density_list$kruskal_df$Kruskal_p_val_BH[i]<significance_level){
@@ -765,6 +719,45 @@ for(i in seq_len(dim(stat_mut_density_list$kruskal_df)[1])){
     print(stat_mut_density_list$kruskal_posthoc_list[[i]])
   }
 }
+```
+
+```
+## [1] "Signature: AC1"
+## 
+## 	Pairwise comparisons using Tukey and Kramer (Nemenyi) test	
+##                    with Tukey-Dist approximation for independent samples 
+## 
+## data:  sig_exposures_vector and sig_strata_vector 
+## 
+##              background high   
+## high         2.6e-11    -      
+## intermediate 0.033      4.5e-05
+## 
+## P value adjustment method: none 
+## [1] "Signature: AC5"
+## 
+## 	Pairwise comparisons using Tukey and Kramer (Nemenyi) test	
+##                    with Tukey-Dist approximation for independent samples 
+## 
+## data:  sig_exposures_vector and sig_strata_vector 
+## 
+##              background high  
+## high         0.0402     -     
+## intermediate 0.5171     0.0012
+## 
+## P value adjustment method: none 
+## [1] "Signature: AC8"
+## 
+## 	Pairwise comparisons using Tukey and Kramer (Nemenyi) test	
+##                    with Tukey-Dist approximation for independent samples 
+## 
+## data:  sig_exposures_vector and sig_strata_vector 
+## 
+##              background high   
+## high         0.0066     -      
+## intermediate 0.4391     5.9e-05
+## 
+## P value adjustment method: none
 ```
 
 
