@@ -350,7 +350,7 @@ names(lymphoma_Nature2013_raw_df) <- c("PID","TYPE","CHROM","START",
 lymphoma_Nature2013_df <- subset(lymphoma_Nature2013_raw_df,TYPE=="subs",
                                  select=c(CHROM,START,REF,ALT,PID))
 names(lymphoma_Nature2013_df)[2] <- "POS"
-head(lymphoma_Nature2013_df)
+kable(head(lymphoma_Nature2013_df))
 ```
 
 Here, we have selected only the variants characterized as `subs` (those are the single nucleotide variants we are interested in for the mutational signatures analysis, small indels are filtered out by this step), so we are left with `r dim(lymphoma_Nature2013_df)[1]` variants or rows. Note that there are `r length(unique(lymphoma_Nature2013_df$PID))` different samples:
@@ -427,29 +427,29 @@ We first load the (older) set of signatures as published in Alexandrov et al. [@
 ```{r process_old_sigs}
 Alex_signatures_path <- paste0("ftp://ftp.sanger.ac.uk/pub/cancer/",
                                "AlexandrovEtAl/signatures.txt")
-Alex_signatures_df <- read.csv(Alex_signatures_path,header=TRUE,sep="\t")
-kable(Alex_signatures_df[c(1:9),c(1:4)])
+AlexInitialArtif_sig_df <- read.csv(Alex_signatures_path,header=TRUE,sep="\t")
+kable(AlexInitialArtif_sig_df[c(1:9),c(1:4)])
 ```
 
 We will now reformat the data frame:
 
 ```{r reformat_old_sigs}
-Alex_rownames <- paste(Alex_signatures_df[,1],Alex_signatures_df[,2],sep=" ")
-select_ind <- grep("Signature",names(Alex_signatures_df))
-Alex_signatures_df <- Alex_signatures_df[,select_ind]
-number_of_Alex_sigs <- dim(Alex_signatures_df)[2]
-names(Alex_signatures_df) <- gsub("Signature\\.","A",names(Alex_signatures_df))
-rownames(Alex_signatures_df) <- Alex_rownames
-kable(Alex_signatures_df[c(1:9),c(1:6)],
+Alex_rownames <- paste(AlexInitialArtif_sig_df[,1],AlexInitialArtif_sig_df[,2],sep=" ")
+select_ind <- grep("Signature",names(AlexInitialArtif_sig_df))
+AlexInitialArtif_sig_df <- AlexInitialArtif_sig_df[,select_ind]
+number_of_Alex_sigs <- dim(AlexInitialArtif_sig_df)[2]
+names(AlexInitialArtif_sig_df) <- gsub("Signature\\.","A",names(AlexInitialArtif_sig_df))
+rownames(AlexInitialArtif_sig_df) <- Alex_rownames
+kable(AlexInitialArtif_sig_df[c(1:9),c(1:6)],
       caption="Exemplary data from the initial Alexandrov signatures.")
 ```
 
 This results in a data frame for signatures, containing `r number_of_Alex_sigs` signatures as column vectors. It is worth noting that in the initial publication, only a subset of these `r number_of_Alex_sigs` signatures were validated by an orthogonal sequencing technology. So we can filter down:
 
 ```{r filter_validated_signatures}
-Alex_validated_signatures_df <- Alex_signatures_df[,grep("^A[0-9]+",
-                                          names(Alex_signatures_df))]
-number_of_Alex_validated_sigs <- dim(Alex_validated_signatures_df)[2]
+AlexInitialValid_sig_df <- AlexInitialArtif_sig_df[,grep("^A[0-9]+",
+                                          names(AlexInitialArtif_sig_df))]
+number_of_Alex_validated_sigs <- dim(AlexInitialValid_sig_df)[2]
 ```
 
 We are left with `r number_of_Alex_validated_sigs` signatures.
@@ -462,17 +462,17 @@ An updated and curated set of mutational signatures is maintained by Ludmil Alex
 ```{r load_sigs}
 Alex_COSMIC_signatures_path <- paste0("http://cancer.sanger.ac.uk/cancergenome/",
                                       "assets/signatures_probabilities.txt")
-Alex_COSMIC_signatures_df <- read.csv(Alex_COSMIC_signatures_path,
+AlexCosmicValid_sig_df <- read.csv(Alex_COSMIC_signatures_path,
                                       header=TRUE,sep="\t")
-Alex_COSMIC_rownames <- paste(Alex_COSMIC_signatures_df[,1],
-                              Alex_COSMIC_signatures_df[,2],sep=" ")
-COSMIC_select_ind <- grep("Signature",names(Alex_COSMIC_signatures_df))
-Alex_COSMIC_signatures_df <- Alex_COSMIC_signatures_df[,COSMIC_select_ind]
-number_of_Alex_COSMIC_sigs <- dim(Alex_COSMIC_signatures_df)[2]
-names(Alex_COSMIC_signatures_df) <- gsub("Signature\\.","AC",
-                                         names(Alex_COSMIC_signatures_df))
-rownames(Alex_COSMIC_signatures_df) <- Alex_COSMIC_rownames
-kable(Alex_COSMIC_signatures_df[c(1:9),c(1:6)],
+Alex_COSMIC_rownames <- paste(AlexCosmicValid_sig_df[,1],
+                              AlexCosmicValid_sig_df[,2],sep=" ")
+COSMIC_select_ind <- grep("Signature",names(AlexCosmicValid_sig_df))
+AlexCosmicValid_sig_df <- AlexCosmicValid_sig_df[,COSMIC_select_ind]
+number_of_Alex_COSMIC_sigs <- dim(AlexCosmicValid_sig_df)[2]
+names(AlexCosmicValid_sig_df) <- gsub("Signature\\.","AC",
+                                         names(AlexCosmicValid_sig_df))
+rownames(AlexCosmicValid_sig_df) <- Alex_COSMIC_rownames
+kable(AlexCosmicValid_sig_df[c(1:9),c(1:6)],
       caption="Exemplary data from the updated Alexandrov signatures.")
 ```
 
@@ -480,8 +480,8 @@ This results in a data frame containing `r number_of_Alex_COSMIC_sigs` signature
 
 ```{r reorder_features}
 COSMIC_order_ind <- match(Alex_rownames,Alex_COSMIC_rownames)
-Alex_COSMIC_signatures_df <- Alex_COSMIC_signatures_df[COSMIC_order_ind,]
-kable(Alex_COSMIC_signatures_df[c(1:9),c(1:6)],
+AlexCosmicValid_sig_df <- AlexCosmicValid_sig_df[COSMIC_order_ind,]
+kable(AlexCosmicValid_sig_df[c(1:9),c(1:6)],
       caption="Exemplary data from the updated Alexandrov signatures, rows reordered.")
 ```
 
@@ -508,10 +508,10 @@ bio_process_vector <- c("spontaneous deamination","spontaneous deamination",
                         "unknown","unknown","unknown","nonvalidated",
                         "nonvalidated","nonvalidated","nonvalidated",
                         "nonvalidated")
-signatures_indices_df <- data.frame(sig=colnames(Alex_signatures_df))
-signatures_indices_df$index <- seq_len(dim(signatures_indices_df)[1])
-signatures_indices_df$colour <- signature_colour_vector
-signatures_indices_df$process <- bio_process_vector
+AlexInitialArtif_sigInd_df <- data.frame(sig=colnames(AlexInitialArtif_sig_df))
+AlexInitialArtif_sigInd_df$index <- seq_len(dim(AlexInitialArtif_sigInd_df)[1])
+AlexInitialArtif_sigInd_df$colour <- signature_colour_vector
+AlexInitialArtif_sigInd_df$process <- bio_process_vector
 
 COSMIC_signature_colour_vector <- c("green","pink","goldenrod",
                                     "lightblue","blue","orangered","yellow",
@@ -535,10 +535,10 @@ COSMIC_bio_process_vector <- c("spontaneous deamination","APOBEC",
                                "unknown","aristocholic acid","unknown",
                                "aflatoxin","unknown","defect DNA MMR",
                                "unknown","unknown","tobacco chewing","unknown")
-COSMIC_signatures_indices_df <- data.frame(sig=colnames(Alex_COSMIC_signatures_df))
-COSMIC_signatures_indices_df$index <- seq_len(dim(COSMIC_signatures_indices_df)[1])
-COSMIC_signatures_indices_df$colour <- COSMIC_signature_colour_vector
-COSMIC_signatures_indices_df$process <- COSMIC_bio_process_vector
+AlexCosmicValid_sigInd_df <- data.frame(sig=colnames(AlexCosmicValid_sig_df))
+AlexCosmicValid_sigInd_df$index <- seq_len(dim(AlexCosmicValid_sigInd_df)[1])
+AlexCosmicValid_sigInd_df$colour <- COSMIC_signature_colour_vector
+AlexCosmicValid_sigInd_df$process <- COSMIC_bio_process_vector
 ```
 
 
@@ -572,7 +572,7 @@ The function `create_mutation_catalogue_from_df` returns a list object with seve
 names(lymphoma_Nature2013_mutation_catalogue_list)
 lymphoma_Nature2013_mutation_catalogue_df <- as.data.frame(
   lymphoma_Nature2013_mutation_catalogue_list$matrix)
-lymphoma_Nature2013_mutation_catalogue_df[c(1:9),c(5:10)]
+kable(lymphoma_Nature2013_mutation_catalogue_df[c(1:9),c(5:10)])
 ```
 \newpage
 
@@ -583,7 +583,7 @@ The `LCD` function performs the decomposition of a mutational catalogue into a p
 
 ```{r LCD, warning=FALSE}
 lymphoma_Nature2013_COSMIC_exposures_df <- LCD(lymphoma_Nature2013_mutation_catalogue_df,
-                                               Alex_COSMIC_signatures_df)
+                                               AlexCosmicValid_sig_df)
 ```
 
 Some adaptation (extracting and reformatting the information which sample belongs to which subgroup):
@@ -597,7 +597,7 @@ The resulting signature exposures can be plotted using custom plotting functions
 
 ```{r plot_abs_exposures_no_cutoff, fig.width=6, fig.height=4, fig.cap="Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition)."}
 abs_plot <- plot_exposures(lymphoma_Nature2013_COSMIC_exposures_df,
-                           COSMIC_signatures_indices_df,
+                           AlexCosmicValid_sigInd_df,
                            COSMIC_subgroups_df)
 abs_plot
 ```
@@ -606,7 +606,7 @@ Second as relative exposures:
 
 ```{r plot_rel_exposures_no_cutoff, fig.width=6, fig.height=4, fig.cap="Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition)."}
 rel_plot <- plot_relative_exposures(lymphoma_Nature2013_COSMIC_exposures_df,
-                                    COSMIC_signatures_indices_df,
+                                    AlexCosmicValid_sigInd_df,
                                     COSMIC_subgroups_df,
                                     in_show_subgroups=FALSE)
 rel_plot
@@ -628,19 +628,19 @@ The cutoff of `r my_cutoff` means that a signature is kept if it's exposure repr
 
 ```{r LCD_cutoff, warning=FALSE}
 COSMIC_LCD_cutoff_list <- LCD_cutoff(lymphoma_Nature2013_mutation_catalogue_df,
-                                     Alex_COSMIC_signatures_df,in_cutoff=my_cutoff,
+                                     AlexCosmicValid_sig_df,in_cutoff=my_cutoff,
                                      in_filename=NULL)
 lymphoma_Nature2013_COSMIC_cutoff_exposures_df <- COSMIC_LCD_cutoff_list$exposures
 lymphoma_Nature2013_COSMIC_cutoff_signatures_df <- COSMIC_LCD_cutoff_list$signatures
 lymphoma_Nature2013_COSMIC_cutoff_sig_ind <- COSMIC_LCD_cutoff_list$choice
 lymphoma_Nature2013_COSMIC_cutoff_exposure_order <- COSMIC_LCD_cutoff_list$order
-chosen_signatures_indices_df <- COSMIC_signatures_indices_df[lymphoma_Nature2013_COSMIC_cutoff_sig_ind,]
+chosen_AlexInitialArtif_sigInd_df <- AlexCosmicValid_sigInd_df[lymphoma_Nature2013_COSMIC_cutoff_sig_ind,]
 ```
 
 At the chosen cutoff of `r my_cutoff`, we are left with `r length(lymphoma_Nature2013_COSMIC_cutoff_sig_ind)` signatures. We can look at these signatures in detail and their attributed biological processes:
 
 ```{r}
-kable(chosen_signatures_indices_df, row.names=FALSE,
+kable(chosen_AlexInitialArtif_sigInd_df, row.names=FALSE,
       caption=paste0("Signatures with cohort-wide exposures > ",my_cutoff))
 ```
 
@@ -648,7 +648,7 @@ Again we can plot absolute exposures:
 
 ```{r plot_abs_exposures_cutoff, fig.width=6, fig.height=4, fig.cap="Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition)."}
 abs_plot <- plot_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
-              chosen_signatures_indices_df,
+              chosen_AlexInitialArtif_sigInd_df,
               COSMIC_subgroups_df)
 abs_plot
 ```
@@ -657,7 +657,7 @@ And relative exposures:
 
 ```{r plot_rel_exposures_cutoff, fig.width=6, fig.height=4, fig.cap="Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition)."}
 rel_plot <- plot_relative_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
-              chosen_signatures_indices_df,
+              chosen_AlexInitialArtif_sigInd_df,
               COSMIC_subgroups_df,
               in_show_subgroups=FALSE)
 rel_plot
@@ -675,7 +675,7 @@ rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df <-
 library(circlize)
 complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                           COSMIC_subgroups_df,
-                          chosen_signatures_indices_df,
+                          chosen_AlexInitialArtif_sigInd_df,
                           in_data_type="norm exposures",
                           in_subgroup_colour_column="col",
                           in_method="manhattan",
@@ -700,7 +700,7 @@ subgroup_colour_vector <- rainbow(length(unique(COSMIC_subgroups_df$cluster)))
 COSMIC_subgroups_df$cluster_col <- subgroup_colour_vector[factor(COSMIC_subgroups_df$cluster)]
 complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                           COSMIC_subgroups_df,
-                          chosen_signatures_indices_df,
+                          chosen_AlexInitialArtif_sigInd_df,
                           in_data_type="norm exposures",
                           in_subgroup_colour_column="cluster_col",
                           in_method="manhattan",
@@ -734,7 +734,7 @@ We now have everything at hand to carry out a stratified signature analysis:
 strata_order_ind <- c(1,3,2)
 mut_density_list <- run_SMC(lymphoma_Nature2013_df,
                             lymphoma_Nature2013_COSMIC_cutoff_signatures_df,
-                            chosen_signatures_indices_df,
+                            chosen_AlexInitialArtif_sigInd_df,
                             COSMIC_subgroups_df,
                             column_name="density_cat",
                             refGenome=BSgenome.Hsapiens.UCSC.hg19,
