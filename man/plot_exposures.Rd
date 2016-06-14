@@ -6,7 +6,7 @@
 \usage{
 plot_exposures(in_exposures_df, in_signatures_ind_df, in_subgroups_df = NULL,
   in_sum_ind = NULL, in_subgroups.field = "subgroup", in_title = "",
-  in_labels = TRUE, in_show_subgroups = TRUE)
+  in_labels = TRUE, in_show_subgroups = TRUE, legend_height = 10)
 }
 \arguments{
 \item{in_exposures_df}{Numerical data frame encoding the exposures \code{H}, i.e. which
@@ -28,6 +28,8 @@ subgroup information from.}
 \item{in_labels}{Flag, if \code{TRUE} the PIDs are displayed on the x-axis}
 
 \item{in_show_subgroups}{Flag, if \code{TRUE} then PIDs are grouped by subgroups}
+
+\item{legend_height}{How many signatures should be displayed in one column together at most.}
 }
 \value{
 The generated barplot - a ggplot2 plot

@@ -826,7 +826,7 @@ add_as_fist_to_list <- function(in_list,in_element){
 }
 
 
-#' Add an element as first entry to a list
+#' Merge exposure data frames
 #' 
 #' Merges with the special feature of preserving the signatures and signature 
 #' order.
@@ -857,6 +857,96 @@ merge_exposures <- function(in_exposures_list,
   exposures_df$sig <- NULL
   exposures_df[is.na(exposures_df)] <- 0
   return(exposures_df)
+}
+
+
+#' Generically melts exposure data frames
+#' 
+#' Melt an exposure data frame with signatures as ID variables.
+#' 
+#' @param in_df
+#'  Numeric data frame with exposures.
+#' 
+#' @return A data frame with the molten exposures.
+#' 
+#' @examples
+#'  NULL
+#' 
+#' @export
+#' 
+melt_exposures <- function(in_df){
+  in_df$sig <- rownames(in_df)
+  in_df_melt <- melt(in_df,id.vars = "sig")
+  names(in_df_melt) <- gsub("variable","PID",names(in_df_melt))
+  return(in_df_melt)
+}
+
+
+#' Compares alternative exposures
+#' 
+#' Compares exposures computed by two alternative approaches for the same cohort
+#' 
+#' @param in_exposures1_df
+#'  Numeric data frame with exposures.
+#' @param in_exposures2_df
+#'  Numeric data frame with exposures.
+#' @param deselect_flag
+#'  Wehther signatures absent in both exposure data frames should be removed.
+#' 
+#' @return A list with entries \code{merge_df}, \code{all_cor.test} and
+#'  \code{cor.test_list}.
+#' \itemize{
+#'  \item \code{merge_df}:
+#'    Merged molten input exposure data frames
+#'  \item \code{all_cor.test}:
+#'    A data structure as returned by \code{\link{cor.test}} for all data 
+#'    points, i.e. taken all signatures together
+#'  \item \code{cor.test_list}:
+#'    A list of data structures as returned by \code{\link{cor.test}}, but 
+#'    evaluated for every signature independently
+#' }
+#' 
+#' @examples
+#'  NULL
+#' 
+#' @export
+#' 
+compare_exposures <- function(in_exposures1_df,
+                              in_exposures2_df,
+                              deselect_flag=TRUE){
+  signatures1 <- rownames(in_exposures1_df)
+  signatures2 <- rownames(in_exposures2_df)
+  common_signatures <- intersect(signatures1,signatures2)
+  if(length(common_signatures) == 0) return(NULL)
+  exposures1_df_melt <- melt_exposures(in_exposures1_df)
+  names(exposures1_df_melt) <- gsub("value","exposures1",
+                                    names(exposures1_df_melt))
+  exposures2_df_melt <- melt_exposures(in_exposures2_df)
+  names(exposures2_df_melt) <- gsub("value","exposures2",
+                                    names(exposures2_df_melt))
+  merge_df <- merge(exposures1_df_melt,exposures2_df_melt,by=c("sig","PID"),
+                    sort=FALSE,all=TRUE)
+  merge_df$exposures1[which(!is.finite(merge_df$exposures1))] <- 0
+  merge_df$exposures2[which(!is.finite(merge_df$exposures2))] <- 0
+  if(deselect_flag){
+    deselect_ind <- which(merge_df$exposures1==0 & merge_df$exposures2==0)
+    merge_df <- merge_df[-deselect_ind,]    
+  }
+  all_cor.test <- cor.test(merge_df$exposures1,merge_df$exposures2)
+  cor.test_list <- lapply(
+    split(merge_df,f = merge_df$sig),
+    FUN=function(current_df){
+      levels1 <- length(unique(current_df$exposures1))
+      levels2 <- length(unique(current_df$exposures2))
+      if(levels1 > 1 & levels2 > 1) {
+        out.test <- cor.test(current_df$exposures1,current_df$exposures2)
+      } else {
+        out.test <- NULL       
+      } 
+    })
+  return(list(merge_df=merge_df,
+              all_cor.test=all_cor.test,
+              cor.test_list=cor.test_list))
 }
 
 

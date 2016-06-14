@@ -2,7 +2,7 @@
 % Please edit documentation in R/basic_functions.R
 \name{merge_exposures}
 \alias{merge_exposures}
-\title{Add an element as first entry to a list}
+\title{Merge exposure data frames}
 \usage{
 merge_exposures(in_exposures_list, in_signatures_df)
 }

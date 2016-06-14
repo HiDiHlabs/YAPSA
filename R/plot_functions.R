@@ -30,6 +30,8 @@
 #'  Flag, if \code{TRUE} the PIDs are displayed on the x-axis
 #' @param in_show_subgroups
 #'  Flag, if \code{TRUE} then PIDs are grouped by subgroups
+#' @param legend_height
+#'  How many signatures should be displayed in one column together at most.
 #'
 #' @return The generated barplot - a ggplot2 plot
 #'
@@ -55,12 +57,12 @@ plot_exposures <- function(in_exposures_df,
                            in_subgroups.field="subgroup",
                            in_title="",
                            in_labels=TRUE,
-                           in_show_subgroups=TRUE) {
+                           in_show_subgroups=TRUE,
+                           legend_height=10) {
   .e <- environment()
   temp_exposures_df <- in_exposures_df
   number_of_sigs <- dim(in_exposures_df)[1]
   number_of_PIDs <- dim(in_exposures_df)[2]
-  legend_height <- 10
   ## prepare for output
   temp_exposures_df$sig_index <- 
     in_signatures_ind_df$index[match(rownames(temp_exposures_df),
