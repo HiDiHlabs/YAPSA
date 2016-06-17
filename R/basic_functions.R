@@ -887,17 +887,32 @@ melt_exposures <- function(in_df){
 #' Compares exposures computed by two alternative approaches for the same cohort
 #' 
 #' @param in_exposures1_df
-#'  Numeric data frame with exposures.
+#'  Numeric data frame with exposures, ideally the smaller exposure data is
+#'  supplied first.
 #' @param in_exposures2_df
-#'  Numeric data frame with exposures.
+#'  Numeric data frame with exposures, ideally the bigger exposure data is
+#'  supplied second.
 #' @param deselect_flag
 #'  Wehther signatures absent in both exposure data frames should be removed.
 #' 
-#' @return A list with entries \code{merge_df}, \code{all_cor.test} and
-#'  \code{cor.test_list}.
+#' @return A list with entries \code{merge_df}, \code{all_cor.coeff},
+#'  \code{all_p.value}, \code{cor.coeff_vector}, \code{p.value_vector},
+#'  \code{all_cor.test}, and \code{cor.test_list}.
 #' \itemize{
 #'  \item \code{merge_df}:
 #'    Merged molten input exposure data frames
+#'  \item \code{all_cor.coeff}:
+#'    Pearson correlation coefficient for all data 
+#'    points, i.e. taken all signatures together
+#'  \item \code{all_p.value}:
+#'    P-value of the Pearson test for all data 
+#'    points, i.e. taken all signatures together
+#'  \item \code{cor.coeff_vector}:
+#'    A vector of Pearson correlation coefficients 
+#'    evaluated for every signature independently
+#'  \item \code{p.value_vector}:
+#'    A vector of p-values of the Pearson tests 
+#'    evaluated for every signature independently
 #'  \item \code{all_cor.test}:
 #'    A data structure as returned by \code{\link{cor.test}} for all data 
 #'    points, i.e. taken all signatures together
@@ -918,6 +933,7 @@ compare_exposures <- function(in_exposures1_df,
   signatures2 <- rownames(in_exposures2_df)
   common_signatures <- intersect(signatures1,signatures2)
   if(length(common_signatures) == 0) return(NULL)
+  common_signatures <- union(signatures2,signatures1)
   exposures1_df_melt <- melt_exposures(in_exposures1_df)
   names(exposures1_df_melt) <- gsub("value","exposures1",
                                     names(exposures1_df_melt))
@@ -944,7 +960,27 @@ compare_exposures <- function(in_exposures1_df,
         out.test <- NULL       
       } 
     })
+  cor.coeff_vector <- unlist(lapply(
+    cor.test_list,
+    function(current_test){
+      if(is.null(current_test)) return(0)
+      return(as.numeric(current_test$estimate))
+    }))
+  p.value_vector <- unlist(lapply(
+    cor.test_list,
+    function(current_test){
+      if(is.null(current_test)) return(1)
+      return(as.numeric(current_test$p.value))
+    }))
+  match_ind <- match(common_signatures,names(cor.test_list))
+  cor.test_list <- cor.test_list[match_ind]
+  cor.coeff_vector <- cor.coeff_vector[match_ind]
+  p.value_vector <- p.value_vector[match_ind]
   return(list(merge_df=merge_df,
+              all_cor.coeff=all_cor.test$estimate,
+              all_p.value=all_cor.test$p.value,
+              cor.coeff_vector=cor.coeff_vector,
+              p.value_vector=p.value_vector,
               all_cor.test=all_cor.test,
               cor.test_list=cor.test_list))
 }

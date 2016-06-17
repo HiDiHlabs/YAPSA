@@ -7,7 +7,8 @@
 complex_heatmap_exposures(in_exposures_df, in_subgroups_df,
   in_signatures_ind_df, in_data_type = "norm exposures",
   in_method = "manhattan", in_subgroup_column = "subgroup",
-  in_subgroup_colour_column = NULL, in_palette = NULL, in_cutoff = 0,
+  in_subgroup_colour_column = NULL, in_palette = colorRamp2(c(0, 0.2, 0.4,
+  0.6), c("white", "yellow", "orange", "red")), in_cutoff = 0,
   in_filename = NULL, in_column_anno_borders = FALSE,
   in_row_anno_borders = FALSE)
 }
@@ -34,10 +35,8 @@ is encoded in \code{in_subgroups_df}}
 subgroups is encoded in \code{in_subgroups_df}. If NULL, a rainbow palette
 is used instead.}
 
-\item{in_palette}{Palette with colours or colour codes for the labels (the text) of the leaves
-in the dendrogram. Typically one colour per subgroup. If none is specified, a
-rainbow palette of the length of the number of subgroups will be used as
-default.}
+\item{in_palette}{Palette with colours for the heatmap. Default is
+\code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red'))}}
 
 \item{in_cutoff}{A numeric value less than 1. Signatures from within \code{W}
 with an overall exposure less than \code{in_cutoff} will be

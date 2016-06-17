@@ -1517,10 +1517,8 @@ heatmap_exposures <- function(in_exposures_df,in_subgroups_df,in_signatures_ind_
 #'  subgroups is encoded in \code{in_subgroups_df}. If NULL, a rainbow palette
 #'  is used instead.
 #' @param in_palette
-#'  Palette with colours or colour codes for the labels (the text) of the leaves
-#'  in the dendrogram. Typically one colour per subgroup. If none is specified, a
-#'  rainbow palette of the length of the number of subgroups will be used as
-#'  default.
+#'  Palette with colours for the heatmap. Default is
+#'  \code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red'))}
 #' @param in_cutoff
 #'  A numeric value less than 1. Signatures from within \code{W}
 #'  with an overall exposure less than \code{in_cutoff} will be
@@ -1562,7 +1560,8 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,in_signatu
                                       in_data_type="norm exposures",
                                       in_method="manhattan",in_subgroup_column="subgroup",
                                       in_subgroup_colour_column=NULL,
-                                      in_palette=NULL,in_cutoff=0,in_filename=NULL,
+                                      in_palette=colorRamp2(c(0,0.2,0.4,0.6),c('white','yellow','orange','red')),
+                                      in_cutoff=0,in_filename=NULL,
                                       in_column_anno_borders=FALSE,
                                       in_row_anno_borders=FALSE){
   if(!in_row_anno_borders){
@@ -1587,7 +1586,7 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,in_signatu
                                                                    names = unique(in_subgroups_df[[in_subgroup_column]]))),
                                     gp = gpar(col="black"))   
   }
-  ht_list = row_anno + Heatmap(in_exposures_df, col = colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red')),
+  ht_list = row_anno + Heatmap(in_exposures_df, col = in_palette,
                                top_annotation = column_anno, 
                                clustering_distance_rows = in_method,
                                clustering_distance_columns = in_method,
@@ -1625,10 +1624,8 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,in_signatu
 #'  of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
 #'  \code{binary} or \code{minkowski}
 #' @param in_palette
-#'  Palette with colours or colour codes for the labels (the text) of the leaves
-#'  in the dendrogram. Typically one colour per subgroup. If none is specified, a
-#'  rainbow palette of the length of the number of subgroups will be used as
-#'  default.
+#'  Palette with colours or colour codes for the heatmap. Default is
+#'  \code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red'))}
 #' @param in_cutoff
 #'  A numeric value less than 1. Signatures from within \code{W}
 #'  with an overall exposure less than \code{in_cutoff} will be
@@ -1670,7 +1667,9 @@ annotation_heatmap_exposures <- function(in_exposures_df,
                                          in_signatures_ind_df,
                                          in_data_type="norm exposures",
                                          in_method="manhattan",
-                                         in_palette=NULL,in_cutoff=0,in_filename=NULL,
+                                         in_palette=colorRamp2(c(0, 0.2, 0.4, 0.6), 
+                                                               c('white', 'yellow', 'orange', 'red')),
+                                         in_cutoff=0,in_filename=NULL,
                                          in_column_anno_borders=FALSE,
                                          in_row_anno_borders=FALSE,
                                          in_show_PIDs=TRUE,
@@ -1696,13 +1695,13 @@ annotation_heatmap_exposures <- function(in_exposures_df,
                                     gp = gpar(col="black"))    
   }
   if(in_show_PIDs){
-    ht_list = row_anno + Heatmap(in_exposures_df, col = colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red')),
+    ht_list = row_anno + Heatmap(in_exposures_df, col = in_palette,
                                  top_annotation = column_anno, 
                                  clustering_distance_rows = in_method,
                                  clustering_distance_columns = in_method,
                                  heatmap_legend_param = list(title = in_data_type))
   } else {
-    ht_list = row_anno + Heatmap(in_exposures_df, col = colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red')),
+    ht_list = row_anno + Heatmap(in_exposures_df, col = in_palette,
                                  top_annotation = column_anno, 
                                  clustering_distance_rows = in_method,
                                  clustering_distance_columns = in_method,
