@@ -8,8 +8,9 @@
 data(sigs)
 }
 \description{
-Data frame of only the validated signatures published initially by Alexandrov et al.
-(Nature 2013), corresponding to the first 22 columns of \code{AlexInitialArtif_sig_df}
+Data frame of only the validated signatures published initially by Alexandrov
+et al. (Nature 2013), corresponding to the first 22 columns of
+\code{AlexInitialArtif_sig_df}
 }
 \author{
 Daniel Huebschmann \email{huebschmann.daniel@googlemail.com}

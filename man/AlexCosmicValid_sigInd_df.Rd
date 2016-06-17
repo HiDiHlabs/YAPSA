@@ -8,10 +8,20 @@
 data(sigs)
 }
 \description{
-A data frame with as many rows as there are signatures in \code{AlexCosmicValid_sig_df}
-and four columns: one for the signature name, one carrying an index, one
-encoding the colour for visualization and one describing the asserted biological
-process.
+A data frame with as many rows as there are signatures in
+\code{AlexCosmicValid_sig_df} and several columns:
+\itemize{
+ \item \code{sig}: signature name
+ \item \code{index}: corresponding to the row index of the signature
+ \item \code{colour}: colour for visualization in stacked barplots
+ \item \code{process}: asserted biological process
+ \item \code{cat.coarse}: categorization of the signatures according
+  to the asserted biological processes at low level of detail
+ \item \code{cat.medium}: categorization of the signatures according
+  to the asserted biological processes at intermediate level of detail
+ \item \code{cat.medium}: categorization of the signatures according
+  to the asserted biological processes at high level of detail
+ }
 }
 \author{
 Daniel Huebschmann \email{huebschmann.daniel@googlemail.com}

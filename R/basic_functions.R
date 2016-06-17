@@ -1016,10 +1016,20 @@ NULL
 
 #' Meta-information on initially published mutational signatures
 #' 
-#' A data frame with as many rows as there are signatures in \code{AlexInitialArtif_sig_df}
-#' and four columns: one for the signature name, one carrying an index, one
-#' encoding the colour for visualization and one describing the asserted biological
-#' process.
+#' A data frame with as many rows as there are signatures in
+#' \code{AlexInitialValid_sig_df} and several columns: 
+#' \itemize{
+#'  \item \code{sig}: signature name
+#'  \item \code{index}: corresponding to the row index of the signature
+#'  \item \code{colour}: colour for visualization in stacked barplots
+#'  \item \code{process}: asserted biological process
+#'  \item \code{cat.coarse}: categorization of the signatures according
+#'   to the asserted biological processes at low level of detail
+#'  \item \code{cat.medium}: categorization of the signatures according
+#'   to the asserted biological processes at intermediate level of detail
+#'  \item \code{cat.medium}: categorization of the signatures according
+#'   to the asserted biological processes at high level of detail
+#'  }
 #' 
 #' @seealso \code{\link{AlexInitialArtif_sig_df}}
 #' @seealso \code{\link{AlexInitialValid_sig_df}}
@@ -1034,8 +1044,9 @@ NULL
 
 #' Sub-data frame of the initially published mutational signatures
 #' 
-#' Data frame of only the validated signatures published initially by Alexandrov et al.
-#' (Nature 2013), corresponding to the first 22 columns of \code{AlexInitialArtif_sig_df}
+#' Data frame of only the validated signatures published initially by Alexandrov
+#' et al. (Nature 2013), corresponding to the first 22 columns of
+#' \code{AlexInitialArtif_sig_df}
 #' 
 #' @seealso \code{\link{AlexInitialArtif_sig_df}}
 #' 
@@ -1070,10 +1081,20 @@ NULL
 
 #' Meta-information on updated mutational signatures
 #' 
-#' A data frame with as many rows as there are signatures in \code{AlexCosmicValid_sig_df}
-#' and four columns: one for the signature name, one carrying an index, one
-#' encoding the colour for visualization and one describing the asserted biological
-#' process.
+#' A data frame with as many rows as there are signatures in
+#' \code{AlexCosmicValid_sig_df} and several columns: 
+#' \itemize{
+#'  \item \code{sig}: signature name
+#'  \item \code{index}: corresponding to the row index of the signature
+#'  \item \code{colour}: colour for visualization in stacked barplots
+#'  \item \code{process}: asserted biological process
+#'  \item \code{cat.coarse}: categorization of the signatures according
+#'   to the asserted biological processes at low level of detail
+#'  \item \code{cat.medium}: categorization of the signatures according
+#'   to the asserted biological processes at intermediate level of detail
+#'  \item \code{cat.medium}: categorization of the signatures according
+#'   to the asserted biological processes at high level of detail
+#'  }
 #' 
 #' @seealso \code{\link{AlexCosmicValid_sig_df}}
 #' 
