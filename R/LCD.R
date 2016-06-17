@@ -386,6 +386,9 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
 #' @param in_sig_ind_df
 #'  Data frame of type signature_indices_df, i.e. indicating name,
 #'  function and meta-information of the signatures. Default is NULL.
+#' @param in_cat_list
+#'  List of categories for aggregation. Have to be among the column names of 
+#'  \code{in_sig_ind_df}. Default is NULL.
 #'  
 #' @return A list with entries \code{exposures}, \code{signatures}, 
 #'          \code{choice} and \code{order}
@@ -427,10 +430,16 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
 #'    Data frame of the type \code{signature_indices_df}, i.e. indicating name,
 #'    function and meta-information of the signatures. Default is NULL, non-NULL
 #'    only if \code{in_sig_ind_df} is non-NULL.
+#'  \item \code{aggregate_exposures_list}:
+#'    List of exposure data frames aggregated over different categories. Default
+#'    is NULL, non-NULL only if \code{in_sig_ind_df} and \code{in_cat_list} are 
+#'    non-NULL and if the categories specified in \code{in_cat_list} are among 
+#'    the column names of \code{in_sig_ind_df}.
 #' }
 #' 
 #' @seealso \code{\link{LCD}}
 #' @seealso \code{\link{LCD_cutoff}}
+#' @seealso \code{\link{aggregate_exposures_by_category}}
 #' @seealso \code{\link[limSolve]{lsei}}
 #' 
 #' @examples
@@ -446,7 +455,8 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
                                in_method="abs",
                                in_per_sample_cutoff=0,
                                in_rescale=TRUE,
-                               in_sig_ind_df=NULL) {
+                               in_sig_ind_df=NULL,
+                               in_cat_list=NULL) {
   # first run analysis without cutoff
   all_exposures_df <- LCD(in_mutation_catalogue_df,
                           in_signatures_df,
@@ -499,8 +509,17 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
                                               fit_catalogue_df[,i])
   }
   out_sig_ind_df <- NULL
+  aggregate_exposures_list <- NULL
   if(!is.null(in_sig_ind_df)){
     out_sig_ind_df <- in_sig_ind_df[sig_choice_ind,]
+    if(!is.null(in_cat_list)){
+      aggregate_exposures_list <- lapply(
+        in_cat_list,FUN=function(current_category){
+          aggregate_exposures_by_category(
+            out_exposures_df,out_sig_ind_df,current_category)
+        })   
+      names(aggregate_exposures_list) <- in_cat_list
+    }
   }
   return(list(exposures=out_exposures_df,
               norm_exposures=out_norm_exposures_df,
@@ -512,7 +531,8 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
               cosDist_fit_orig_per_matrix=cosDist_fit_orig_per_matrix,
               cosDist_fit_orig_per_col=cosDist_fit_orig_per_col,
               sum_ind=sum_ind,
-              out_sig_ind_df=out_sig_ind_df))
+              out_sig_ind_df=out_sig_ind_df,
+              aggregate_exposures_list=aggregate_exposures_list))
 }
 
 

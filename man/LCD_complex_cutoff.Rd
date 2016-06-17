@@ -6,7 +6,8 @@
 \usage{
 LCD_complex_cutoff(in_mutation_catalogue_df, in_signatures_df,
   in_cutoff_vector = NULL, in_filename = NULL, in_method = "abs",
-  in_per_sample_cutoff = 0, in_rescale = TRUE, in_sig_ind_df = NULL)
+  in_per_sample_cutoff = 0, in_rescale = TRUE, in_sig_ind_df = NULL,
+  in_cat_list = NULL)
 }
 \arguments{
 \item{in_mutation_catalogue_df}{A numeric data frame \code{V} with \code{n} rows and \code{m} columns,
@@ -34,7 +35,10 @@ discarded.}
 exposures match colSums over mutational catalogue}
 
 \item{in_sig_ind_df}{Data frame of type signature_indices_df, i.e. indicating name,
- function and meta-information of the signatures. Default is NULL.}
+function and meta-information of the signatures. Default is NULL.}
+
+\item{in_cat_list}{List of categories for aggregation. Have to be among the column names of
+ \code{in_sig_ind_df}. Default is NULL.}
 }
 \value{
 A list with entries \code{exposures}, \code{signatures},
@@ -77,6 +81,11 @@ A list with entries \code{exposures}, \code{signatures},
    Data frame of the type \code{signature_indices_df}, i.e. indicating name,
    function and meta-information of the signatures. Default is NULL, non-NULL
    only if \code{in_sig_ind_df} is non-NULL.
+ \item \code{aggregate_exposures_list}:
+   List of exposure data frames aggregated over different categories. Default
+   is NULL, non-NULL only if \code{in_sig_ind_df} and \code{in_cat_list} are
+   non-NULL and if the categories specified in \code{in_cat_list} are among
+   the column names of \code{in_sig_ind_df}.
 }
 }
 \description{
@@ -96,6 +105,8 @@ NULL
 \code{\link{LCD}}
 
 \code{\link{LCD_cutoff}}
+
+\code{\link{aggregate_exposures_by_category}}
 
 \code{\link[limSolve]{lsei}}
 }

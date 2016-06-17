@@ -1175,3 +1175,42 @@ compute_comparison_stat_df <- function(in_sim_df){
   names(stat_df)[2] <- "mean_sim"
   return(stat_df)
 }
+
+
+#' Aggregate exposures by category
+#' 
+#' If a valid category (i.e. it matches to a category specified in 
+#' in_sig_ind_df) is supplied, then the exposures are aggregated over this
+#' category.
+#' 
+#' @param in_exposures_df
+#'  Input data frame of exposures.
+#' @param in_sig_ind_df
+#'  Input data frame of meta information on the signatures. Has to match the 
+#'  signatures in \code{in_exposures_df}
+#' @param in_category
+#'  Category to be aggregated over
+#' 
+#' @return A dataframe of aggregated exposures.
+#' 
+#' @seealso \code{\link{LCD_complex_cutoff}}
+#' 
+#' @examples
+#'  NULL
+#'
+#' @export
+#'
+aggregate_exposures_by_category <- function(
+  in_exposures_df,in_sig_ind_df,in_category){
+  if(any(in_category==names(in_sig_ind_df))) {
+    temp_exposures <- cbind(
+      in_exposures_df,in_sig_ind_df[,in_category,drop=FALSE])
+    names(temp_exposures) <- gsub(in_category,"cat",names(temp_exposures))
+    temp_aggregate_exposures <- aggregate(.~cat,data=temp_exposures,FUN=sum)
+    rownames(temp_aggregate_exposures) <- temp_aggregate_exposures$cat
+    temp_aggregate_exposures$cat <- NULL
+    return(temp_aggregate_exposures)
+  } else {
+    return(NULL)
+  }
+}
