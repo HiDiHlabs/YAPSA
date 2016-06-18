@@ -568,6 +568,9 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
 #' @param in_sig_ind_df
 #'  Data frame of type signature_indices_df, i.e. indicating name,
 #'  function and meta-information of the signatures. Default is NULL.
+#' @param in_cat_list
+#'  List of categories for aggregation. Have to be among the column names of 
+#'  \code{in_sig_ind_df}. Default is NULL.
 #'  
 #' @return A list with entries \code{exposures}, \code{signatures},
 #'          \code{choice} and \code{order}
@@ -609,6 +612,11 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
 #'    Data frame of the type \code{signature_indices_df}, i.e. indicating name,
 #'    function and meta-information of the signatures. Default is NULL, non-NULL
 #'    only if \code{in_sig_ind_df} is non-NULL.
+#'  \item \code{aggregate_exposures_list}:
+#'    List of exposure data frames aggregated over different categories. Default
+#'    is NULL, non-NULL only if \code{in_sig_ind_df} and \code{in_cat_list} are 
+#'    non-NULL and if the categories specified in \code{in_cat_list} are among 
+#'    the column names of \code{in_sig_ind_df}.
 #' }
 #' 
 #' @seealso \code{\link{LCD_complex_cutoff}}
@@ -624,7 +632,8 @@ LCD_complex_cutoff_perPID <- function(in_mutation_catalogue_df,
                                       in_filename=NULL,
                                       in_method="abs",
                                       in_rescale=TRUE,
-                                      in_sig_ind_df=NULL){
+                                      in_sig_ind_df=NULL,
+                                      in_cat_list=NULL){
   complex_COSMIC_list_list <- lapply(
     seq_along(in_mutation_catalogue_df), FUN=function(current_col){
       current_mut_cat <- in_mutation_catalogue_df[,current_col,drop=FALSE]
@@ -636,18 +645,6 @@ LCD_complex_cutoff_perPID <- function(in_mutation_catalogue_df,
                                                 in_rescale=in_rescale)
       return(complex_COSMIC_list)
   })
-#   exposures_list <- lapply(complex_COSMIC_list_list,FUN=function(x) {
-#     current_exposures <- x$exposures
-#     current_exposures$sig <- rownames(current_exposures)
-#     return(current_exposures)
-#   })
-#   exposures_df <- Reduce(function(...) merge(..., by="sig",all=TRUE,sort=FALSE),
-#                          exposures_list)
-#   row_order <- order(match(exposures_df$sig,names(in_signatures_df)))
-#   exposures_df <- exposures_df[row_order,]
-#   rownames(exposures_df) <- exposures_df$sig
-#   exposures_df$sig <- NULL
-#   exposures_df[is.na(exposures_df)] <- 0
   exposures_list <- lapply(complex_COSMIC_list_list,FUN=function(x) {
     return(x$exposures)})
   exposures_df <- merge_exposures(exposures_list,
@@ -667,8 +664,17 @@ LCD_complex_cutoff_perPID <- function(in_mutation_catalogue_df,
   total_counts <- colSums(in_mutation_catalogue_df)
   sum_ind <- rev(order(total_counts))
   out_sig_ind_df <- NULL
+  aggregate_exposures_list <- NULL
   if(!is.null(in_sig_ind_df)){
     out_sig_ind_df <- in_sig_ind_df[sig_choice_ind,]
+    if(!is.null(in_cat_list)){
+      aggregate_exposures_list <- lapply(
+        in_cat_list,FUN=function(current_category){
+          aggregate_exposures_by_category(
+            exposures_df,out_sig_ind_df,current_category)
+        })   
+      names(aggregate_exposures_list) <- in_cat_list
+    }
   }
   return(list(exposures=exposures_df,
               norm_exposures=norm_exposures_df,
@@ -680,7 +686,8 @@ LCD_complex_cutoff_perPID <- function(in_mutation_catalogue_df,
               cosDist_fit_orig_per_matrix=cosDist_fit_orig_per_matrix,
               cosDist_fit_orig_per_col=cosDist_fit_orig_per_col,
               sum_ind=sum_ind,
-              out_sig_ind_df=out_sig_ind_df))
+              out_sig_ind_df=out_sig_ind_df,
+              aggregate_exposures_list=aggregate_exposures_list))
 }
 
 
