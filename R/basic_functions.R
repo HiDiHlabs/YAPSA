@@ -1027,8 +1027,10 @@ NULL
 #'   to the asserted biological processes at low level of detail
 #'  \item \code{cat.medium}: categorization of the signatures according
 #'   to the asserted biological processes at intermediate level of detail
-#'  \item \code{cat.medium}: categorization of the signatures according
+#'  \item \code{cat.high}: categorization of the signatures according
 #'   to the asserted biological processes at high level of detail
+#'  \item \code{cat.putative}: categorization of the signatures according
+#'   to the asserted biological processes based on clustering and inference
 #'  }
 #' 
 #' @seealso \code{\link{AlexInitialArtif_sig_df}}
@@ -1092,8 +1094,10 @@ NULL
 #'   to the asserted biological processes at low level of detail
 #'  \item \code{cat.medium}: categorization of the signatures according
 #'   to the asserted biological processes at intermediate level of detail
-#'  \item \code{cat.medium}: categorization of the signatures according
+#'  \item \code{cat.fine}: categorization of the signatures according
 #'   to the asserted biological processes at high level of detail
+#'  \item \code{cat.putative}: categorization of the signatures according
+#'   to the asserted biological processes based on clustering and inference
 #'  }
 #' 
 #' @seealso \code{\link{AlexCosmicValid_sig_df}}

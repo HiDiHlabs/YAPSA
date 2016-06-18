@@ -19,8 +19,10 @@ A data frame with as many rows as there are signatures in
   to the asserted biological processes at low level of detail
  \item \code{cat.medium}: categorization of the signatures according
   to the asserted biological processes at intermediate level of detail
- \item \code{cat.medium}: categorization of the signatures according
+ \item \code{cat.fine}: categorization of the signatures according
   to the asserted biological processes at high level of detail
+ \item \code{cat.putative}: categorization of the signatures according
+  to the asserted biological processes based on clustering and inference
  }
 }
 \author{

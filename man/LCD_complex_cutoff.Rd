@@ -41,8 +41,7 @@ function and meta-information of the signatures. Default is NULL.}
  \code{in_sig_ind_df}. Default is NULL.}
 }
 \value{
-A list with entries \code{exposures}, \code{signatures},
-         \code{choice} and \code{order}
+A list with entries:
 \itemize{
  \item \code{exposures}:
    The exposures \code{H}, a numeric data frame with

@@ -15,7 +15,22 @@ signatures in \code{in_exposures_df}}
 \item{in_category}{Category to be aggregated over}
 }
 \value{
-A dataframe of aggregated exposures.
+A list with entries:
+\itemize{
+ \item \code{exposures}:
+   The exposures \code{H}, a numeric data frame with
+   \code{l} rows and \code{m} columns, \code{l} being
+   the number of aggregated signatures and \code{m} being the number
+   of samples
+ \item \code{norm_exposures}:
+   The normalized exposures \code{H}, a numeric data frame with
+   \code{l} rows and \code{m} columns, \code{l} being
+   the number of aggregated signatures and \code{m} being the number
+   of samples
+ \item \code{out_sig_ind_df}:
+   Data frame of the type \code{signature_indices_df}, i.e. indicating name,
+   function and meta-information of the aggregated signatures..
+}
 }
 \description{
 If a valid category (i.e. it matches to a category specified in

@@ -1191,7 +1191,22 @@ compute_comparison_stat_df <- function(in_sim_df){
 #' @param in_category
 #'  Category to be aggregated over
 #' 
-#' @return A dataframe of aggregated exposures.
+#' @return A list with entries:
+#' \itemize{
+#'  \item \code{exposures}:
+#'    The exposures \code{H}, a numeric data frame with 
+#'    \code{l} rows and \code{m} columns, \code{l} being
+#'    the number of aggregated signatures and \code{m} being the number
+#'    of samples
+#'  \item \code{norm_exposures}:
+#'    The normalized exposures \code{H}, a numeric data frame with 
+#'    \code{l} rows and \code{m} columns, \code{l} being
+#'    the number of aggregated signatures and \code{m} being the number
+#'    of samples
+#'  \item \code{out_sig_ind_df}:
+#'    Data frame of the type \code{signature_indices_df}, i.e. indicating name,
+#'    function and meta-information of the aggregated signatures..
+#' }
 #' 
 #' @seealso \code{\link{LCD_complex_cutoff}}
 #' 
@@ -1203,13 +1218,24 @@ compute_comparison_stat_df <- function(in_sim_df){
 aggregate_exposures_by_category <- function(
   in_exposures_df,in_sig_ind_df,in_category){
   if(any(in_category==names(in_sig_ind_df))) {
+    ## process exposures
     temp_exposures <- cbind(
       in_exposures_df,in_sig_ind_df[,in_category,drop=FALSE])
     names(temp_exposures) <- gsub(in_category,"cat",names(temp_exposures))
     temp_aggregate_exposures <- aggregate(.~cat,data=temp_exposures,FUN=sum)
     rownames(temp_aggregate_exposures) <- temp_aggregate_exposures$cat
     temp_aggregate_exposures$cat <- NULL
-    return(temp_aggregate_exposures)
+    ## normalize exposures
+    norm_aggregate_exposures <- normalize_df_per_dim(temp_aggregate_exposures,2)
+    ## process sig_ind_df
+    names(in_sig_ind_df) <- gsub(in_category,"cat",names(in_sig_ind_df))
+    out_sig_ind_df <- aggregate(.~cat,data=in_sig_ind_df,FUN=head,1)
+    out_sig_ind_df$sig <- out_sig_ind_df$cat
+    out_sig_ind_df$cat <- NULL
+    out_sig_ind_df$colour <- as.character(out_sig_ind_df$colour)
+    return(list(exposures=temp_aggregate_exposures,
+                norm_exposures=norm_aggregate_exposures,
+                out_sig_ind_df=out_sig_ind_df))
   } else {
     return(NULL)
   }

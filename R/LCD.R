@@ -390,8 +390,7 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
 #'  List of categories for aggregation. Have to be among the column names of 
 #'  \code{in_sig_ind_df}. Default is NULL.
 #'  
-#' @return A list with entries \code{exposures}, \code{signatures}, 
-#'          \code{choice} and \code{order}
+#' @return A list with entries:
 #' \itemize{
 #'  \item \code{exposures}:
 #'    The exposures \code{H}, a numeric data frame with 
