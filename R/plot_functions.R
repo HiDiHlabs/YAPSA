@@ -1306,6 +1306,8 @@ stat_plot_subgroups <- function(in_exposures_df,in_subgroups_df,
 #'  Graphical parameter to adjust figure to be created
 #' @param in_title
 #'  Title in the figure to be created under \code{in_filename}
+#' @param in_plot_flag
+#'  Whether or not to display the dendrogram
 #'
 #' @return A list with entries
 #'  \code{hclust} and
@@ -1335,7 +1337,8 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
                              in_method="manhattan",
                              in_subgroup_column="subgroup",
                              in_palette=NULL,in_cutoff=0,in_filename=NULL,
-                             in_shift_factor=0.3,in_cex=0.2,in_title="") {
+                             in_shift_factor=0.3,in_cex=0.2,in_title="",
+                             in_plot_flag=FALSE) {
   ## 1. choose only signatures with exposures above cutoff
   exposures_sum_df <- data.frame(sum=apply(in_exposures_df,1,sum))
   exposures_sum_df$sum_norm <- exposures_sum_df$sum/sum(exposures_sum_df$sum)
@@ -1358,11 +1361,12 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
   max_height <- max(my_exposures_hierarchy$height)
   if (!is.null(in_filename)) {
     png(in_filename,width=1000,height=400)
-  }
-  plot(my_exposures_hc,cex=in_cex,ylim=c((-1)*in_shift_factor*max_height,max_height),main=in_title)
-  if (!is.null(in_filename)) {
+    plot(my_exposures_hc,cex=in_cex,ylim=c((-1)*in_shift_factor*max_height,max_height),main=in_title)
     dev.off()    
   }
+  if(in_plot_flag) plot(my_exposures_hc,cex=in_cex,
+                        ylim=c((-1)*in_shift_factor*max_height,max_height),
+                        main=in_title)
   return(list(hclust=my_exposures_hierarchy,dendrogram=my_exposures_hc))
 }
 

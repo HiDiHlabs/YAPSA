@@ -986,6 +986,92 @@ compare_exposures <- function(in_exposures1_df,
 }
 
 
+#' Find samples affected
+#' 
+#' Find samples affected by SNVs in a certain pathway
+#' 
+#' @param in_gene_list
+#'  List of genes in the pathway of interest.
+#' @param in_gene_vector
+#'  Character vector for genes annotated to SNVs as in \code{vcf_like_df}.
+#' @param in_PID_vector
+#'  Character vector for sample names annotated to SNVs as in
+#'  \code{vcf_like_df}.
+#' 
+#' @return A character vector of the names of the affected samples
+#' 
+#' @examples
+#'  NULL
+#' 
+#' @export
+#' 
+find_affected_PIDs <- function(in_gene_list,
+                               in_gene_vector,
+                               in_PID_vector){
+  choice_gene_pattern <- paste0(in_gene_list,collapse="|")
+  choice_mut_ind <- grep(choice_gene_pattern,in_gene_vector)
+  affected_PIDs <- unique(in_PID_vector[choice_mut_ind])
+  return(affected_PIDs)
+}
+
+
+#' Test significance of association
+#' 
+#' Test significance of association between a vector of exposures and a
+#' selection of samples, e.g. those affected by mutations in a pathway as
+#' returned by \code{\link{find_affected_PIDs}}
+#' 
+#' @param in_exposure_vector
+#'  Named vector of a phenotype (e.g. exposures to a specific signature)
+#' @param in_affected_PIDs
+#'  Character vector of samples affected by some criterion, e.g. mutations in a
+#'  pathway as returned by \code{\link{find_affected_PIDs}}
+#' @param in_mutation_label
+#'  If non-NULL, prefix to the mutation status (x-axis label) in the produced
+#'  boxplot
+#' @param in_exposure_label
+#'  If non-NULL, prefix to the exposures (y-axis label) in the produced
+#'  boxplot
+#' 
+#' @return A list with entries:
+#' \itemize{
+#'  \item \code{current_kruskal}:
+#'    Kruskal test object from testing phenotype against affection
+#'  \item \code{current_boxplot}:
+#'    Boxplot of phenotype against affection
+#' }
+#' 
+#' @examples
+#'  NULL
+#' 
+#' @export
+#' 
+test_exposureAffected <- function(in_exposure_vector,
+                                  in_affected_PIDs,
+                                  in_mutation_label=NULL,
+                                  in_exposure_label=NULL){
+  .e <- environment()
+  factor_vector <- rep("wt",length(in_exposure_vector)) 
+  names(factor_vector) <- names(in_exposure_vector)
+  factor_vector[in_affected_PIDs] <- "mut"
+  if(!is.null(in_mutation_label)) factor_vector <- paste0(in_mutation_label,"-",
+                                                          factor_vector)
+  factor_vector <- factor(factor_vector)
+  test_df <- data.frame(  
+    exposure=as.numeric(in_exposure_vector),  
+    mut_stat=factor_vector)	
+  current_kruskal <- kruskal.test(exposure~mut_stat,data=test_df)
+  current_boxplot <- ggplot(environment = .e, data = test_df) +  
+    geom_boxplot(aes(x=mut_stat,y=exposure))
+  if(!is.null(in_exposure_label)){
+    current_boxplot <- current_boxplot + ylab(paste0(in_exposure_label,
+                                                     " exposure"))
+  }
+  return(list(kruskal=current_kruskal,
+              boxplot=current_boxplot))
+}
+
+
 #' Information on initially published mutational signatures
 #' 
 #' Data frame of the signatures published initially by Alexandrov et al. (Nature 
