@@ -462,6 +462,63 @@ exposures_barplot <- function(in_exposures_df,in_signatures_ind_df=NULL,
 }
 
 
+#' Add information to an annotation data structure
+#' 
+#' Function to iteratively add information to an annotation data structure as
+#' needed for \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and especially for 
+#' \code{\link{annotation_exposures_barplot}}
+#' 
+#' @param in_annotation_col
+#'  List, every element of which refers to one layer of annotation. List
+#'  elements are structures corresponding to named colour vectors
+#' @param in_annotation_df
+#'  Data frame, every column of which corresponds to a layer of annotation. It
+#'  has as many rows as there are samples, every entry in a row corresponding to
+#'  the attribute the samples has for the corresponding layer of annotation. The
+#'  factor levels of a column of \code{in_annotation_df} correspond to the names
+#'  of the corresponding element in \code{in_annotation_col}
+#' @param in_attribution_vector
+#'  A vector which is going to be cbinded to \code{in_annotatiin_df}, carrying
+#'  the annotation information of the new layer to be added
+#' @param in_colour_vector
+#'  Named vector of colours to be attributed to the new annotation
+#' @param in_name
+#'  Name of the new layer of annotation
+#'
+#' @return A list with entries
+#' \itemize{
+#'  \item \code{annotation_col}:
+#'    A list as in \code{in_annotation_col} but with one additional layer of
+#'    annotation
+#'  \item \code{annotation_df}:
+#'    A data frame as in \code{in_annotation_df} but with one additional layer
+#'    of annotation
+#' }
+#'
+#' @export
+#' 
+add_annotation <- function(in_annotation_col,
+                           in_annotation_df,
+                           in_attribution_vector,
+                           in_colour_vector,
+                           in_name){
+  current_name_vector <- sort(unique(as.character(in_attribution_vector)))
+  current_annotation_index <- length(in_annotation_col) + 1
+  annotation_col <- in_annotation_col
+  annotation_col[[current_annotation_index]] <- 
+    structure(in_colour_vector,names=current_name_vector)
+  names(annotation_col)[current_annotation_index] <- in_name
+  if(is.null(in_annotation_df)){
+    annotation_df <- data.frame(in_attribution_vector)
+  } else {
+    annotation_df <- cbind(in_annotation_df,
+                           data.frame(in_attribution_vector))
+  }
+  names(annotation_df)[current_annotation_index] <- in_name
+  return(list(annotation_col=annotation_col,
+              annotation_df=annotation_df))
+}
+
 
 #' Plot the exposures of a cohort with different layers of annotation
 #'
@@ -1645,6 +1702,8 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,in_signatu
 #'  Whether or not to show the PIDs on the x-axis
 #' @param in_annotation_legend_side
 #'  Where to put the legends of the annotation df, default is right.
+#' @param in_show_legend_bool_vector
+#'  Which legends to display
 #'
 #' @details
 #'  It might be necessary to install the newest version of the development branch
@@ -1677,7 +1736,8 @@ annotation_heatmap_exposures <- function(in_exposures_df,
                                          in_column_anno_borders=FALSE,
                                          in_row_anno_borders=FALSE,
                                          in_show_PIDs=TRUE,
-                                         in_annotation_legend_side="right"){
+                                         in_annotation_legend_side="right",
+                                         in_show_legend_bool_vector=rep(TRUE,length(in_annotation_col))){
   if(!in_row_anno_borders){
     row_anno = rowAnnotation(df = data.frame(signature = in_signatures_ind_df$index),
                              col = list(signature = structure(in_signatures_ind_df$colour, 
@@ -1692,11 +1752,17 @@ annotation_heatmap_exposures <- function(in_exposures_df,
   }
   if(!in_column_anno_borders){
     column_anno = HeatmapAnnotation(df = in_annotation_df, 
-                                    col = in_annotation_col)
+                                    col = in_annotation_col,
+                                    show_legend=in_show_legend_bool_vector,
+                                    show_annotation_name=TRUE,
+                                    annotation_name_offset=unit(2,"mm"))
   } else {
     column_anno = HeatmapAnnotation(df = in_annotation_df, 
                                     col = in_annotation_col,
-                                    gp = gpar(col="black"))    
+                                    gp = gpar(col="black"),
+                                    show_legend=in_show_legend_bool_vector,
+                                    show_annotation_name=TRUE,
+                                    annotation_name_offset=unit(2,"mm"))    
   }
   if(in_show_PIDs){
     ht_list = row_anno + Heatmap(in_exposures_df, col = in_palette,

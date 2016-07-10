@@ -7,7 +7,7 @@ Author: Daniel Huebschmann, Zuguang Gu, Matthias Schlesner
 Maintainer: Daniel Huebschmann <d.huebschmann@dkfz.de>
 Imports: limSolve, SomaticSignatures,  VariantAnnotation,
   reshape2, gridExtra, corrplot, dendextend, gplots, GetoptLong,
-  circlize, gtrellis, PMCMR, ComplexHeatmap, KEGGREST
+  circlize (>= 0.3.8), gtrellis, PMCMR, ComplexHeatmap (>= 1.11.5), KEGGREST
 Depends: GenomicRanges, ggplot2, grid
 Description: This package provides functions and routines useful in 
   the analysis of somatic signatures (cf. L. Alexandrov et al., Nature 
@@ -16,7 +16,7 @@ Description: This package provides functions and routines useful in
   signature analysis on stratified mutational catalogue (SMC = stratify 
   mutational catalogue) are provided.
 License: GPL-3
-Suggests: testthat, knitr
+Suggests: testthat, BiocStyle, knitr, rmarkdown
 VignetteBuilder: knitr
 LazyLoad: yes
 biocViews: Sequencing, DNASeq, SomaticMutation, Visualization,

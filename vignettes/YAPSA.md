@@ -3,6 +3,11 @@ Daniel Huebschmann
 26/08/2015  
 
   
+
+```r
+library(BiocStyle)
+```
+
 # Introduction {#introduction}
 
 The concept of mutational signatures was introduced in a series of papers by Ludmil Alexandrov et al. [@Alex2013] and [@Alex_CellRep2013]. A computational framework was published [@Alex_package2012] with the purpose to detect a limited number of mutational processes which then describe the whole set of SNVs (single nucleotide variants) in a cohort of cancer samples. The general approach [@Alex2013] is as follows:
@@ -36,7 +41,7 @@ In the following, we will denote the columns of $V$ by $V_{(\cdot j)}$, which co
 \end{aligned}
 $$
 
-Remember that $j$ is the index over samples, $m$ is the number of samples, $i$ is the index over signatures and $l$ is the number of signatures. `LCD` uses the function `lsei` from the package [limsolve](https://cran.r-project.org/web/packages/limSolve/index.html) [@limsolve_package2009] and [@limsolve2009]. Note that the optimization procedure is carried out for every $V_{(\cdot j)}$, i.e. for every column of $V$ separately. Of course $W$ is constant, i.e. the same for every $V_{(\cdot j)}$.
+Remember that $j$ is the index over samples, $m$ is the number of samples, $i$ is the index over signatures and $l$ is the number of signatures. `LCD` uses the function `lsei` from the package *[limsolve](http://cran.fhcrc.org/web/packages/limsolve/index.html)* (https://cran.r-project.org/web/packages/limSolve/index.html) [@limsolve_package2009] and [@limsolve2009]. Note that the optimization procedure is carried out for every $V_{(\cdot j)}$, i.e. for every column of $V$ separately. Of course $W$ is constant, i.e. the same for every $V_{(\cdot j)}$.
 
 This procedure is highly sensitive: as soon as a signature has a contribution or an exposure in at least one sample of a cohort, it will be reported (within the floating point precision of the operating system). This might blur the picture and counteracts the initial purpose of complexity reduction. Therefore there is a function `LCD_cutoff`. This function takes as a second argument a cutoff (a value between zero and one). In the analysis, it will keep only those signatures which have a cumulative (over the cohort) normalized exposure greater than this cutoff. In fact it runs the LCD-procedure twice: once to find initial exposures, summing over the cohort and excluding the ones with too low a contribution as described just above, and a second time doing the analysis only with the signatures left over. Beside the exposures H corresponding to this reduced set of signatures, the function `LCD_cutoff` also returns the reduced set of signatures itself.
 
@@ -609,8 +614,6 @@ hclust_list <- hclust_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_
                                 in_method="manhattan",
                                 in_subgroup_column="subgroup")
 ```
-
-![Clustering of the Samples based on the relative exposures of the COSMIC signatures in the lymphoma mutational catalogues.](YAPSA_files/figure-html/apply_hclust_exposures-1.png) 
 
 The dendrogram produced by either the function `complex_heatmap_exposures` or the function `hclust_exposures` can be cut to yield signature exposure specific subgroups of the PIDs.
 

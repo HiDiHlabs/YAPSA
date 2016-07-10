@@ -9,7 +9,8 @@ annotation_heatmap_exposures(in_exposures_df, in_annotation_df,
   in_method = "manhattan", in_palette = colorRamp2(c(0, 0.2, 0.4, 0.6),
   c("white", "yellow", "orange", "red")), in_cutoff = 0, in_filename = NULL,
   in_column_anno_borders = FALSE, in_row_anno_borders = FALSE,
-  in_show_PIDs = TRUE, in_annotation_legend_side = "right")
+  in_show_PIDs = TRUE, in_annotation_legend_side = "right",
+  in_show_legend_bool_vector = rep(TRUE, length(in_annotation_col)))
 }
 \arguments{
 \item{in_exposures_df}{Numerical data frame encoding the exposures \code{H}, i.e. which
@@ -46,6 +47,8 @@ to the running environment.}
 \item{in_show_PIDs}{Whether or not to show the PIDs on the x-axis}
 
 \item{in_annotation_legend_side}{Where to put the legends of the annotation df, default is right.}
+
+\item{in_show_legend_bool_vector}{Which legends to display}
 }
 \value{
 The function doesn't return any value.
