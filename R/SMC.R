@@ -106,15 +106,15 @@
 #'                 %in% unique(lymphoma_test_df$PID))
 #'  lymphoma_test_exposures_df <- lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
 #'  temp_subgroups_df <- make_subgroups_df(lymphoma_test_exposures_df,lymphoma_test_df)
-#'  lymphoma_test_signatures_df <- Alex_COSMIC_signatures_df[,chosen_signatures_indices_df$index]
+#'  lymphoma_test_signatures_df <- AlexCosmicValid_sig_df[,AlexCosmicValid_sigInd_df$index]
 #'  mut_density_list <- run_SMC(lymphoma_test_df,
 #'                              lymphoma_test_signatures_df,
-#'                              chosen_signatures_indices_df,
+#'                              AlexCosmicValid_sigInd_df,
 #'                              temp_subgroups_df,
 #'                              column_name="random_cat",
 #'                              refGenome=BSgenome.Hsapiens.UCSC.hg19,
 #'                              cohort_method_flag="norm_PIDs",
-#'                              in_rownames = rownames(Alex_COSMIC_signatures_df))
+#'                              in_rownames = rownames(AlexCosmicValid_sig_df))
 #' }
 #' 
 #' @seealso \code{\link{create_mutation_catalogue_from_df}}

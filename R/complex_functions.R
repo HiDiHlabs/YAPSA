@@ -120,7 +120,7 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
 #' This function creates a mutational catalogue from a VRanges Object by
 #' first calling \code{\link[SomaticSignatures]{mutationContext}} to establish
 #' the motif context of the variants in the input VRanges and then calling
-#' \code{\link{mutationContextMatrix}} to build the
+#' \code{\link[SomaticSignatures]{motifMatrix}} to build the
 #' mutational catalogue \code{V}.
 #'
 #' @param in_vr 
@@ -160,6 +160,7 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
 #' \dontrun{
 #'  library(BSgenome.Hsapiens.UCSC.hg19)
 #'  data(lymphoma_test)
+#'  data(sigs)
 #'  word_length <- 3
 #'  temp_vr <- makeVRangesFromDataFrame(
 #'    lymphoma_test_df,in_seqnames.field="CHROM",
@@ -181,16 +182,16 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
 #'  other_list <- create_mutation_catalogue_from_VR(
 #'    other_vr,in_refGenome=BSgenome.Hsapiens.UCSC.hg19,
 #'    in_wordLength=word_length,in_PID.field="PID",
-#'    in_verbose=1,in_rownames=rownames(Alex_COSMIC_signatures_df)) 
+#'    in_verbose=1,in_rownames=rownames(AlexCosmicValid_sig_df)) 
 #'  dim(other_list$matrix)
 #'  head(other_list$matrix)
 #' }
 #' 
 #' @seealso \code{\link[SomaticSignatures]{mutationContext}}
 #' @seealso \code{\link[SomaticSignatures]{motifMatrix}}
-#' @seealso \code{\link{mutationContextMatrix}}
 #' 
-#' @import SomaticSignatures
+#' @importFrom SomaticSignatures mutationContext
+#' @importFrom SomaticSignatures motifMatrix
 #' @export
 #' 
 create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
@@ -557,6 +558,8 @@ transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,wordLength=3
 #' 
 #' @param in_matrix,in_norms
 #'  Arguments to \code{\link[SomaticSignatures]{normalizeMotifs}}
+#' @param adjust_counts
+#'  Whether to rescale the counts after adaption or not. Default is true.
 #'
 #' @return
 #'  The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but with rownames
@@ -565,7 +568,7 @@ transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,wordLength=3
 #'  @examples
 #'  NULL
 #'  
-#'  @import SomaticSignatures
+#'  @importFrom SomaticSignatures normalizeMotifs
 #'  @export
 #'  
 normalizeMotifs_otherRownames <- function(in_matrix,
@@ -1045,7 +1048,7 @@ get_extreme_PIDs <- function(in_exposures_df,in_quantile=0.03) {
 #' 
 #' @param in_gene_list
 #'  List with genes of interest
-#' @param in_exposures_df
+#' @param in_exposure_df
 #'  Data frame with the signature exposures
 #' @param in_mut_table
 #'  Data frame or table of mutations (derived from vcf-format)

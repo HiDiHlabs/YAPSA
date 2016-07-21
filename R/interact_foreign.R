@@ -1,4 +1,5 @@
-#' @import GetoptLong
+#' @importFrom GetoptLong qq
+#' @importFrom GetoptLong qq.options
 #' 
 check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
   
@@ -24,7 +25,8 @@ check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
   return(ifelse(res, FALSE, TRUE))
 }
 
-#' @import GetoptLong
+#' @importFrom GetoptLong qq
+#' @importFrom GetoptLong qq.options
 #' 
 check_bedtools = function(module = NULL, inc = NULL, bedtools_bin = "bedtools") {
   
@@ -378,7 +380,8 @@ run_annotate_vcf_pl <- function(in_data_file,
 #' @seealso \code{\link[KEGGREST]{keggFind}}
 #' @seealso \code{\link{extract_names_from_gene_list}}
 #' 
-#' @import KEGGREST
+#' @importFrom KEGGREST keggFind
+#' @importFrom KEGGREST keggLink
 #' @export
 #' 
 build_gene_list_for_pathway <- function(in_string,in_organism) {
@@ -408,7 +411,7 @@ build_gene_list_for_pathway <- function(in_string,in_organism) {
 #' @seealso \code{\link[KEGGREST]{keggGet}}
 #' @seealso \code{\link{build_gene_list_for_pathway}}
 #' 
-#' @import KEGGREST
+#' @importFrom KEGGREST keggGet
 #' @export
 #' 
 extract_names_from_gene_list <- function(in_KEGG_gene_list,l) {

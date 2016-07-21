@@ -555,9 +555,6 @@ add_annotation <- function(in_annotation_col,
 #'  to which subgroup for all layers of annotation
 #' @param in_annotation_col
 #'  A list indicating colour attributions for all layers of annotation
-#' @param in_signatures_ind_df
-#'  A data frame containing meta information about the signatures, especially the
-#'  asserted colour
 #' @param ylab
 #'  String indicating the column name in \code{in_subgroups_df} to take the
 #'  subgroup information from.
@@ -1226,6 +1223,8 @@ stat_plot_subgroups_old <- function(in_exposures_df,in_subgroups_df,
 #' @param in_PID.field
 #'  Name indicating which column in \code{in_subgroups_df} contains the
 #'  PID information 
+#' @param in_colour_vector
+#'  If non-null, specifies the colours attributed to the subgroups 
 #'  
 #' @return NULL
 #' 
@@ -1425,122 +1424,6 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
                         ylim=c((-1)*in_shift_factor*max_height,max_height),
                         main=in_title)
   return(list(hclust=my_exposures_hierarchy,dendrogram=my_exposures_hc))
-}
-
-
-#' Create heatmap to cluster the PIDs according to their signature exposures
-#'
-#' The PIDs are clustered according to their signature exposures. The procedure
-#' is analogous to \code{\link{hclust_exposures}}, but the graphical output is
-#' more detailed due to the heatmap. This function calls: 
-#' \itemize{
-#'  \item \code{\link[gplots]{heatmap.2}} for all statistics.
-#' }
-#'
-#' @param in_exposures_df
-#'  Numerical data frame encoding the exposures \code{H}, i.e. which
-#'  signature contributes how much to which PID (patient identifier or sample).
-#' @param in_subgroups_df
-#'  A data frame indicating which PID (patient or sample identifyier) belongs
-#'  to which subgroup
-#' @param in_signatures_ind_df
-#'  A data frame containing meta information about the signatures, especially the
-#'  asserted colour
-#' @param in_method
-#'  Method of the clustering to be supplied to \code{\link{dist}}. Can be either
-#'  of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
-#'  \code{binary} or \code{minkowski}
-#' @param in_subgroup_column
-#'  Indicates the name of the column in which the subgroup information
-#'  is encoded in \code{in_subgroups_df}
-#' @param in_subgroup_colour_column
-#'  Indicates the name of the column in which the colour information for
-#'  subgroups is encoded in \code{in_subgroups_df}. If NULL, a rainbow palette
-#'  is used instead.
-#' @param in_palette
-#'  Palette with colours or colour codes for the labels (the text) of the leaves
-#'  in the dendrogram. Typically one colour per subgroup. If none is specified, a
-#'  rainbow palette of the length of the number of subgroups will be used as
-#'  default.
-#' @param in_cutoff
-#'  A numeric value less than 1. Signatures from within \code{W}
-#'  with an overall exposure less than \code{in_cutoff} will be
-#'  discarded for the clustering.
-#' @param in_filename
-#'  A path to save the heatmap. If none is specified, the figure will be plotted
-#'  to the running environment.
-#' @param in_title
-#'  Title in the figure to be created under \code{in_filename}
-#'
-#' @return The function doesn't return any value.
-#' 
-#' @examples
-#'  data(lymphoma_cohort_LCD_results)
-#'  heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
-#'                    COSMIC_subgroups_df,
-#'                    chosen_signatures_indices_df,
-#'                    in_subgroup_colour_column="col",
-#'                    in_method="manhattan",
-#'                    in_subgroup_column="subgroup")
-#'
-#' @seealso \code{\link{hclust}}
-#' @seealso \code{\link{dist}}
-#' @seealso \code{\link[dendextend]{labels_colors}}
-#' 
-#' @importFrom gplots heatmap.2
-#' @export
-#' 
-heatmap_exposures <- function(in_exposures_df,in_subgroups_df,in_signatures_ind_df,
-                              in_method="manhattan",in_subgroup_column="subgroup",
-                              in_subgroup_colour_column=NULL,
-                              in_palette=NULL,in_cutoff=0,in_filename=NULL,in_title="") {
-  ## 1. choose only signatures with exposures above cutoff
-  exposures_sum_df <- data.frame(sum=apply(in_exposures_df,1,sum))
-  exposures_sum_df$sum_norm <- exposures_sum_df$sum/sum(exposures_sum_df$sum)
-  sig_choice_ind <- which(exposures_sum_df$sum_norm >= in_cutoff)
-  reduced_exposures_df <- in_exposures_df[sig_choice_ind,]
-  ## 2. reformat for heatmap.2 function
-  reduced_exposures_matrix <- as.matrix(reduced_exposures_df)
-  ## 3. custom colour code for the heatmap
-  heatmap_palette <- c("lightyellow","yellow","orange","red","red","red","darkred","darkred","darkred")
-  myColorRange <- colorRampPalette(heatmap_palette)(n=100)
-  ## 4. colour the labels of the leaves according to subgroups
-  subgroup_column_index <- which(tolower(names(in_subgroups_df))==tolower(in_subgroup_column))
-  number_of_subgroups <- length(unique(in_subgroups_df[,subgroup_column_index]))
-  if(is.null(in_subgroup_colour_column)){
-    if(is.null(in_palette)){
-      in_palette=rainbow(number_of_subgroups)
-    }
-    colorCodes <- in_palette[seq_len(number_of_subgroups)] 
-    subgroups_colour_vector <- colorCodes[factor(in_subgroups_df[,subgroup_column_index])]
-  } else {
-    subgroup_colour_ind <- which(names(in_subgroups_df)==in_subgroup_colour_column)
-    colorCodes <- unique(in_subgroups_df[,subgroup_colour_ind])
-    subgroups_colour_vector<- in_subgroups_df[,subgroup_colour_ind]
-  }
-  colorNames <- sapply(colorCodes,function(l) {
-    my_ind <- min(which(subgroups_colour_vector==l))
-    return(in_subgroups_df[my_ind,subgroup_column_index])
-                                              })
-  sig_colour_vector <- in_signatures_ind_df$colour
-  if (!is.null(in_filename)) {
-    png(in_filename,width=800,height=800)
-  }
-  heatmap.2(reduced_exposures_matrix, distfun=function(i)
-    dist(i,method=in_method), hclustfun=function(i)
-      hclust(i,method="complete"),
-    trace="none",main=in_title,col=myColorRange,margins=c(12,8),srtCol=45,
-    ColSideColors=subgroups_colour_vector,
-    RowSideColors=sig_colour_vector)
-  legend("topright",
-         legend = colorNames,
-         col = colorCodes,
-         lty= 1,
-         lwd = 10)
-  if (!is.null(in_filename)) {
-    dev.off()    
-  }
-  return()
 }
 
 

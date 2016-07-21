@@ -267,12 +267,13 @@ plot_strata <- function(in_strata_list,in_signatures_ind_df,output_path=NULL,in_
 #' @return The comparison matrix of cosine similarities.
 #' 
 #' @examples
-#' make_comparison_matrix(Alex_COSMIC_signatures_df,in_nrect=9,
+#' data(sigs)
+#' make_comparison_matrix(AlexCosmicValid_sig_df,in_nrect=9,
 #'                        in_palette=colorRampPalette(c("blue","green","red"))(n=100))
 #' 
 #' @seealso \code{\link{compare_SMCs}}
 #' 
-#' @import corrplot
+#' @importFrom corrplot corrplot
 #' @export
 #' 
 make_comparison_matrix <- function(in_strata_df,output_path=NULL,in_nrect=5,

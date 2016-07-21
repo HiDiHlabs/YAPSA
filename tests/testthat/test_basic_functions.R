@@ -20,7 +20,7 @@ test_that("Test compare_sets", {
   ## execute function to be tested
   test_list <- YAPSA:::compare_sets(sig_1_df,sig_2_df)
   ## compare
-  expect_that(test_list$similarity, is_equivalent_to(distance_matrix))
+  expect_that(test_list$distance, is_equivalent_to(distance_matrix))
   expect_that(test_list$hierarchy_small[1,], is_equivalent_to(names(sig_2_df)))
   expect_that(test_list$hierarchy_big[1,], is_equivalent_to(names(sig_1_df)))
 })
@@ -214,7 +214,9 @@ test_that("Test annotate_intermut_dist_cohort on very simple synthetic data", {
 
 test_that("Test shapiro_if_possible on very simple synthetic data", {
   significance_threshold <- 0.05
+  set.seed(1)
   expect_less_than(shapiro_if_possible(runif(100,min=2,max=4)),significance_threshold)
+  set.seed(1)
   expect_more_than(shapiro_if_possible(rnorm(100,mean=5,sd=3)),significance_threshold)
   expect_that(shapiro_if_possible(rep(4.3,100)),equals(0))
   expect_null(shapiro_if_possible(c("Hello","World")))

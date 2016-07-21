@@ -117,35 +117,6 @@ LCD <- function(in_mutation_catalogue_df,
 #' @seealso \code{\link{LCD_cutoff}}
 #' @seealso \code{\link[limSolve]{lsei}}
 #' 
-#' @examples
-#' ## define raw data
-#' W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
-#' W_prim_df <- as.data.frame(W_prim)
-#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
-#' W <- as.matrix(W_df) 
-#' ## 1. Simple case: non-negativity already in raw data
-#' H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
-#' H_df <- as.data.frame(H) # corresponds to the exposures
-#' V <- W %*% H # matrix multiplication
-#' V_df <- as.data.frame(V) # corresponds to the mutational catalogue
-#' exposures_df <- YAPSA:::LCD(V_df,W_df)
-#' ## 2. more complicated: raw data already contains negative elements
-#' ## define indices where sign is going to be swapped
-#' sign_ind <- c(5,7)
-#' ## now compute the indices of the other fields in the columns affected
-#' ## by the sign change
-#' row_ind <- sign_ind %% dim(H)[1]
-#' temp_ind <- 2*row_ind -1
-#' other_ind <- sign_ind + temp_ind
-#' ## alter the matrix H to yield a new mutational catalogue
-#' H_compl <- H
-#' H_compl[sign_ind] <- (-1)*H[sign_ind]
-#' H_compl_df <- as.data.frame(H_compl) # corresponds to the exposures
-#' V_compl <- W %*% H_compl # matrix multiplication
-#' V_compl_df <- as.data.frame(V_compl) # corresponds to the mutational catalogue
-#' exposures_df <- YAPSA:::LCD_strict(V_compl_df,W_df)
-#' exposures <- as.matrix(exposures_df)
-#' 
 #' @importFrom limSolve lsei
 #' @export
 #' 
@@ -179,7 +150,7 @@ LCD_strict <- function(in_mutation_catalogue_df,in_signatures_df){
                                     G=G_first, H=H_first, verbose=FALSE)
     all_fractions <- limSolve::lsei(A = current_matrix, B = b,
                                     G=G_second, H=H_second, verbose=FALSE)
-    
+    temp_exposures_vector <- as.vector(all_fractions$X)
     rel_exposures_vector <- temp_exposures_vector/sum(temp_exposures_vector)
     deselect_ind <- which(rel_exposures_vector<in_per_sample_cutoff)
     temp_exposures_vector[deselect_ind] <- 0
@@ -557,10 +528,6 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
 #' @param in_method
 #'  Indicate to which data the cutoff shall be applied: absolute exposures,
 #'  relative exposures
-#' @param in_per_sample_cutoff
-#'  A numeric value less than 1. Signatures from within \code{W}
-#'  with an exposure per sample less than \code{in_cutoff} will be
-#'  discarded.
 #' @param in_rescale
 #'  Boolean, if TRUE (default) the exposures are rescaled such that colSums over
 #'  exposures match colSums over mutational catalogue
