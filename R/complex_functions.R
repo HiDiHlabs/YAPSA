@@ -564,11 +564,11 @@ transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,wordLength=3
 #'  The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but with rownames
 #'  transformed back to the convention of the input
 #'  
-#'  @examples
+#' @examples
 #'  NULL
 #'  
-#'  @importFrom SomaticSignatures normalizeMotifs
-#'  @export
+#' @importFrom SomaticSignatures normalizeMotifs
+#' @export
 #'  
 normalizeMotifs_otherRownames <- function(in_matrix,
                                           in_norms,

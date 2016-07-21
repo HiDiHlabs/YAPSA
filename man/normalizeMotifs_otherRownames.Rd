@@ -14,16 +14,14 @@ normalizeMotifs_otherRownames(in_matrix, in_norms, adjust_counts = TRUE)
 \value{
 The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but with rownames
  transformed back to the convention of the input
- 
- @examples
- NULL
- 
- @importFrom SomaticSignatures normalizeMotifs
- @export
 }
 \description{
 This is a wrapper function to \code{\link[SomaticSignatures]{normalizeMotifs}}. The rownames
 are first transformed to fit the convention of the \code{\link[SomaticSignatures]{SomaticSignatures}}
 package and then passed on to the above mentioned function.
+}
+\examples{
+ NULL
+ 
 }
 

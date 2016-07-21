@@ -1304,7 +1304,7 @@ stat_plot_subgroups <- function(in_exposures_df,in_subgroups_df,
     match_ind <- match(names(in_colour_vector),names(my_palette))
     my_palette[match_ind] <- in_colour_vector
   }
-  q <- ggplot(plot_df,environment=.e,aes(sig,y=mean,group=subgroup)) +
+  q <- ggplot(plot_df,environment=.e,aes_string(x="sig",y="mean",group="subgroup")) +
     geom_bar(aes_string(fill="sig",col="subgroup",size=0.3),
              stat='identity',position="dodge",width=.7,size=1) +
     scale_fill_manual(name="sig",labels=in_signatures_ind_df$sig,values=in_signatures_ind_df$colour) +
