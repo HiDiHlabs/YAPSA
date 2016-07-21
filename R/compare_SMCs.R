@@ -273,6 +273,7 @@ plot_strata <- function(in_strata_list,in_signatures_ind_df,output_path=NULL,in_
 #' 
 #' @seealso \code{\link{compare_SMCs}}
 #' 
+#' @importFrom grDevices colorRampPalette png dev.off
 #' @importFrom corrplot corrplot
 #' @export
 #' 

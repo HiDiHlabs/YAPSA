@@ -76,8 +76,6 @@ It might be necessary to install the newest version of the development branch
 \seealso{
 \code{\link[ComplexHeatmap]{Heatmap}}
 
-\code{\link{heatmap_exposures}}
-
 \code{\link{complex_heatmap_exposures}}
 }
 

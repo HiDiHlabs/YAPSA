@@ -23,7 +23,8 @@ naming convention is needed. The inverse transform is done with
 \code{\link{translate_to_1kG}}.
 }
 \examples{
-test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),dummy=c("a","b","c","d"))
+test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),
+                      dummy=c("a","b","c","d"))
 hg19_df <- translate_to_hg19(test_df, in_CHROM.field = "CHROM")
 hg19_df
 

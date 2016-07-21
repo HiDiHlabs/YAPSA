@@ -30,7 +30,7 @@ Plot one averaged signature exposure pattern per subgroup. Uses
 }
 \examples{
  NULL
- 
+
 }
 \seealso{
 \code{\link{split_exposures_by_subgroups}}

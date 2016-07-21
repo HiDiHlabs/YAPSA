@@ -171,7 +171,6 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
 #'    in_verbose=1)
 #'  dim(temp_list$matrix)
 #'  head(temp_list$matrix)
-#'  
 #'  test_list <- split(lymphoma_test_df,f=lymphoma_test_df$PID)
 #'  other_list <- list()
 #'  for(i in seq_len(length(test_list))){other_list[[i]] <- test_list[[i]][c(1:80),]}
@@ -576,7 +575,7 @@ normalizeMotifs_otherRownames <- function(in_matrix,
                                           adjust_counts=TRUE) {
   my_matrix <- in_matrix
   rownames(my_matrix) <- transform_rownames_MATLAB_to_R(rownames(in_matrix))
-  out_matrix <- normalizeMotifs(my_matrix,in_norms)
+  out_matrix <- SomaticSignatures::normalizeMotifs(my_matrix,in_norms)
   rownames(out_matrix) <- rownames(in_matrix)
   if(adjust_counts){
     total_counts <- colSums(in_matrix)

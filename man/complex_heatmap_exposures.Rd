@@ -53,9 +53,8 @@ to the running environment.}
 The function doesn't return any value.
 }
 \description{
-The PIDs are clustered according to their signature exposures. The procedure
-is analogous to \code{\link{heatmap_exposures}}, but unsing the package
-\pkg{ComplexHeatmap} by Zuguang Gu instead. This function calls: 
+The PIDs are clustered according to their signature exposures. unses package
+\pkg{ComplexHeatmap} by Zuguang Gu. This function calls: 
 \itemize{
  \item \code{\link[ComplexHeatmap]{rowAnnotation}},
  \item \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and
@@ -81,7 +80,5 @@ It might be necessary to install the newest version of the development branch
 }
 \seealso{
 \code{\link[ComplexHeatmap]{Heatmap}}
-
-\code{\link{heatmap_exposures}}
 }
 

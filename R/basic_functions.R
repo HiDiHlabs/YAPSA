@@ -387,7 +387,8 @@ stderrmean_over_present <- function(in_df,in_dimension) {
 #' @seealso \code{\link{translate_to_1kG}}
 #' 
 #' @examples
-#' test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),dummy=c("a","b","c","d"))
+#' test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),
+#'                       dummy=c("a","b","c","d"))
 #' hg19_df <- translate_to_hg19(test_df, in_CHROM.field = "CHROM")
 #' hg19_df
 #' 
@@ -1062,7 +1063,7 @@ test_exposureAffected <- function(in_exposure_vector,
     mut_stat=factor_vector)	
   current_kruskal <- kruskal.test(exposure~mut_stat,data=test_df)
   current_boxplot <- ggplot(environment = .e, data = test_df) +  
-    geom_boxplot(aes(x=mut_stat,y=exposure))
+    geom_boxplot(aes_string(x="mut_stat",y="exposure"))
   if(!is.null(in_exposure_label)){
     current_boxplot <- current_boxplot + ylab(paste0(in_exposure_label,
                                                      " exposure"))

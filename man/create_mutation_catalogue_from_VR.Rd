@@ -64,7 +64,6 @@ NULL
    in_verbose=1)
  dim(temp_list$matrix)
  head(temp_list$matrix)
- 
  test_list <- split(lymphoma_test_df,f=lymphoma_test_df$PID)
  other_list <- list()
  for(i in seq_len(length(test_list))){other_list[[i]] <- test_list[[i]][c(1:80),]}

@@ -423,6 +423,7 @@ enhanced_barplot = function(mat, col, anno, anno_color, ylab = NULL,
 #'  
 #' @seealso \code{\link{enhanced_barplot}}
 #' 
+#' @importFrom grDevices rainbow
 #' @export
 #' 
 exposures_barplot <- function(in_exposures_df,in_signatures_ind_df=NULL,
@@ -1059,6 +1060,7 @@ plot_group_facet <- function(in_df_list,in_name_list,
 #'  
 #' @return The function doesn't return any value.
 #' 
+#' @importFrom grDevices pdf png dev.off
 #' @import ggplot2
 #' @import grid
 #' @import gridExtra
@@ -1232,7 +1234,8 @@ stat_plot_subgroups_old <- function(in_exposures_df,in_subgroups_df,
 #' 
 #' @examples
 #'  NULL
-#'  
+#'
+#' @importFrom grDevices rainbow  
 #' @export
 #' 
 stat_plot_subgroups <- function(in_exposures_df,in_subgroups_df,
@@ -1302,7 +1305,7 @@ stat_plot_subgroups <- function(in_exposures_df,in_subgroups_df,
     my_palette[match_ind] <- in_colour_vector
   }
   q <- ggplot(plot_df,environment=.e,aes(sig,y=mean,group=subgroup)) +
-    geom_bar(aes(fill=sig,col=subgroup,size=0.3),
+    geom_bar(aes_string(fill="sig",col="subgroup",size=0.3),
              stat='identity',position="dodge",width=.7,size=1) +
     scale_fill_manual(name="sig",labels=in_signatures_ind_df$sig,values=in_signatures_ind_df$colour) +
     scale_colour_manual(values=my_palette) +
@@ -1385,7 +1388,8 @@ stat_plot_subgroups <- function(in_exposures_df,in_subgroups_df,
 #' @seealso \code{\link{hclust}}
 #' @seealso \code{\link{dist}}
 #' @seealso \code{\link[dendextend]{labels_colors}}
-#' 
+#'
+#' @importFrom grDevices rainbow png dev.off 
 #' @import dendextend
 #' @export
 #' 
@@ -1429,9 +1433,8 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
 
 #' Heatmap to cluster the PIDs on their signature exposures (with ComplexHeatmap)
 #'
-#' The PIDs are clustered according to their signature exposures. The procedure
-#' is analogous to \code{\link{heatmap_exposures}}, but unsing the package
-#' \pkg{ComplexHeatmap} by Zuguang Gu instead. This function calls: 
+#' The PIDs are clustered according to their signature exposures. unses package
+#' \pkg{ComplexHeatmap} by Zuguang Gu. This function calls: 
 #' \itemize{
 #'  \item \code{\link[ComplexHeatmap]{rowAnnotation}},
 #'  \item \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and
@@ -1494,7 +1497,6 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
 #'                            in_subgroup_column="subgroup")
 #'
 #' @seealso \code{\link[ComplexHeatmap]{Heatmap}}
-#' @seealso \code{\link{heatmap_exposures}}
 #'
 #' @import ComplexHeatmap
 #' @import circlize
@@ -1600,7 +1602,6 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,in_signatu
 #'  NULL
 #'
 #' @seealso \code{\link[ComplexHeatmap]{Heatmap}}
-#' @seealso \code{\link{heatmap_exposures}}
 #' @seealso \code{\link{complex_heatmap_exposures}}
 #'
 #' @import ComplexHeatmap
@@ -1801,7 +1802,7 @@ plotExchangeSpectra <- function(in_catalogue_df,
   names(my_palette) <- c("C>A","C>G","C>T","T>A","T>C","T>G")
   if(!is.null(in_colour_vector)) my_palette <- in_colour_vector
   p <- ggplot(catalogue_df_melt,environment=.e) +
-    geom_bar(aes(x=triplet,y=value,fill=nuc_exchange),
+    geom_bar(aes_string(x="triplet",y="value",fill="nuc_exchange"),
              stat='identity') +
     scale_fill_manual(name="exchange",values=my_palette) +
     facet_grid(variable~nuc_exchange,scales="free_x")
