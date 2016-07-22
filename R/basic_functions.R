@@ -1073,7 +1073,7 @@ test_exposureAffected <- function(in_exposure_vector,
 }
 
 
-#' Information on initially published mutational signatures
+#' Data for initial sigs, including artifacts
 #' 
 #' Data frame of the signatures published initially by Alexandrov et al. (Nature 
 #' 2013). There are 27 signatures which constitute the columns, 22 of which were
@@ -1101,7 +1101,7 @@ test_exposureAffected <- function(in_exposure_vector,
 NULL
 
 
-#' Meta-information on initially published mutational signatures
+#' Meta-info for initial sigs, including artifacts
 #' 
 #' A data frame with as many rows as there are signatures in
 #' \code{AlexInitialValid_sig_df} and several columns: 
@@ -1131,7 +1131,7 @@ NULL
 NULL
 
 
-#' Sub-data frame of the initially published mutational signatures
+#' Data for initial sigs, only validated
 #' 
 #' Data frame of only the validated signatures published initially by Alexandrov
 #' et al. (Nature 2013), corresponding to the first 22 columns of
@@ -1148,7 +1148,37 @@ NULL
 NULL
 
 
-#' Information on updated mutational signatures
+#' Meta-info for initial sigs, only validated
+#' 
+#' A data frame with as many rows as there are signatures in
+#' \code{AlexInitialValid_sig_df} and several columns: 
+#' \itemize{
+#'  \item \code{sig}: signature name
+#'  \item \code{index}: corresponding to the row index of the signature
+#'  \item \code{colour}: colour for visualization in stacked barplots
+#'  \item \code{process}: asserted biological process
+#'  \item \code{cat.coarse}: categorization of the signatures according
+#'   to the asserted biological processes at low level of detail
+#'  \item \code{cat.medium}: categorization of the signatures according
+#'   to the asserted biological processes at intermediate level of detail
+#'  \item \code{cat.high}: categorization of the signatures according
+#'   to the asserted biological processes at high level of detail
+#'  \item \code{cat.putative}: categorization of the signatures according
+#'   to the asserted biological processes based on clustering and inference
+#'  }
+#' 
+#' @seealso \code{\link{AlexInitialArtif_sig_df}}
+#' @seealso \code{\link{AlexInitialValid_sig_df}}
+#' 
+#' @docType data
+#' @name AlexInitialValid_sigInd_df
+#' @usage data(sigs)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+NULL
+
+
+#' Data for Cosmic sigs, only validated
 #' 
 #' Data frame of the updated signatures list maintained by Ludmil Alexandrov at
 #' \url{http://cancer.sanger.ac.uk/cosmic/signatures}. The data was downloaded from
@@ -1168,7 +1198,7 @@ NULL
 NULL
 
 
-#' Meta-information on updated mutational signatures
+#' Meta-info for Cosmic sigs, only validated
 #' 
 #' A data frame with as many rows as there are signatures in
 #' \code{AlexCosmicValid_sig_df} and several columns: 
@@ -1191,6 +1221,55 @@ NULL
 #' 
 #' @docType data
 #' @name AlexCosmicValid_sigInd_df
+#' @usage data(sigs)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+NULL
+
+
+#' Data for Cosmic sigs, including artifacts
+#' 
+#' Data frame of the updated signatures list maintained by Ludmil Alexandrov at
+#' \url{http://cancer.sanger.ac.uk/cosmic/signatures}. The data was downloaded from
+#' \url{http://cancer.sanger.ac.uk/cancergenome/assets/signatures_probabilities.txt}
+#' and reformatted. The column names are \emph{AC} pasted to the number of the
+#' signature, e.g. \emph{AC5}. The naming convention for the rows is as described
+#' for \code{\link{AlexInitialArtif_sig_df}}.
+#' 
+#' @seealso \code{\link{AlexInitialArtif_sig_df}}
+#' 
+#' @docType data
+#' @name AlexCosmicArtif_sig_df
+#' @usage data(sigs)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @references Alexandrov et al. (Nature 2013)
+#' 
+NULL
+
+
+#' Meta-info for Cosmic sigs, including artifacts
+#' 
+#' A data frame with as many rows as there are signatures in
+#' \code{AlexCosmicValid_sig_df} and several columns: 
+#' \itemize{
+#'  \item \code{sig}: signature name
+#'  \item \code{index}: corresponding to the row index of the signature
+#'  \item \code{colour}: colour for visualization in stacked barplots
+#'  \item \code{process}: asserted biological process
+#'  \item \code{cat.coarse}: categorization of the signatures according
+#'   to the asserted biological processes at low level of detail
+#'  \item \code{cat.medium}: categorization of the signatures according
+#'   to the asserted biological processes at intermediate level of detail
+#'  \item \code{cat.fine}: categorization of the signatures according
+#'   to the asserted biological processes at high level of detail
+#'  \item \code{cat.putative}: categorization of the signatures according
+#'   to the asserted biological processes based on clustering and inference
+#'  }
+#' 
+#' @seealso \code{\link{AlexCosmicValid_sig_df}}
+#' 
+#' @docType data
+#' @name AlexCosmicArtif_sigInd_df
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
 #' 
@@ -1294,7 +1373,7 @@ NULL
 NULL
 
 
-#' Signature information for test data for plot functions
+#' Sigs info (initial, including artifacts) for test data for plot functions
 #' 
 #' Signature information for the data stored in
 #' \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}} and 
@@ -1311,7 +1390,24 @@ NULL
 NULL
 
 
-#' Optimal cutoffs for relative exposures for the COSMIC signatures
+#' Sigs info (Cosmic, only validated) for test data for plot functions
+#' 
+#' Signature information for the data stored in
+#' \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}} and 
+#' \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}.
+#' 
+#' @docType data
+#' @name chosen_signatures_indices_df
+#' @usage data(lymphoma_cohort_LCD_results)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+#' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
+#' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
+#' 
+NULL
+
+
+#' Opt. cutoffs, rel exposures for the COSMIC sigs, only validated
 #' 
 #' Data frame of signature specific cutoff values for the LCD analysis with
 #' relative exposures. All values represent optimal cutoffs. The optimal
@@ -1333,7 +1429,51 @@ NULL
 NULL
 
 
-#' Optimal cutoffs for absolute exposures for the COSMIC signatures
+#' Opt. cutoffs, rel exposures for the COSMIC sigs, only validated
+#' 
+#' Data frame of signature specific cutoff values for the LCD analysis with
+#' relative exposures. All values represent optimal cutoffs. The optimal
+#' cutoffs were determined for different choices of parameters in the cost
+#' function of the optimization. The row index is equivalent to the ratio
+#' between costs for false negative attribution and false positive
+#' attribution. The columns correspond to the different signatures. To be
+#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
+#' at http://cancer.sanger.ac.uk/cosmic/signatures .
+#' 
+#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
+#' @seealso \code{\link{cutoffInitialValid_rel_df}}
+#' 
+#' @docType data
+#' @name cutoffCosmicValid_rel_df
+#' @usage data(cutoffs)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+NULL
+
+
+#' Opt. cutoffs, rel exposures for the COSMIC sigs, including artifacts
+#' 
+#' Data frame of signature specific cutoff values for the LCD analysis with
+#' relative exposures. All values represent optimal cutoffs. The optimal
+#' cutoffs were determined for different choices of parameters in the cost
+#' function of the optimization. The row index is equivalent to the ratio
+#' between costs for false negative attribution and false positive
+#' attribution. The columns correspond to the different signatures. To be
+#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
+#' at http://cancer.sanger.ac.uk/cosmic/signatures .
+#' 
+#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
+#' @seealso \code{\link{cutoffInitialValid_rel_df}}
+#' 
+#' @docType data
+#' @name cutoffCosmicArtif_rel_df
+#' @usage data(cutoffs)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+NULL
+
+
+#' Opt. cutoffs, abs exposures for the COSMIC sigs, only validated
 #' 
 #' Data frame of signature specific cutoff values for the LCD analysis with
 #' absolute exposures. All values represent optimal cutoffs. The optimal
@@ -1355,7 +1495,29 @@ NULL
 NULL
 
 
-#' Optimal cutoffs for relative exposures of initial signatures
+#' Opt. cutoffs, abs exposures for the COSMIC sigs, including artifacts
+#' 
+#' Data frame of signature specific cutoff values for the LCD analysis with
+#' absolute exposures. All values represent optimal cutoffs. The optimal
+#' cutoffs were determined for different choices of parameters in the cost
+#' function of the optimization. The row index is equivalent to the ratio
+#' between costs for false negative attribution and false positive
+#' attribution. The columns correspond to the different signatures. To be
+#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
+#' at http://cancer.sanger.ac.uk/cosmic/signatures .
+#' 
+#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
+#' @seealso \code{\link{cutoffInitialValid_abs_df}}
+#' 
+#' @docType data
+#' @name cutoffCosmicArtif_abs_df
+#' @usage data(cutoffs)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+NULL
+
+
+#' Opt. cutoffs, rel exposures for the initial sigs, only validated
 #' 
 #' Data frame of signature specific cutoff values for the LCD analysis with
 #' relative exposures. All values represent optimal cutoffs. The optimal
@@ -1377,7 +1539,29 @@ NULL
 NULL
 
 
-#' Optimal cutoffs for absolute exposures of initial signatures
+#' Opt. cutoffs, rel exposures for the initial sigs, including artifacts
+#' 
+#' Data frame of signature specific cutoff values for the LCD analysis with
+#' relative exposures. All values represent optimal cutoffs. The optimal
+#' cutoffs were determined for different choices of parameters in the cost
+#' function of the optimization. The row index is equivalent to the ratio
+#' between costs for false negative attribution and false positive
+#' attribution. The columns correspond to the different signatures. To be
+#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures published
+#' in Alexandrov et al. (Nature 2013).
+#' 
+#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
+#' @seealso \code{\link{cutoffInitialValid_abs_df}}
+#' 
+#' @docType data
+#' @name cutoffInitialArtif_rel_df
+#' @usage data(cutoffs)
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+NULL
+
+
+#' Opt. cutoffs, abs exposures for the initial sigs, only validated
 #' 
 #' Data frame of signature specific cutoff values for the LCD analysis with
 #' absolute exposures. All values represent optimal cutoffs. The optimal
@@ -1399,7 +1583,7 @@ NULL
 NULL
 
 
-#' Optimal adapted cutoffs for absolute exposures of initial signatures
+#' Opt. cutoffs, abs exposures for the initial sigs, including artifacts
 #' 
 #' Data frame of signature specific cutoff values for the LCD analysis with
 #' absolute exposures. All values represent optimal cutoffs. The optimal
@@ -1414,74 +1598,8 @@ NULL
 #' @seealso \code{\link{cutoffInitialValid_rel_df}}
 #' 
 #' @docType data
-#' @name abs_cutoff_adapt_df
-#' @usage data(abs_cutoff_adapt)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-NULL
-
-
-#' Optimal adapted cutoffs for relative exposures of initial signatures
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' relative exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures published
-#' in Alexandrov et al. (Nature 2013).
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
-#' @seealso \code{\link{cutoffInitialValid_abs_df}}
-#' 
-#' @docType data
-#' @name rel_cutoff_adapt_df
-#' @usage data(rel_cutoff_adapt)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-NULL
-
-
-#' Optimal adapted cutoffs for absolute exposures of COSMIC signatures
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' absolute exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
-#' at http://cancer.sanger.ac.uk/cosmic/signatures .
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
-#' @seealso \code{\link{cutoffInitialValid_rel_df}}
-#' 
-#' @docType data
-#' @name abs_cutoff_adapt_COSMIC_df
-#' @usage data(abs_cutoff_adapt_COSMIC)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-NULL
-
-
-#' Optimal adapted cutoffs for relative exposures of COSMIC signatures
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' relative exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
-#' at http://cancer.sanger.ac.uk/cosmic/signatures .
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
-#' @seealso \code{\link{cutoffInitialValid_abs_df}}
-#' 
-#' @docType data
-#' @name rel_cutoff_adapt_COSMIC_df
-#' @usage data(rel_cutoff_adapt_COSMIC)
+#' @name cutoffInitialArtif_abs_df
+#' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
 #' 
 NULL

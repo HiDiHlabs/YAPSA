@@ -3,8 +3,10 @@
 \docType{data}
 \name{cutoffCosmicValid_rel_df}
 \alias{cutoffCosmicValid_rel_df}
-\title{Optimal cutoffs for relative exposures for the COSMIC signatures}
+\title{Opt. cutoffs, rel exposures for the COSMIC sigs, only validated}
 \usage{
+data(cutoffs)
+
 data(cutoffs)
 }
 \description{
@@ -16,11 +18,26 @@ between costs for false negative attribution and false positive
 attribution. The columns correspond to the different signatures. To be
 used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
 at http://cancer.sanger.ac.uk/cosmic/signatures .
+
+Data frame of signature specific cutoff values for the LCD analysis with
+relative exposures. All values represent optimal cutoffs. The optimal
+cutoffs were determined for different choices of parameters in the cost
+function of the optimization. The row index is equivalent to the ratio
+between costs for false negative attribution and false positive
+attribution. The columns correspond to the different signatures. To be
+used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
+at http://cancer.sanger.ac.uk/cosmic/signatures .
 }
 \author{
 Daniel Huebschmann \email{huebschmann.daniel@googlemail.com}
+
+Daniel Huebschmann \email{huebschmann.daniel@googlemail.com}
 }
 \seealso{
+\code{\link{cutoffCosmicValid_abs_df}}
+
+\code{\link{cutoffInitialValid_rel_df}}
+
 \code{\link{cutoffCosmicValid_abs_df}}
 
 \code{\link{cutoffInitialValid_rel_df}}

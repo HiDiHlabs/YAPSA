@@ -3,7 +3,7 @@
 \docType{data}
 \name{AlexCosmicValid_sigInd_df}
 \alias{AlexCosmicValid_sigInd_df}
-\title{Meta-information on updated mutational signatures}
+\title{Meta-info for Cosmic sigs, only validated}
 \usage{
 data(sigs)
 }

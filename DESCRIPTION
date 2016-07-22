@@ -9,6 +9,7 @@ Imports:
     limSolve,
     SomaticSignatures,
     VariantAnnotation,
+    GenomeInfoDb,
     reshape2,
     gridExtra,
     corrplot,
@@ -18,7 +19,8 @@ Imports:
     gtrellis,
     PMCMR,
     ComplexHeatmap (>= 1.11.5),
-    KEGGREST
+    KEGGREST,
+    BSgenome.Hsapiens.UCSC.hg19
 Depends:
     GenomicRanges,
     ggplot2,

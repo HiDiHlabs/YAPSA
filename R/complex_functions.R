@@ -48,6 +48,7 @@
 #' 
 #' @import GenomicRanges
 #' @import VariantAnnotation
+#' @importFrom GenomeInfoDb seqlengths seqlengths<-
 #' @export
 #' 
 makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo=NULL,
@@ -86,7 +87,9 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
       }
       out_vr$PID <- my_gr$PID
     } else {
-      if(verbose_flag==1){cat("YAPSA:::makeVRangesFromDataFrame::warning:PID information missing. Filling up with dummy entries.\n");}
+      if(verbose_flag==1){
+        cat("YAPSA:::makeVRangesFromDataFrame::warning:PID information ",
+            "missing. Filling up with dummy entries.\n");}
       out_vr$PID <- "dummy_PID"
     }
     if(tolower(in_subgroup.field) %in% name_list) {

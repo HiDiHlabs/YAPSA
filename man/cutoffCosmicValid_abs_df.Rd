@@ -3,7 +3,7 @@
 \docType{data}
 \name{cutoffCosmicValid_abs_df}
 \alias{cutoffCosmicValid_abs_df}
-\title{Optimal cutoffs for absolute exposures for the COSMIC signatures}
+\title{Opt. cutoffs, abs exposures for the COSMIC sigs, only validated}
 \usage{
 data(cutoffs)
 }

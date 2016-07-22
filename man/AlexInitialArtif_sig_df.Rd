@@ -3,7 +3,7 @@
 \docType{data}
 \name{AlexInitialArtif_sig_df}
 \alias{AlexInitialArtif_sig_df}
-\title{Information on initially published mutational signatures}
+\title{Data for initial sigs, including artifacts}
 \usage{
 data(sigs)
 }

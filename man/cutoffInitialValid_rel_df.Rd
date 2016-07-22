@@ -3,7 +3,7 @@
 \docType{data}
 \name{cutoffInitialValid_rel_df}
 \alias{cutoffInitialValid_rel_df}
-\title{Optimal cutoffs for relative exposures of initial signatures}
+\title{Opt. cutoffs, rel exposures for the initial sigs, only validated}
 \usage{
 data(cutoffs)
 }

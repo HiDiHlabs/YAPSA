@@ -3,7 +3,7 @@
 \docType{data}
 \name{cutoffInitialValid_abs_df}
 \alias{cutoffInitialValid_abs_df}
-\title{Optimal cutoffs for absolute exposures of initial signatures}
+\title{Opt. cutoffs, abs exposures for the initial sigs, only validated}
 \usage{
 data(cutoffs)
 }

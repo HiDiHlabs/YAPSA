@@ -3,7 +3,7 @@
 \docType{data}
 \name{AlexInitialValid_sig_df}
 \alias{AlexInitialValid_sig_df}
-\title{Sub-data frame of the initially published mutational signatures}
+\title{Data for initial sigs, only validated}
 \usage{
 data(sigs)
 }

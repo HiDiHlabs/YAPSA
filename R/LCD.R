@@ -187,7 +187,8 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
                        in_per_sample_cutoff=0) {
   # first run analysis without cutoff
   if(in_convention=="strict"){
-    all_exposures_df <- LCD_strict(in_mutation_catalogue_df,in_signatures_df)
+    #all_exposures_df <- LCD_strict(in_mutation_catalogue_df,in_signatures_df)
+    all_exposures_df <- LCD(in_mutation_catalogue_df,in_signatures_df)
   } else{
     all_exposures_df <- LCD(in_mutation_catalogue_df,
                             in_signatures_df,
@@ -212,7 +213,8 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
   choice_signatures_df <- in_signatures_df[,sig_choice_ind,drop=F]
   # now rerun the decomposition with only the chosen signatures
   if(in_convention=="strict"){
-    out_exposures_df <- LCD_strict(in_mutation_catalogue_df,choice_signatures_df)    
+    #out_exposures_df <- LCD_strict(in_mutation_catalogue_df,choice_signatures_df)    
+    out_exposures_df <- LCD(in_mutation_catalogue_df,choice_signatures_df)    
   } else{
     out_exposures_df <- LCD(in_mutation_catalogue_df,
                             choice_signatures_df,
@@ -589,52 +591,6 @@ res=function(x,b,in_matrix){
 
 norm_res=function(x,b,in_matrix){
   norm(as.matrix(b - in_matrix %*% x),"F")
-}
-
-
-LCD_Lagrange <- function(in_mutation_catalogue_df,
-                         in_signatures_df,
-                         in_per_sample_cutoff=0){
-  signatures_matrix <- as.matrix(in_signatures_df)
-  out_exposures_df <- data.frame()
-  number_of_features <- dim(in_signatures_df)[1]
-  number_of_sig <- dim(in_signatures_df)[2]
-  start_val <- rep(1/number_of_sig,number_of_sig)
-  l_h <- rep(0,number_of_features)
-  l_x <- rep(0,number_of_sig)
-  for (i in seq_len(ncol(in_mutation_catalogue_df))) {
-    my_b <- in_mutation_catalogue_df[,i]
-    u_h <- my_b
-    u_x <- rep(sum(my_b),number_of_sig)
-    my_res <- function(x) return(res(x,my_b,signatures_matrix))
-    my_norm_res <- function(x) return(norm_res(x,my_b,signatures_matrix))
-    temp_fractions <- solnp(pars=start_val, fun=my_norm_res,
-                            LB=l_x, UB=u_x)
-    which(temp_fractions$pars>1)
-    #1  2  3  4  6  9 12 13 17 27
-    temp_fractions <- solnp(pars=start_val, fun=my_norm_res, 
-                            ineqfun=my_res, ineqLB=l_h, ineqUB=u_h)
-    which(temp_fractions$pars>0)
-    #2  3  5  7  8  9 10 11 12 13 15 17 20 21 23 26
-    temp_fractions <- solnp(pars=start_val, fun=my_norm_res, 
-                            ineqfun=my_res, ineqLB=l_h, ineqUB=u_h,
-                            LB=l_x, UB=u_x)
-    temp_fractions <- gosolnp(fun=my_norm_res, 
-                              ineqfun=my_res, ineqLB=l_h, ineqUB=u_h,
-                              LB=l_x, UB=u_x)
-    sp <- startpars(pars=start_val, fun=my_norm_res, 
-                    ineqfun=my_res, ineqLB=l_h, ineqUB=u_h,
-                    LB=l_x, UB=u_x)
-    temp_exposures_vector <- as.vector(temp_fractions$X)
-    rel_exposures_vector <- temp_exposures_vector/sum(temp_exposures_vector)
-    deselect_ind <- which(rel_exposures_vector<in_per_sample_cutoff)
-    temp_exposures_vector[deselect_ind] <- 0
-    out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- temp_exposures_vector
-    rm(temp_fractions)
-  }
-  colnames(out_exposures_df) <- colnames(in_mutation_catalogue_df)
-  rownames(out_exposures_df) <- colnames(in_signatures_df)
-  return(out_exposures_df) 
 }
 
 
