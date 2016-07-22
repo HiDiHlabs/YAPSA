@@ -1745,14 +1745,14 @@ trellis_rainfall_plot <- function(in_rainfall_dat,in_point_size=unit(1,"mm"),
       temp_color <- temp_list$col
       temp_df <- temp_list$df
       temp_alpha <- temp_list$alpha
-      add_track(temp_df, track = 2, panel.fun = function(gr) {
+      add_track(temp_df, track = 2, panel_fun = function(gr) {
         grid.rect(gr[[2]], unit(0, "npc"), width=gr[[4]], height=unit(1, "npc"),
                   default.units = "native", hjust=0, vjust=0, gp = gpar(col=temp_color,fill =temp_color,alpha=temp_alpha))        
       })
     }
   }
   # track for rainfall plots
-  add_track(rainfall_dat, track = 2, panel.fun = function(gr) {
+  add_track(rainfall_dat, track = 2, panel_fun = function(gr) {
     x = gr[[2]]
     y = log10(gr[[3]])
     grid.points(x, y, pch = 16, size = in_point_size, gp = gpar(col = gr[[4]]))
