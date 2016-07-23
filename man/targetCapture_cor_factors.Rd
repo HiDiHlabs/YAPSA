@@ -7,6 +7,9 @@
 \usage{
 data(targetCapture_cor_factors)
 }
+\value{
+A list of lists of data frames
+}
 \description{
 List of lists with correction factors for different target capture kits.
 The elements of the overall list are lists, every one carrying information

@@ -6,7 +6,8 @@
 #' signature exposures. Output of this function is the basis for applying
 #' \code{\link{plot_strata}} and \code{\link{make_comparison_matrix}}. It
 #' is called by the wrapper functions \code{\link{compare_SMCs}},
-#' \code{\link{run_plot_strata_general}} or \code{\link{run_comparison_general}}.
+#' \code{\link{run_plot_strata_general}} or 
+#' \code{\link{run_comparison_general}}.
 #'
 #' @param in_stratification_lists_list
 #'  List of lists with entries from different (orthogonal) stratification 
@@ -43,13 +44,16 @@
 #' 
 #' @export
 #' 
-make_strata_df <- function(in_stratification_lists_list,in_remove_signature_ind=NULL,
+make_strata_df <- function(in_stratification_lists_list,
+                           in_remove_signature_ind=NULL,
                            in_additional_stratum=NULL) {
-  my_number_of_signatures <- dim(in_stratification_lists_list[[1]]$cohort[[1]])[1]
+  my_number_of_signatures <- 
+    dim(in_stratification_lists_list[[1]]$cohort[[1]])[1]
   my_SMCs <- names(in_stratification_lists_list)
   my_strata <- c()
   for(SMC in my_SMCs) {
-    temp_strata_names <- paste0(SMC,"_",unlist(in_stratification_lists_list[[SMC]]$name_list))
+    temp_strata_names <- 
+      paste0(SMC,"_",unlist(in_stratification_lists_list[[SMC]]$name_list))
     temp_all <- paste0(SMC,"_all")
     my_strata <- c(my_strata,temp_all,temp_strata_names)
   }
@@ -59,7 +63,8 @@ make_strata_df <- function(in_stratification_lists_list,in_remove_signature_ind=
   my_number_of_strata <- c()
   for(SMC in my_SMCs) {
     SMC_counter <- SMC_counter + 1
-    my_number_of_strata[SMC_counter] <- length(in_stratification_lists_list[[SMC]]$cohort)
+    my_number_of_strata[SMC_counter] <- 
+      length(in_stratification_lists_list[[SMC]]$cohort)
     for(stratum in seq_len(my_number_of_strata[SMC_counter])) {
       stratum_counter <- stratum_counter + 1
       temp_df <- in_stratification_lists_list[[SMC]]$cohort[[stratum]]
@@ -77,7 +82,9 @@ make_strata_df <- function(in_stratification_lists_list,in_remove_signature_ind=
     my_number_of_SMCs <- my_number_of_SMCs+1
     my_number_of_strata <- c(my_number_of_strata,1)
   }
-  return(list(strata_df=out_strata_df,number_of_SMCs=my_number_of_SMCs,number_of_strata=my_number_of_strata))
+  return(list(strata_df=out_strata_df,
+              number_of_SMCs=my_number_of_SMCs,
+              number_of_strata=my_number_of_strata))
 }
 
 
@@ -119,15 +126,19 @@ make_strata_df <- function(in_stratification_lists_list,in_remove_signature_ind=
 #' 
 #' @export
 #' 
-make_catalogue_strata_df <- function(in_stratification_lists_list,in_additional_stratum=NULL) {
-  my_number_of_PIDs <- dim(in_stratification_lists_list[[1]]$catalogues_list[[1]])[2]
-  my_number_of_features <- dim(in_stratification_lists_list[[1]]$catalogues_list[[1]])[1]
+make_catalogue_strata_df <- function(in_stratification_lists_list,
+                                     in_additional_stratum=NULL) {
+  my_number_of_PIDs <- 
+    dim(in_stratification_lists_list[[1]]$catalogues_list[[1]])[2]
+  my_number_of_features <- 
+    dim(in_stratification_lists_list[[1]]$catalogues_list[[1]])[1]
   my_SMCs <- names(in_stratification_lists_list)
   my_strata <- c()
   ## normalize the catalogues
   normalized_catalogues_lists_list <- list()
   for(SMC in my_SMCs) {
-    temp_strata_names <- paste0(SMC,"_",unlist(in_stratification_lists_list[[SMC]]$name_list))
+    temp_strata_names <- 
+      paste0(SMC,"_",unlist(in_stratification_lists_list[[SMC]]$name_list))
     temp_all <- paste0(SMC,"_all")
     my_strata <- c(my_strata,temp_all,temp_strata_names)
     my_catalogues_list <- in_stratification_lists_list[[SMC]]$catalogues_list
@@ -136,8 +147,9 @@ make_catalogue_strata_df <- function(in_stratification_lists_list,in_additional_
     my_catalogues_list[[temp_length+1]] <- sum_catalogue
     permut_ind <- c(temp_length+1,seq_len(temp_length))
     this_catalogues_list <- my_catalogues_list[permut_ind]
-    normalized_catalogues_lists_list[[SMC]] <- base::lapply(this_catalogues_list,
-                                                            function(l) normalize_df_per_dim(l,2))
+    normalized_catalogues_lists_list[[SMC]] <- 
+      base::lapply(this_catalogues_list,
+                   function(l) normalize_df_per_dim(l,2))
   }
   out_strata_df <- repeat_df(0,my_number_of_features,length(my_strata))
   stratum_counter <- 0
@@ -145,7 +157,8 @@ make_catalogue_strata_df <- function(in_stratification_lists_list,in_additional_
   my_number_of_strata <- c()
   for(SMC in my_SMCs) {
     SMC_counter <- SMC_counter + 1
-    my_number_of_strata[SMC_counter] <- length(in_stratification_lists_list[[SMC]]$cohort)
+    my_number_of_strata[SMC_counter] <- 
+      length(in_stratification_lists_list[[SMC]]$cohort)
     for(stratum in seq_len(my_number_of_strata[SMC_counter])) {
       stratum_counter <- stratum_counter + 1
       temp_df <- normalized_catalogues_lists_list[[SMC]][[stratum]]
@@ -153,14 +166,17 @@ make_catalogue_strata_df <- function(in_stratification_lists_list,in_additional_
       names(out_strata_df)[stratum_counter] <- my_strata[stratum_counter]
     }
   }
-  rownames(out_strata_df) <- rownames(in_stratification_lists_list[[1]]$catalogues_list[[1]])
+  rownames(out_strata_df) <- 
+    rownames(in_stratification_lists_list[[1]]$catalogues_list[[1]])
   my_number_of_SMCs <- length(my_SMCs)
   if(!(is.null(in_additional_stratum))) {
     out_strata_df$compare <- in_additional_stratum
     my_number_of_SMCs <- my_number_of_SMCs+1
     my_number_of_strata <- c(my_number_of_strata,1)
   }
-  return(list(strata_df=out_strata_df,number_of_SMCs=my_number_of_SMCs,number_of_strata=my_number_of_strata))
+  return(list(strata_df=out_strata_df,
+              number_of_SMCs=my_number_of_SMCs,
+              number_of_strata=my_number_of_strata))
 }
 
 
@@ -191,7 +207,10 @@ make_catalogue_strata_df <- function(in_stratification_lists_list,in_additional_
 #' @import ggplot2
 #' @export
 #' 
-plot_strata <- function(in_strata_list,in_signatures_ind_df,output_path=NULL,in_attribute="") {
+plot_strata <- function(in_strata_list,
+                        in_signatures_ind_df,
+                        output_path=NULL,
+                        in_attribute="") {
   in_strata_df <- in_strata_list$strata_df
   number_of_SMCs <- in_strata_list$number_of_SMCs
   number_of_strata <- in_strata_list$number_of_strata
@@ -199,12 +218,16 @@ plot_strata <- function(in_strata_list,in_signatures_ind_df,output_path=NULL,in_
   stratum_counter <- 0
   for(stratum in names(in_strata_df)) {
     stratum_counter <- stratum_counter + 1
-    temp_df <- data.frame(sig=rownames(in_strata_df),exposure=in_strata_df[,stratum])
+    temp_df <- data.frame(sig=rownames(in_strata_df),
+                          exposure=in_strata_df[,stratum])
     plot_list[[stratum_counter]] <- ggplot() + 
-      ggplot2::geom_bar(data=temp_df,aes_string(x="sig",y="exposure",fill="sig",size=0.3),stat='identity',position="dodge",width=.7) + 
+      ggplot2::geom_bar(data=temp_df,
+                        aes_string(x="sig",y="exposure",fill="sig",size=0.3),
+                        stat='identity',position="dodge",width=.7) + 
       scale_fill_manual(values=in_signatures_ind_df$colour) + ## colour_vector needs to be supplied!!
       labs(x="",y="",title=stratum) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),legend.position = "none")
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+            legend.position = "none")
   }
   horizontal_element_width <- 10
   number_of_horizontal_units <- number_of_SMCs*horizontal_element_width
@@ -220,18 +243,22 @@ plot_strata <- function(in_strata_list,in_signatures_ind_df,output_path=NULL,in_
       height=number_of_vertical_units*vertical_figure_factor)
   }
   grid.newpage()
-  pushViewport(viewport(layout = grid.layout(number_of_vertical_units, number_of_horizontal_units)))
+  pushViewport(viewport(layout = grid.layout(number_of_vertical_units, 
+                                             number_of_horizontal_units)))
   this_offsets <- c(0,cumsum(number_of_strata)[1:length(number_of_strata)-1])
   vertical_temp_stop <- 0
   for (i in seq_len(sum(number_of_strata))) {
     this_SMC <- findInterval(i,cumsum(number_of_strata)+1)+1
     this_stratum <- i - this_offsets[this_SMC]
     horizontal_temp_start <- (this_SMC-1)*horizontal_element_width+1
-    horizontal_temp_stop <- (horizontal_temp_start - 1) + horizontal_element_width
+    horizontal_temp_stop <- 
+      (horizontal_temp_start - 1) + horizontal_element_width
     vertical_temp_start <- vertical_temp_stop + 1
     vertical_temp_start <- (this_stratum-1)*vertical_element_height+1
     vertical_temp_stop <- (vertical_temp_start - 1) + vertical_element_height    
-    print(plot_list[[i]], vp = vplayout(vertical_temp_start:vertical_temp_stop, horizontal_temp_start:horizontal_temp_stop))
+    print(plot_list[[i]], 
+          vp = vplayout(vertical_temp_start:vertical_temp_stop, 
+                        horizontal_temp_start:horizontal_temp_stop))
   }
   if(!is.null(output_path)){
     dev.off()
@@ -268,8 +295,9 @@ plot_strata <- function(in_strata_list,in_signatures_ind_df,output_path=NULL,in_
 #' 
 #' @examples
 #' data(sigs)
-#' make_comparison_matrix(AlexCosmicValid_sig_df,in_nrect=9,
-#'                        in_palette=colorRampPalette(c("blue","green","red"))(n=100))
+#' make_comparison_matrix(
+#'  AlexCosmicValid_sig_df,in_nrect=9,
+#'  in_palette=colorRampPalette(c("blue","green","red"))(n=100))
 #' 
 #' @seealso \code{\link{compare_SMCs}}
 #' 
@@ -280,18 +308,21 @@ plot_strata <- function(in_strata_list,in_signatures_ind_df,output_path=NULL,in_
 make_comparison_matrix <- function(in_strata_df,output_path=NULL,in_nrect=5,
                                    in_attribute="",in_palette=NULL) {
   if(is.null(in_palette)){
-    myColorRange <- colorRampPalette(c("blue","green","green","green","green","green",
-                                       "green","green","green","green","red"))(n=100)    
+    myColorRange <- colorRampPalette(c("blue","green","green","green","green",
+                                       "green","green","green","green","green",
+                                       "red"))(n=100)    
   } else {
     myColorRange <- in_palette
   }
   compare_list <- compare_sets(in_strata_df,in_strata_df)
   dist_df <- compare_list$distance
   if(!is.null(output_path)){
-    fileName <- file.path(output_path,paste0(in_attribute,"_comparison_matrix.png"))
+    fileName <- file.path(output_path,
+                          paste0(in_attribute,"_comparison_matrix.png"))
     png(fileName,width=500,height=500)
   }
-  corrplot(as.matrix(1-dist_df),method="color",order="hclust",addrect=in_nrect,col=myColorRange)
+  corrplot(as.matrix(1-dist_df),method="color",order="hclust",
+           addrect=in_nrect,col=myColorRange)
   if(!is.null(output_path)){
     dev.off()
   }
@@ -331,8 +362,11 @@ make_comparison_matrix <- function(in_strata_df,output_path=NULL,in_nrect=5,
 #' 
 #' @export
 #' 
-compare_SMCs <- function(in_stratification_lists_list,in_signatures_ind_df,output_path,
-                         in_nrect=5,in_attribute="") {
+compare_SMCs <- function(in_stratification_lists_list,
+                         in_signatures_ind_df,
+                         output_path,
+                         in_nrect=5,
+                         in_attribute="") {
   strata_list <- make_strata_df(in_stratification_lists_list)
   strata_df <- strata_list$strata_df
   plot_strata(strata_list,in_signatures_ind_df,output_path,in_attribute)
@@ -340,7 +374,8 @@ compare_SMCs <- function(in_stratification_lists_list,in_signatures_ind_df,outpu
   names(reduced_strata_df)[1] <- "all"
   remove_ind <- grep("_all$",names(reduced_strata_df))
   reduced_strata_df <- reduced_strata_df[,-remove_ind]
-  my_matrix <- make_comparison_matrix(reduced_strata_df,output_path,in_nrect,in_attribute)
+  my_matrix <- make_comparison_matrix(reduced_strata_df,output_path,
+                                      in_nrect,in_attribute)
   return(my_matrix)
 }
 
@@ -376,11 +411,17 @@ compare_SMCs <- function(in_stratification_lists_list,in_signatures_ind_df,outpu
 #' 
 #' @export
 #' 
-run_plot_strata_general <- function(in_stratification_lists_list,in_signatures_ind_df,output_path=NULL,
-                                    in_attribute="",in_remove_signature_ind=NULL,
+run_plot_strata_general <- function(in_stratification_lists_list,
+                                    in_signatures_ind_df,
+                                    output_path=NULL,
+                                    in_attribute="",
+                                    in_remove_signature_ind=NULL,
                                     in_additional_stratum=NULL) {
-  strata_list <- make_strata_df(in_stratification_lists_list,in_remove_signature_ind,in_additional_stratum)
-  plot_strata(strata_list$strata_df,in_signatures_ind_df,output_path,in_attribute)
+  strata_list <- make_strata_df(in_stratification_lists_list,
+                                in_remove_signature_ind,
+                                in_additional_stratum)
+  plot_strata(strata_list$strata_df,in_signatures_ind_df,
+              output_path,in_attribute)
 }
 
 
@@ -422,10 +463,15 @@ run_plot_strata_general <- function(in_stratification_lists_list,in_signatures_i
 #' 
 #' @export
 #' 
-run_comparison_general <- function(in_stratification_lists_list,output_path=NULL,in_nrect=5,
-                                   in_attribute="",in_remove_signature_ind=NULL,
+run_comparison_general <- function(in_stratification_lists_list,
+                                   output_path=NULL,
+                                   in_nrect=5,
+                                   in_attribute="",
+                                   in_remove_signature_ind=NULL,
                                    in_additional_stratum=NULL) {
-  strata_list <- make_strata_df(in_stratification_lists_list,in_remove_signature_ind,in_additional_stratum)
+  strata_list <- make_strata_df(in_stratification_lists_list,
+                                in_remove_signature_ind,
+                                in_additional_stratum)
   strata_df <- strata_list$strata_df
   reduced_strata_df <- strata_df
   names(reduced_strata_df)[1] <- "all"
@@ -433,7 +479,10 @@ run_comparison_general <- function(in_stratification_lists_list,output_path=NULL
   if(length(remove_ind)>0) {
     reduced_strata_df <- reduced_strata_df[,-remove_ind]
   }
-  my_matrix <- make_comparison_matrix(reduced_strata_df,output_path,in_nrect,in_attribute)
+  my_matrix <- make_comparison_matrix(reduced_strata_df,
+                                      output_path,
+                                      in_nrect,
+                                      in_attribute)
   return(my_matrix)
 }
 
@@ -466,9 +515,12 @@ run_comparison_general <- function(in_stratification_lists_list,output_path=NULL
 #' 
 #' @export
 #' 
-run_comparison_catalogues <- function(in_stratification_lists_list,output_path=NULL,
-                                      in_nrect=5,in_attribute="") {
-  catalogue_strata_list <- make_catalogue_strata_df(in_stratification_lists_list)
+run_comparison_catalogues <- function(in_stratification_lists_list,
+                                      output_path=NULL,
+                                      in_nrect=5,
+                                      in_attribute="") {
+  catalogue_strata_list <- 
+    make_catalogue_strata_df(in_stratification_lists_list)
   catalogue_strata_df <- catalogue_strata_list$strata_df
   reduced_strata_df <- catalogue_strata_df
   names(reduced_strata_df)[1] <- "all"
@@ -476,6 +528,9 @@ run_comparison_catalogues <- function(in_stratification_lists_list,output_path=N
   if(length(remove_ind)>0) {
     reduced_strata_df <- reduced_strata_df[,-remove_ind]
   }
-  my_matrix <- make_comparison_matrix(reduced_strata_df,output_path,in_nrect,in_attribute)
+  my_matrix <- make_comparison_matrix(reduced_strata_df,
+                                      output_path,
+                                      in_nrect,
+                                      in_attribute)
   return(my_matrix)
 }

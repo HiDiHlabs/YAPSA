@@ -10,10 +10,12 @@ LCD_cutoff(in_mutation_catalogue_df, in_signatures_df, in_cutoff = 0.01,
 }
 \arguments{
 \item{in_mutation_catalogue_df}{A numeric data frame \code{V} with \code{n} rows and \code{m} columns, 
-\code{n} being the number of features and \code{m} being the number of samples}
+\code{n} being the number of features and \code{m} being the number of 
+samples}
 
 \item{in_signatures_df}{A numeric data frame \code{W} with \code{n} rows and \code{l} columns,
-\code{n} being the number of features and \code{l} being the number of signatures}
+\code{n} being the number of features and \code{l} being the number of 
+signatures}
 
 \item{in_cutoff}{A numeric value less than 1. Signatures from within \code{W}
 with an overall exposure less than \code{in_cutoff} will be
@@ -21,8 +23,8 @@ discarded.}
 
 \item{in_filename}{A path to generate a histogram of the signature exposures if non-NULL}
 
-\item{in_method}{Indicate to which data the cutoff shall be applied: absolute exposures, relative 
-exposures}
+\item{in_method}{Indicate to which data the cutoff shall be applied: absolute exposures, 
+relative exposures}
 
 \item{in_convention}{Indicate whether LCD or LCD_strict should be used}
 
@@ -31,8 +33,8 @@ with an exposure per sample less than \code{in_cutoff} will be
 discarded.}
 }
 \value{
-A list with entries \code{exposures}, \code{signatures}, \code{choice}
-         and \code{order}
+A list with entries \code{exposures}, \code{signatures}, 
+         \code{choice} and \code{order}
 \itemize{
  \item \code{exposures}:
    The exposures \code{H}, a numeric data frame with 
@@ -77,7 +79,7 @@ a given cutoff over the whole cohort.
 ## define raw data
 W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
 W_prim_df <- as.data.frame(W_prim)
-W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
 W <- as.matrix(W_df) 
 ## 1. Simple case: non-negativity already in raw data
 H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)

@@ -12,12 +12,14 @@ normalizeMotifs_otherRownames(in_matrix, in_norms, adjust_counts = TRUE)
 \item{adjust_counts}{Whether to rescale the counts after adaption or not. Default is true.}
 }
 \value{
-The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but with rownames
- transformed back to the convention of the input
+The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but
+ with rownames transformed back to the convention of the input
 }
 \description{
-This is a wrapper function to \code{\link[SomaticSignatures]{normalizeMotifs}}. The rownames
-are first transformed to fit the convention of the \code{\link[SomaticSignatures]{SomaticSignatures}}
+This is a wrapper function to 
+\code{\link[SomaticSignatures]{normalizeMotifs}}. The rownames
+are first transformed to fit the convention of the 
+\code{\link[SomaticSignatures]{SomaticSignatures}}
 package and then passed on to the above mentioned function.
 }
 \examples{

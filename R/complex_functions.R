@@ -51,14 +51,18 @@
 #' @importFrom GenomeInfoDb seqlengths seqlengths<-
 #' @export
 #' 
-makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo=NULL,
-                                     in_seqnames.field="X.CHROM",in_start.field="POS",
+makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
+                                     in_seqinfo=NULL,
+                                     in_seqnames.field="X.CHROM",
+                                     in_start.field="POS",
                                      in_end.field="POS",in_PID.field="PID",
-                                     in_subgroup.field="subgroup",in_strand.field="strand",
+                                     in_subgroup.field="subgroup",
+                                     in_strand.field="strand",
                                      verbose_flag=1) {
   out_vr <- NULL
   name_list <- tolower(names(in_df))
-  match_list <- c("ref","alt",tolower(in_seqnames.field),tolower(in_start.field),tolower(in_end.field))
+  match_list <- c("ref","alt",tolower(in_seqnames.field),
+                  tolower(in_start.field),tolower(in_end.field))
   if(length(which(match_list %in% name_list)) == length(match_list)) {
     my_gr <- GenomicRanges::makeGRangesFromDataFrame(in_df,
                                       keep.extra.columns=in_keep.extra.columns,
@@ -70,19 +74,24 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
     if(!("+" %in% unique(strand(my_gr))) & !("-" %in% unique(strand(my_gr)))) {
       strand(my_gr) <- "+"
       if(verbose_flag==1){
-        cat("YAPSA:::makeVRangesFromDataFrame::warning:strand information missing, set to \"+\".\n")
+        cat("YAPSA:::makeVRangesFromDataFrame::warning:strand ",
+            "information missing, set to \"+\".\n")
       }
     }    
-    out_vr <- VRanges(seqnames=seqnames(my_gr),ranges=ranges(my_gr),ref=my_gr$REF,alt=my_gr$ALT)
+    out_vr <- VRanges(seqnames=seqnames(my_gr),ranges=ranges(my_gr),
+                      ref=my_gr$REF,alt=my_gr$ALT)
     if(tolower(in_PID.field) %in% name_list) {
       if(verbose_flag==1){
-        cat("YAPSA:::makeVRangesFromDataFrame::in_PID.field found. Retrieving PID information.\n")
+        cat("YAPSA:::makeVRangesFromDataFrame::in_PID.field found. ",
+            "Retrieving PID information.\n")
       }
-      column_ind <- min(which(tolower(names(mcols(my_gr)))==tolower(in_PID.field)))
+      column_ind <- 
+        min(which(tolower(names(mcols(my_gr)))==tolower(in_PID.field)))
       out_vr$PID <- mcols(my_gr)[,column_ind]
     } else if("pid" %in% name_list) {
       if(verbose_flag==1){
-        cat(paste0("YAPSA:::makeVRangesFromDataFrame::warning:in_PID.field not a valid column name,",
+        cat(paste0("YAPSA:::makeVRangesFromDataFrame::warning:in_PID.field ",
+                   "not a valid column name,",
                    " but default is valid. Retrieving PID information.\n"))
       }
       out_vr$PID <- my_gr$PID
@@ -94,24 +103,30 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
     }
     if(tolower(in_subgroup.field) %in% name_list) {
       if(verbose_flag==1){
-        cat("YAPSA:::makeVRangesFromDataFrame::in_subgroup.field found. Retrieving subgroup information.\n")
+        cat("YAPSA:::makeVRangesFromDataFrame::in_subgroup.field found. ",
+            "Retrieving subgroup information.\n")
       }
-      column_ind <- min(which(tolower(names(mcols(my_gr)))==tolower(in_subgroup.field)))
+      column_ind <- 
+        min(which(tolower(names(mcols(my_gr)))==tolower(in_subgroup.field)))
       out_vr$Type <- mcols(my_gr)[,column_ind]
     } else if("subgroup" %in% name_list) {
       if(verbose_flag==1){
-        cat(paste0("YAPSA:::makeVRangesFromDataFrame::warning:in_subgroup.field not a valid column name,",
+        cat(paste0("YAPSA:::makeVRangesFromDataFrame::warning:",
+                   "in_subgroup.field not a valid column name,",
                    " but default is valid. Retrieving subgroup information.\n"))
       }
       out_vr$Type <- my_gr$subgroup
     } else {
-      if(verbose_flag==1){cat("YAPSA:::makeVRangesFromDataFrame::warning:subgroup information missing. Filling up with dummy entries.\n");}
+      if(verbose_flag==1){cat("YAPSA:::makeVRangesFromDataFrame::warning:",
+                              "subgroup information missing. ",
+                              "Filling up with dummy entries.\n");}
       out_vr$Type <- "dummy_subgroup"
     }
     seqlengths(out_vr) <- seqlengths(my_gr)    
   } else {
     if(verbose_flag==1){
-      cat("YAPSA:::makeVRangesFromDataFrame::error:mismatch in column names, return NULL.\n")
+      cat("YAPSA:::makeVRangesFromDataFrame::error:mismatch in column names, ",
+          "return NULL.\n")
     }
   }
   return(out_vr)
@@ -132,10 +147,12 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
 #'  number of custom or used defined columns. One of these can carry a PID
 #'  (patient or sample identifyier) and one can carry subgroup information.
 #' @param in_refGenome
-#'  The reference genome handed over to \code{\link[SomaticSignatures]{mutationContext}}
+#'  The reference genome handed over to 
+#'  \code{\link[SomaticSignatures]{mutationContext}}
 #'  and used to extract the motif context of the variants in \code{in_vr}.
 #' @param in_wordLength
-#'  The size of the motifs to be extracted by \code{\link[SomaticSignatures]{mutationContext}}
+#'  The size of the motifs to be extracted by 
+#'  \code{\link[SomaticSignatures]{mutationContext}}
 #' @param in_PID.field
 #'  Indicates the name of the column in which the PID (patient or sample
 #'  identifier) is encoded
@@ -145,7 +162,8 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
 #'  Optional parameter to specify rownames of the mutational catalogue \code{V}
 #'  i.e. the names of the features.
 #' @param adapt_rownames
-#'  Rownames of the output \code{matrix} will be adapted if \code{adapt_rownames=1}
+#'  Rownames of the output \code{matrix} will be adapted if 
+#'  \code{adapt_rownames=1}
 #'
 #' @return A list with entries
 #'  \code{matrix},
@@ -176,7 +194,9 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,in_seqinfo
 #'  head(temp_list$matrix)
 #'  test_list <- split(lymphoma_test_df,f=lymphoma_test_df$PID)
 #'  other_list <- list()
-#'  for(i in seq_len(length(test_list))){other_list[[i]] <- test_list[[i]][c(1:80),]}
+#'  for(i in seq_len(length(test_list))){
+#'    other_list[[i]] <- test_list[[i]][c(1:80),]
+#'  }
 #'  other_df <- do.call(rbind,other_list)
 #'  other_vr <- makeVRangesFromDataFrame(
 #'    other_df,in_seqnames.field="CHROM",
@@ -205,12 +225,20 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
   names(mcols(in_vr))[PID_index] <- "PID"
   in_vr$PID <- factor(as.character(in_vr$PID))
   # now start real work of the function
-  if ( in_verbose==1 ) {cat("YAPSA:::create_mutation_catalogue_from_VR::Extracting mutation context for the SNVs from the reference genome...\n");}
+  if ( in_verbose==1 ) {
+    cat("YAPSA:::create_mutation_catalogue_from_VR::Extracting mutation ",
+        "context for the SNVs from the reference genome...\n");
+  }
   my_motifs <- mutationContext(in_vr, in_refGenome, k=in_wordLength, unify=TRUE)
-  if ( in_verbose==1 ) {cat("YAPSA:::create_mutation_catalogue_from_VR::Building mutational catalogue...\n");}
-  ## cave: mutationContextMatrix is the old version of the SomaticSignatures package
-  ##       motifMatrix is the new version, but return a list instead of a matrix when the data is sparse
-  #my_matrix = mutationContextMatrix(my_motifs, group=in_PID.field,normalize = FALSE)
+  if ( in_verbose==1 ) {
+    cat("YAPSA:::create_mutation_catalogue_from_VR::Building mutational ",
+        "catalogue...\n");
+    }
+  ## cave: mutationContextMatrix is the old version of the SomaticSignatures 
+  ##       package motifMatrix is the new version, but return a list instead 
+  ##       of a matrix when the data is sparse
+  #my_matrix = mutationContextMatrix(my_motifs, group=in_PID.field,
+  #                                  normalize = FALSE)
   my_matrix = motifMatrix(my_motifs, group=in_PID.field,normalize = FALSE)
   ## check if unallowed nucleotides in matrix
   deselect_ind <- grep("[NX]",rownames(my_matrix))
@@ -220,15 +248,24 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
   # account for sparsity of the matrix
   if(length(in_rownames) > 0) {
     if(length(in_rownames) < dim(my_matrix)[1]) {
-      if(in_verbose==1) {cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: supplied rownames too short\n");}
+      if(in_verbose==1) {
+        cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: supplied ",
+            "rownames too short\n");
+      }
     } else if (!is.character(in_rownames)) {
-      if(in_verbose==1) {cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: supplied rownames not character format\n");}
+      if(in_verbose==1) {
+        cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: supplied ",
+            "rownames not character format\n");
+      }
     } else {
       my_rownames <- transform_rownames_MATLAB_to_R(in_rownames,in_wordLength)
       temp_matrix <- matrix(0,nrow=length(my_rownames),ncol=dim(my_matrix)[2])
       match_ind <- match(rownames(my_matrix),my_rownames)
       if( (length(match_ind) < dim(my_matrix)[1]) | (any(is.na(match_ind))) ) {
-        if(in_verbose==1) {cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: my_matrix contains rownames which are not in supplied rownames.\n");}
+        if(in_verbose==1) {
+          cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: my_matrix ",
+              "contains rownames which are not in supplied rownames.\n");
+        }
       } else {
         temp_colnames <- colnames(my_matrix)
         temp_matrix[match_ind,] <- my_matrix
@@ -239,15 +276,23 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
     }
   }
   # string manipulations for export to matlab
-  if ( in_verbose==1 ) {cat("YAPSA:::create_mutation_catalogue_from_VR::Performing string manipulations for output to matlab...\n");}
+  if ( in_verbose==1 ) {
+    cat("YAPSA:::create_mutation_catalogue_from_VR::Performing string ",
+        "manipulations for output to matlab...\n");
+  }
   temp_frame <- data.frame(strsplit(rownames(my_matrix)," "))
   colnames(temp_frame) <- rownames(my_matrix)
   my_frame <- as.data.frame(t(temp_frame[,]))
   colnames(my_frame) <- c("exchange","context")
-  my_frame$types <- paste0(substr(my_frame$exchange,1,1),">",substr(my_frame$exchange,2,2))
+  my_frame$types <- 
+    paste0(substr(my_frame$exchange,1,1),">",substr(my_frame$exchange,2,2))
   ## adapt for word length here
   fraction_length <- floor(in_wordLength/2)
-  my_frame$subtypes <- paste0(substr(my_frame$context,1,fraction_length),substr(my_frame$exchange,1,1),substr(my_frame$context,in_wordLength-fraction_length+1,in_wordLength))  
+  my_frame$subtypes <- 
+    paste0(substr(my_frame$context,1,fraction_length),
+           substr(my_frame$exchange,1,1),
+           substr(my_frame$context,
+                  in_wordLength-fraction_length+1,in_wordLength))  
   my_frame$newnames <- paste0(my_frame$types," ",my_frame$subtypes)
   if(adapt_rownames==1) {
     rownames(my_matrix) <- my_frame$newnames
@@ -288,18 +333,21 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
 #'  Indicates the name of the column in which the subgroup information
 #'  is encoded
 #' @param this_refGenome
-#'  The reference genome handed over to \code{\link{create_mutation_catalogue_from_VR}}
+#'  The reference genome handed over to 
+#'  \code{\link{create_mutation_catalogue_from_VR}}
 #'  and indirectly to \code{\link[SomaticSignatures]{mutationContext}}
 #'  and used to extract the motif context of the variants in \code{in_vr}.
 #' @param this_wordLength
-#'  The size of the motifs to be extracted by \code{\link[SomaticSignatures]{mutationContext}}
+#'  The size of the motifs to be extracted by 
+#'  \code{\link[SomaticSignatures]{mutationContext}}
 #' @param this_verbose
 #'  Verbose if \code{this_verbose=1}
 #' @param this_rownames
 #'  Optional parameter to specify rownames of the mutational catalogue \code{V}
 #'  i.e. the names of the features.
 #' @param this_adapt_rownames
-#'  Rownames of the output \code{matrix} will be adapted if \code{this_adapt_rownames=1}
+#'  Rownames of the output \code{matrix} will be adapted if 
+#'  \code{this_adapt_rownames=1}
 #'
 #' @return A list with entries
 #'  \code{matrix} and
@@ -334,12 +382,17 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
 #' 
 #' @export
 #'
-create_mutation_catalogue_from_df <- function(this_df,this_refGenome_Seqinfo=NULL,
+create_mutation_catalogue_from_df <- function(this_df,
+                                              this_refGenome_Seqinfo=NULL,
                                               this_seqnames.field="X.CHROM",
-                                              this_start.field="POS",this_end.field="POS",
-                                              this_PID.field="PID",this_subgroup.field="subgroup",
-                                              this_refGenome,this_wordLength,this_verbose=1,
-                                              this_rownames=c(),this_adapt_rownames=1) {
+                                              this_start.field="POS",
+                                              this_end.field="POS",
+                                              this_PID.field="PID",
+                                              this_subgroup.field="subgroup",
+                                              this_refGenome,this_wordLength,
+                                              this_verbose=1,
+                                              this_rownames=c(),
+                                              this_adapt_rownames=1) {
   if(is.null(this_refGenome_Seqinfo)){
     this_refGenome_Seqinfo <- seqinfo(this_refGenome)
   }
@@ -352,9 +405,12 @@ create_mutation_catalogue_from_df <- function(this_df,this_refGenome_Seqinfo=NUL
                                     in_PID.field=this_PID.field,
                                     in_subgroup.field=this_subgroup.field,
                                     verbose_flag=this_verbose)
-  my_result_list <- create_mutation_catalogue_from_VR(my_vr,this_refGenome,this_wordLength,
-                                                      this_PID.field,this_verbose,
-                                                      this_rownames,this_adapt_rownames)
+  my_result_list <- create_mutation_catalogue_from_VR(my_vr,this_refGenome,
+                                                      this_wordLength,
+                                                      this_PID.field,
+                                                      this_verbose,
+                                                      this_rownames,
+                                                      this_adapt_rownames)
   return(my_result_list)
 }
 
@@ -388,10 +444,14 @@ transform_rownames_R_to_MATLAB <- function(in_rownames,wordLength=3) {
   colnames(temp_frame) <- in_rownames
   my_frame <- as.data.frame(t(temp_frame[,]))
   colnames(my_frame) <- c("exchange","context")
-  my_frame$types <- paste0(substr(my_frame$exchange,1,1),">",substr(my_frame$exchange,2,2))
+  my_frame$types <- paste0(substr(my_frame$exchange,1,1),">",
+                           substr(my_frame$exchange,2,2))
   ## adapt for word length here
   fraction_length <- floor(wordLength/2)
-  my_frame$subtypes <- paste0(substr(my_frame$context,1,fraction_length),substr(my_frame$exchange,1,1),substr(my_frame$context,wordLength-fraction_length+1,wordLength))  
+  my_frame$subtypes <- paste0(
+    substr(my_frame$context,1,fraction_length),
+    substr(my_frame$exchange,1,1),
+    substr(my_frame$context,wordLength-fraction_length+1,wordLength))  
   out_rownames <- paste0(my_frame$types," ",my_frame$subtypes)
   return(out_rownames)
 }
@@ -426,10 +486,13 @@ transform_rownames_MATLAB_to_R <- function(in_rownames,wordLength=3) {
   colnames(temp_frame) <- in_rownames
   my_frame <- as.data.frame(t(temp_frame[,]))
   colnames(my_frame) <- c("exchange","context")
-  my_frame$types <- paste0(substr(my_frame$exchange,1,1),substr(my_frame$exchange,3,3))
+  my_frame$types <- paste0(substr(my_frame$exchange,1,1),
+                           substr(my_frame$exchange,3,3))
   ## adapt for word length here
   fraction_length <- floor(wordLength/2)
-  my_frame$subtypes <- paste0(substr(my_frame$context,1,fraction_length),".",substr(my_frame$context,wordLength-fraction_length+1,wordLength))  
+  my_frame$subtypes <- paste0(
+    substr(my_frame$context,1,fraction_length),".",
+    substr(my_frame$context,wordLength-fraction_length+1,wordLength))  
   out_rownames <- paste0(my_frame$types," ",my_frame$subtypes)
   return(out_rownames)
 }
@@ -440,8 +503,8 @@ transform_rownames_MATLAB_to_R <- function(in_rownames,wordLength=3) {
 #' Rownames or names of the features used differ between the different contexts
 #' a signature analysis is carried out in. The function
 #' \code{transform_rownames_MATLAB_to_R} changes from the convention used in
-#' stored mutational catalogues by Alexandrov et al. to the one used by the YAPSA
-#' pacakge.
+#' stored mutational catalogues by Alexandrov et al. to the one used by the 
+#' YAPSA pacakge.
 #'
 #' @param in_rownames 
 #'  Character vector of input rownames
@@ -463,11 +526,13 @@ transform_rownames_nature_to_R <- function(in_rownames,wordLength=3) {
   ## adapt for word length here
   fraction_length <- floor(wordLength/2)
   string_length <- nchar(as.character(in_rownames[1]))
-  my_frame <- repeat_df(in_value = "a",in_rows = length(in_rownames),in_cols = 2)
+  my_frame <- repeat_df(in_value = "a",in_rows = length(in_rownames),
+                        in_cols = 2)
   colnames(my_frame) <- c("types","subtypes")
-  my_frame$subtypes <- paste0(substr(in_rownames,1,fraction_length),
-                              substr(in_rownames,fraction_length+2,fraction_length+2),
-                              substr(in_rownames,string_length-fraction_length+1,string_length))  
+  my_frame$subtypes <- paste0(
+    substr(in_rownames,1,fraction_length),
+    substr(in_rownames,fraction_length+2,fraction_length+2),
+    substr(in_rownames,string_length-fraction_length+1,string_length))  
   my_frame$types <- substr(in_rownames,fraction_length+2,fraction_length+4)
   out_rownames <- paste0(my_frame$types," ",my_frame$subtypes)
   return(out_rownames)
@@ -478,8 +543,8 @@ transform_rownames_nature_to_R <- function(in_rownames,wordLength=3) {
 #'
 #' Rownames or names of the features used differ between the different contexts
 #' a signature analysis is carried out in. The function
-#' \code{transform_rownames_YAPSA_to_deconstructSigs} changes from the convention
-#'  used in the YAPSA package to the one used by the deconstructSigs
+#' \code{transform_rownames_YAPSA_to_deconstructSigs} changes from the 
+#' convention used in the YAPSA package to the one used by the deconstructSigs
 #' pacakge.
 #'
 #' @param in_rownames 
@@ -497,18 +562,21 @@ transform_rownames_nature_to_R <- function(in_rownames,wordLength=3) {
 #' 
 #' @export
 #'
-transform_rownames_YAPSA_to_deconstructSigs <- function(in_rownames,wordLength=3) {
+transform_rownames_YAPSA_to_deconstructSigs <- function(in_rownames,
+                                                        wordLength=3) {
   out_rownames <- in_rownames
   ## adapt for word length here
   fraction_length <- floor(wordLength/2)
   string_length <- nchar(as.character(in_rownames[1]))
-  my_frame <- repeat_df(in_value = "a",in_rows = length(in_rownames),in_cols = 2)
+  my_frame <- repeat_df(in_value = "a",in_rows = length(in_rownames),
+                        in_cols = 2)
   colnames(my_frame) <- c("types","subtypes")
   my_frame$subtypes <- lapply(in_rownames,function(x) strsplit(x," ")[[1]][2])
   my_frame$types <- lapply(in_rownames,function(x) strsplit(x," ")[[1]][1])
-  out_rownames <- paste0(substr(my_frame$subtypes,1,fraction_length),"[",
-                         my_frame$types,"]",
-                         substr(my_frame$subtypes,fraction_length+2,2*fraction_length+1))
+  out_rownames <- paste0(
+    substr(my_frame$subtypes,1,fraction_length),"[",
+    my_frame$types,"]",
+    substr(my_frame$subtypes,fraction_length+2,2*fraction_length+1))
   return(out_rownames)
 }
 
@@ -517,8 +585,8 @@ transform_rownames_YAPSA_to_deconstructSigs <- function(in_rownames,wordLength=3
 #'
 #' Rownames or names of the features used differ between the different contexts
 #' a signature analysis is carried out in. The function
-#' \code{transform_rownames_YAPSA_to_deconstructSigs} changes from the convention
-#'  used in the deconstructSigs package to the one used by the YAPSA
+#' \code{transform_rownames_YAPSA_to_deconstructSigs} changes from the 
+#' convention used in the deconstructSigs package to the one used by the YAPSA
 #' pacakge.
 #'
 #' @param in_rownames 
@@ -536,16 +604,19 @@ transform_rownames_YAPSA_to_deconstructSigs <- function(in_rownames,wordLength=3
 #' 
 #' @export
 #'
-transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,wordLength=3) {
+transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,
+                                                        wordLength=3) {
   out_rownames <- in_rownames
   ## adapt for word length here
   fraction_length <- floor(wordLength/2)
   string_length <- nchar(as.character(in_rownames[1]))
-  my_frame <- repeat_df(in_value = "a",in_rows = length(in_rownames),in_cols = 2)
+  my_frame <- repeat_df(in_value = "a",in_rows = length(in_rownames),
+                        in_cols = 2)
   colnames(my_frame) <- c("types","subtypes")
-  my_frame$subtypes <- paste0(substr(in_rownames,1,fraction_length),
-                              substr(in_rownames,2+fraction_length,2+fraction_length),
-                              substr(in_rownames,6+fraction_length,5+2*fraction_length))
+  my_frame$subtypes <- paste0(
+    substr(in_rownames,1,fraction_length),
+    substr(in_rownames,2+fraction_length,2+fraction_length),
+    substr(in_rownames,6+fraction_length,5+2*fraction_length))
   my_frame$types <- substr(in_rownames,2+fraction_length,4+fraction_length)
   out_rownames <- paste0(my_frame$types," ",my_frame$subtypes)  
   return(out_rownames)
@@ -554,8 +625,10 @@ transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,wordLength=3
 
 #' Normalize Somatic Motifs with different rownames
 #' 
-#' This is a wrapper function to \code{\link[SomaticSignatures]{normalizeMotifs}}. The rownames
-#' are first transformed to fit the convention of the \code{\link[SomaticSignatures]{SomaticSignatures}}
+#' This is a wrapper function to 
+#' \code{\link[SomaticSignatures]{normalizeMotifs}}. The rownames
+#' are first transformed to fit the convention of the 
+#' \code{\link[SomaticSignatures]{SomaticSignatures}}
 #' package and then passed on to the above mentioned function.
 #' 
 #' @param in_matrix,in_norms
@@ -564,8 +637,8 @@ transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,wordLength=3
 #'  Whether to rescale the counts after adaption or not. Default is true.
 #'
 #' @return
-#'  The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but with rownames
-#'  transformed back to the convention of the input
+#'  The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but
+#'  with rownames transformed back to the convention of the input
 #'  
 #' @examples
 #'  NULL
@@ -610,7 +683,8 @@ normalizeMotifs_otherRownames <- function(in_matrix,
 #' 
 #' @seealso \code{\link{stratify_and_create_mutational_catalogue}}
 #' 
-adjust_number_of_columns_in_list_of_catalogues <- function(in_all_list,in_merged_results_list) {
+adjust_number_of_columns_in_list_of_catalogues <- function(in_all_list,
+                                                           in_merged_results_list) {
   out_list <- list()
   number_of_strata <- length(in_all_list$results_lists_list)
   reference_matrix <- in_merged_results_list$matrix
@@ -627,26 +701,37 @@ adjust_number_of_columns_in_list_of_catalogues <- function(in_all_list,in_merged
 }
 
 
-save_mutation_catalogue <- function(in_table,in_matrix,in_frame,in_subgroup_flag,in_meta_info,in_subDir,in_verbose) {
+save_mutation_catalogue <- function(in_table,in_matrix,in_frame,
+                                    in_subgroup_flag,in_meta_info,in_subDir,
+                                    in_verbose) {
   type_df <- aggregate(data=in_table,subgroup~PID, function(l) return(l[1]))
   if (dim(type_df)[1] != length(colnames(in_matrix))) {
-    cat("YAPSA:::save_mutation_catalogue::Warning: mismatch between subgroup information and colnames(in_matrix).\n");
+    cat("YAPSA:::save_mutation_catalogue::Warning: mismatch between subgroup ",
+        "information and colnames(in_matrix).\n");
   }
   subgroup_vector <- rep("dummy",dim(in_matrix)[2])
   if (in_subgroup_flag==1) {
-    subgroup_vector <- as.character(in_meta_info$Diagnosis[match(colnames(in_matrix),in_meta_info$PID)])
+    subgroup_vector <- 
+      as.character(in_meta_info$Diagnosis[match(colnames(in_matrix),
+                                                in_meta_info$PID)])
   }
   if (in_subgroup_flag==2) {
-    subgroup_vector <- as.character(type_df$subgroup[match(colnames(in_matrix),type_df$PID)])
+    subgroup_vector <- 
+      as.character(type_df$subgroup[match(colnames(in_matrix),type_df$PID)])
   }
   # store to text files
   if ( in_verbose==1 ) {cat("Store to specified files...\n");}
   save(in_table,in_matrix,file=file.path(in_subDir,"MotifMatrix.RData"))
-  write.table(in_matrix,sep="\t",file=file.path(in_subDir,"MotifMatrix.txt"),col.names=FALSE,row.names=FALSE)
-  write(c("PIDs",colnames(in_matrix)),sep="\t",file=file.path(in_subDir,"MotifMatrix_colnames.txt"))
-  write(c("subgroup",subgroup_vector),sep="\t",file=file.path(in_subDir,"MotifMatrix_subgroups.txt"))
-  write(c("types",in_frame$types),sep="\t",file=file.path(in_subDir,"MotifMatrix_types.txt"))
-  write(c("subtypes",in_frame$subtypes),sep="\t",file=file.path(in_subDir,"MotifMatrix_subtypes.txt"))
+  write.table(in_matrix,sep="\t",file=file.path(in_subDir,"MotifMatrix.txt"),
+              col.names=FALSE,row.names=FALSE)
+  write(c("PIDs",colnames(in_matrix)),sep="\t",
+        file=file.path(in_subDir,"MotifMatrix_colnames.txt"))
+  write(c("subgroup",subgroup_vector),sep="\t",
+        file=file.path(in_subDir,"MotifMatrix_subgroups.txt"))
+  write(c("types",in_frame$types),sep="\t",
+        file=file.path(in_subDir,"MotifMatrix_types.txt"))
+  write(c("subtypes",in_frame$subtypes),sep="\t",
+        file=file.path(in_subDir,"MotifMatrix_subtypes.txt"))
 }
 
 
@@ -685,12 +770,14 @@ save_mutation_catalogue <- function(in_table,in_matrix,in_frame,in_subgroup_flag
 #' NULL
 #' \dontrun{
 #'  data(lymphoma_test)
-#'  strata_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-#'                                         in_outlier_cutoffs=c(-4,4),
-#'                                         in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-#'                                         in_labels=c("small","intermediate","big"))
+#'  strata_list <- cut_breaks_as_intervals(
+#'    lymphoma_test_df$random_norm,
+#'    in_outlier_cutoffs=c(-4,4),
+#'    in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
+#'    in_labels=c("small","intermediate","big"))
 #'  lymphoma_test_df$random_cat <- strata_list$category_vector
-#'  stratification_list <- stratify_vcf_like_df(lymphoma_test_df,"random_cat",in_verbose=0)
+#'  stratification_list <- stratify_vcf_like_df(lymphoma_test_df,"random_cat",
+#'                                              in_verbose=0)
 #'  stratification_list$name_list
 #'  for (i in seq_len(3)){
 #'    cat("\nStratum ",i,"\n")
@@ -718,7 +805,9 @@ stratify_vcf_like_df <- function(in_table,in_column_name,in_verbose=0) {
     temp_table <- in_table[temp_ind,]
     temp_name <- i
     if(in_verbose == 1) {
-      cat("YAPSA:::stratify_vcf_like_df:: temp_name =",temp_name,"; number of variants:",dim(temp_table)[1],"; number of PIDs:",length(unique(temp_table$PID)),"\n")
+      cat("YAPSA:::stratify_vcf_like_df:: temp_name =",temp_name,
+          "; number of variants:",dim(temp_table)[1],"; number of PIDs:",
+          length(unique(temp_table$PID)),"\n")
     }
     out_table_list[[counter]] <- temp_table
     out_name_list[[counter]] <- temp_name
@@ -726,7 +815,8 @@ stratify_vcf_like_df <- function(in_table,in_column_name,in_verbose=0) {
   return(list(table_list=out_table_list,name_list=out_name_list))
 }
 
-save_stratified_vcf_like_df <- function(in_table_list,in_name_list,in_target_dir,in_verbose) {
+save_stratified_vcf_like_df <- function(in_table_list,in_name_list,
+                                        in_target_dir,in_verbose) {
   number_of_strata <- length(in_table_list)
   subDir <- file.path(in_target_dir, "vcf_like")
   strataDir <- file.path(in_target_dir, "strata")
@@ -740,7 +830,9 @@ save_stratified_vcf_like_df <- function(in_table_list,in_name_list,in_target_dir
     temp_table <- in_table_list[[i]]
     temp_name <- in_name_list[[i]]
     if(in_verbose == 1) {
-      cat("YAPSA:::save_stratified_vcf_like_df:: temp_name =",temp_name,"; number of variants:",dim(temp_table)[1],"; number of PIDs:",length(unique(temp_table$PID)),"\n")
+      cat("YAPSA:::save_stratified_vcf_like_df:: temp_name =",temp_name,
+          "; number of variants:",dim(temp_table)[1],"; number of PIDs:",
+          length(unique(temp_table$PID)),"\n")
     }
     file_name <- paste0(subDir,"/somatic_SNVs_",temp_name,".tsv")
     names(temp_table) <- sub("X.CHROM","\\#CHROM",names(temp_table))
@@ -833,10 +925,11 @@ save_stratified_vcf_like_df <- function(in_table_list,in_name_list,in_target_dir
 #'  library(BSgenome.Hsapiens.UCSC.hg19)
 #'  data(lymphoma_test)
 #'  word_length <- 3
-#'  strata_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-#'                                         in_outlier_cutoffs=c(-4,4),
-#'                                         in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-#'                                         in_labels=c("small","intermediate","big"))
+#'  strata_list <- cut_breaks_as_intervals(
+#'    lymphoma_test_df$random_norm,
+#'    in_outlier_cutoffs=c(-4,4),
+#'    in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
+#'    in_labels=c("small","intermediate","big"))
 #'  lymphoma_test_df$random_cat <- strata_list$category_vector
 #'  temp_list <- stratify_and_create_mutational_catalogue(
 #'    lymphoma_test_df,"random_cat",
@@ -858,43 +951,60 @@ save_stratified_vcf_like_df <- function(in_table_list,in_name_list,in_target_dir
 #' 
 #' @export
 #' 
-stratify_and_create_mutational_catalogue <- function(our_table,our_column_name,vcf_target_dir,
-                                                     strata_target_dir,our_refGenome_Seqinfo,
-                                                     our_seqnames.field="X.CHROM",our_start.field="POS",
-                                                     our_end.field="POS",our_PID.field="PID",
-                                                     our_subgroup.field="subgroup",our_refGenome,
-                                                     our_wordLength,in_verbose=1,our_rownames=c()) {
+stratify_and_create_mutational_catalogue <- function(our_table,our_column_name,
+                                                     vcf_target_dir,
+                                                     strata_target_dir,
+                                                     our_refGenome_Seqinfo,
+                                                     our_seqnames.field="X.CHROM",
+                                                     our_start.field="POS",
+                                                     our_end.field="POS",
+                                                     our_PID.field="PID",
+                                                     our_subgroup.field="subgroup",
+                                                     our_refGenome,
+                                                     our_wordLength,
+                                                     in_verbose=1,
+                                                     our_rownames=c()) {
   results_lists_list <- list()
   results_list <- stratify_vcf_like_df(our_table,our_column_name,in_verbose)
   table_list <- results_list$table_list
   name_list <- results_list$name_list
   if(!is.null(vcf_target_dir)) {
-    status <- save_stratified_vcf_like_df(table_list,name_list,vcf_target_dir,in_verbose)    
+    status <- save_stratified_vcf_like_df(table_list,name_list,
+                                          vcf_target_dir,in_verbose)    
   }
   number_of_strata <- length(table_list)
-  if(in_verbose == 1) {cat("\nYAPSA:::stratify_and_create_mutational_catalogue::Create mutational catalogues...\n")}
+  if(in_verbose == 1) {
+    cat("\nYAPSA:::stratify_and_create_mutational_catalogue::Create ",
+        "mutational catalogues...\n")
+  }
   for (i in seq_len(number_of_strata)) {
-    if(in_verbose == 1) {cat("\nYAPSA:::stratify_and_create_mutational_catalogue::Processing stratum: ",i,"\n")}
+    if(in_verbose == 1) {
+      cat("\nYAPSA:::stratify_and_create_mutational_catalogue::Processing ",
+          "stratum: ",i,"\n")
+    }
     temp_table <- table_list[[i]]
     temp_name <- name_list[[i]]
-    temp_results_list <- create_mutation_catalogue_from_df(temp_table,
-                                                           our_refGenome_Seqinfo,
-                                                           this_seqnames.field=our_seqnames.field,
-                                                           this_start.field=our_start.field,
-                                                           this_end.field=our_end.field,
-                                                           this_PID.field=our_PID.field,
-                                                           this_subgroup.field=our_subgroup.field,
-                                                           our_refGenome,our_wordLength,in_verbose,
-                                                           our_rownames)
+    temp_results_list <- create_mutation_catalogue_from_df(
+      temp_table,
+      our_refGenome_Seqinfo,
+      this_seqnames.field=our_seqnames.field,
+      this_start.field=our_start.field,
+      this_end.field=our_end.field,
+      this_PID.field=our_PID.field,
+      this_subgroup.field=our_subgroup.field,
+      our_refGenome,our_wordLength,in_verbose,
+      our_rownames)
     if(!is.null(strata_target_dir)) {
       temp_matrix <- temp_results_list$matrix
       temp_frame <- temp_results_list$frame
       MotifMatrix_dir <- file.path(strata_target_dir,temp_name)
-      save_mutation_catalogue(temp_table,temp_matrix,temp_frame,2,NULL,MotifMatrix_dir,in_verbose)
+      save_mutation_catalogue(temp_table,temp_matrix,temp_frame,2,NULL,
+                              MotifMatrix_dir,in_verbose)
     }
     results_lists_list[[i]] <- temp_results_list
   }    
-  return(list(table_list=table_list,name_list=name_list,results_lists_list=results_lists_list))  
+  return(list(table_list=table_list,name_list=name_list,
+              results_lists_list=results_lists_list))  
 }
 
 
@@ -940,10 +1050,11 @@ stratify_and_create_mutational_catalogue <- function(our_table,our_column_name,v
 #' @examples
 #'  data(lymphoma_test)
 #'  lymphoma_test_df$random_norm <- rnorm(dim(lymphoma_test_df)[1])
-#'  temp_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-#'                                       in_outlier_cutoffs=c(-4,4),
-#'                                       in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-#'                                       in_labels=c("small","intermediate","big"))
+#'  temp_list <- cut_breaks_as_intervals(
+#'    lymphoma_test_df$random_norm,
+#'    in_outlier_cutoffs=c(-4,4),
+#'    in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
+#'    in_labels=c("small","intermediate","big"))
 #'  \dontrun{
 #'   temp_list$density_plot
 #'  }
@@ -955,7 +1066,8 @@ stratify_and_create_mutational_catalogue <- function(our_table,our_column_name,v
 #' 
 cut_breaks_as_intervals <- function(in_vector,
                                     in_outlier_cutoffs=c(0,3000),
-                                    in_cutoff_ranges_list=list(c(60,69),c(25,32)),
+                                    in_cutoff_ranges_list=list(c(60,69),
+                                                               c(25,32)),
                                     in_labels=c("late","intermediate","early"),
                                     in_name="",
                                     output_path=NULL) {
@@ -984,13 +1096,15 @@ cut_breaks_as_intervals <- function(in_vector,
   if(!is.null(output_path)) {
     png(output_path,width=400,height=400); p; dev.off()    
   }
-  my_cutoff_vector <- c(in_outlier_cutoffs[1],my_cutoff_vector,in_outlier_cutoffs[2])
+  my_cutoff_vector <- c(in_outlier_cutoffs[1],my_cutoff_vector,
+                        in_outlier_cutoffs[2])
   ## discretize into categories
   cut_vector <- cut(in_vector,my_cutoff_vector,right=FALSE,labels=in_labels)
   cut_vector <- as.character(cut_vector)
   cut_vector[which(is.na(cut_vector))] <- "undetermined"
   cut_vector <- factor(cut_vector)
-  return(list(category_vector=cut_vector,density_plot=p,cutoffs=my_cutoff_vector))
+  return(list(category_vector=cut_vector,density_plot=p,
+              cutoffs=my_cutoff_vector))
 }
 
 
@@ -1024,16 +1138,21 @@ get_extreme_PIDs <- function(in_exposures_df,in_quantile=0.03) {
   for(i in seq_len(my_number_of_sigs)) {
     this_sig <- rownames(in_exposures_df)[i]
     my_exposure_vector <- in_exposures_df[i,]
-    my_breaks <- as.numeric(quantile(my_exposure_vector,probs=c(in_quantile,(1-in_quantile))))
+    my_breaks <- as.numeric(quantile(my_exposure_vector,
+                                     probs=c(in_quantile,(1-in_quantile))))
     extreme_low_ind <- which(my_exposure_vector<=my_breaks[1])
     extreme_high_ind <- which(my_exposure_vector>=my_breaks[2])
-    extreme_PID_df[,4*i-3] <- names(my_exposure_vector[extreme_low_ind[seq_len(my_number_of_extremes)]])
+    extreme_PID_df[,4*i-3] <- names(
+      my_exposure_vector[extreme_low_ind[seq_len(my_number_of_extremes)]])
     names(extreme_PID_df)[4*i-3] <- paste0(this_sig,"_low_PIDs")
-    extreme_PID_df[,4*i-2] <- as.numeric(my_exposure_vector[extreme_low_ind[seq_len(my_number_of_extremes)]])
+    extreme_PID_df[,4*i-2] <- as.numeric(
+      my_exposure_vector[extreme_low_ind[seq_len(my_number_of_extremes)]])
     names(extreme_PID_df)[4*i-2] <- paste0(this_sig,"_low_exp")
-    extreme_PID_df[,4*i-1] <- names(my_exposure_vector[extreme_high_ind[seq_len(my_number_of_extremes)]])
+    extreme_PID_df[,4*i-1] <- names(
+      my_exposure_vector[extreme_high_ind[seq_len(my_number_of_extremes)]])
     names(extreme_PID_df)[4*i-1] <- paste0(this_sig,"_high_PIDs")
-    extreme_PID_df[,4*i] <- as.numeric(my_exposure_vector[extreme_high_ind[seq_len(my_number_of_extremes)]])
+    extreme_PID_df[,4*i] <- as.numeric(
+      my_exposure_vector[extreme_high_ind[seq_len(my_number_of_extremes)]])
     names(extreme_PID_df)[4*i] <- paste0(this_sig,"_high_exp")
   }
   out_df <- data.frame(t(extreme_PID_df))
@@ -1103,9 +1222,10 @@ test_gene_list_in_exposures <- function(in_gene_list,
   significance_counter <- 0
   out_t_test_vector <- c()
   for (i in seq_len(number_of_signatures)) {
-    temp_test_dat <- t.test(this_exposure_df[which(this_exposure_df$this_status=="none"),i],
-                            this_exposure_df[which(this_exposure_df$this_status=="mut"),i],
-                            alternative="less")
+    temp_test_dat <- t.test(
+      this_exposure_df[which(this_exposure_df$this_status=="none"),i],
+      this_exposure_df[which(this_exposure_df$this_status=="mut"),i],
+      alternative="less")
     out_t_test_vector[i] <- temp_test_dat$p.value
     if(out_t_test_vector[i] < in_p_cutoff & !is.na(out_t_test_vector[i])) {
       significance_counter <- significance_counter + 1

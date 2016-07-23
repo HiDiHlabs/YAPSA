@@ -7,18 +7,21 @@
 translate_to_hg19(in_df, in_CHROM.field = "CHROM")
 }
 \arguments{
-\item{in_df}{Data frame which carries one column with chromosome information to be reformatted}
+\item{in_df}{Data frame which carries one column with chromosome information to be 
+reformatted}
 
-\item{in_CHROM.field}{String indicating which column of \code{in_df} carries the chromosome information}
+\item{in_CHROM.field}{String indicating which column of \code{in_df} carries the chromosome 
+information}
 }
 \value{
 A data frame identical to \code{in_df}, but with the names in the
  chromosome column replaced
 }
 \description{
-In hg19 naming convention, chromosome names start with the prefix \emph{chr} and
-the gonosomes are called \emph{X} and \emph{Y}. If data analysis is performed e.g.
-with \code{\link[BSgenome.Hsapiens.UCSC.hg19]{BSgenome.Hsapiens.UCSC.hg19}}, this
+In hg19 naming convention, chromosome names start with the prefix \emph{chr} 
+and the gonosomes are called \emph{X} and \emph{Y}. If data analysis is 
+performed e.g. with 
+\code{\link[BSgenome.Hsapiens.UCSC.hg19]{BSgenome.Hsapiens.UCSC.hg19}}, this
 naming convention is needed. The inverse transform is done with
 \code{\link{translate_to_1kG}}.
 }

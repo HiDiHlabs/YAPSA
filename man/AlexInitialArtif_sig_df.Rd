@@ -7,6 +7,9 @@
 \usage{
 data(sigs)
 }
+\value{
+A data frame
+}
 \description{
 Data frame of the signatures published initially by Alexandrov et al. (Nature 
 2013). There are 27 signatures which constitute the columns, 22 of which were

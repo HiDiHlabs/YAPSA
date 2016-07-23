@@ -30,7 +30,7 @@
 #' ## define raw data
 #' W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
 #' W_prim_df <- as.data.frame(W_prim)
-#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
 #' W <- as.matrix(W_df) 
 #' ## 1. Simple case: non-negativity already in raw data
 #' H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
@@ -51,7 +51,7 @@
 #' H_compl[sign_ind] <- (-1)*H[sign_ind]
 #' H_compl_df <- as.data.frame(H_compl) # corresponds to the exposures
 #' V_compl <- W %*% H_compl # matrix multiplication
-#' V_compl_df <- as.data.frame(V_compl) # corresponds to the mutational catalogue
+#' V_compl_df <- as.data.frame(V_compl) # corresponds to the mutational catalog
 #' exposures_df <- YAPSA:::LCD(V_compl_df,W_df)
 #' exposures <- as.matrix(exposures_df)
 #' 
@@ -64,9 +64,11 @@
 #   G <- diag(dim(signatures_matrix)[2])
 #   H <- rep(0,dim(signatures_matrix)[2])
 #   for (i in seq_len(ncol(in_mutation_catalogue_df))) {
-#     temp_fractions <- limSolve::lsei(A = signatures_matrix, B = in_mutation_catalogue_df[,i],
+#     temp_fractions <- limSolve::lsei(A = signatures_matrix, 
+#                                      B = in_mutation_catalogue_df[,i],
 #                                      G=G, H=H, verbose=FALSE)
-#     out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- as.vector(temp_fractions$X)
+#     out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- 
+#       as.vector(temp_fractions$X)
 #     rm(temp_fractions)
 #   }
 #   colnames(out_exposures_df) <- colnames(in_mutation_catalogue_df)
@@ -81,13 +83,15 @@ LCD <- function(in_mutation_catalogue_df,
   G <- diag(dim(signatures_matrix)[2])
   H <- rep(0,dim(signatures_matrix)[2])
   for (i in seq_len(ncol(in_mutation_catalogue_df))) {
-    temp_fractions <- limSolve::lsei(A = signatures_matrix, B = in_mutation_catalogue_df[,i],
+    temp_fractions <- limSolve::lsei(A = signatures_matrix, 
+                                     B = in_mutation_catalogue_df[,i],
                                      G=G, H=H, verbose=FALSE)
     temp_exposures_vector <- as.vector(temp_fractions$X)
     rel_exposures_vector <- temp_exposures_vector/sum(temp_exposures_vector)
     deselect_ind <- which(rel_exposures_vector<in_per_sample_cutoff)
     temp_exposures_vector[deselect_ind] <- 0
-    out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- temp_exposures_vector
+    out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- 
+      temp_exposures_vector
     rm(temp_fractions)
   }
   colnames(out_exposures_df) <- colnames(in_mutation_catalogue_df)
@@ -108,10 +112,12 @@ LCD <- function(in_mutation_catalogue_df,
 #'
 #' @param in_mutation_catalogue_df
 #'  A numeric data frame \code{V} with \code{n} rows and \code{m} columns, 
-#'  \code{n} being the number of features and \code{m} being the number of samples
+#'  \code{n} being the number of features and \code{m} being the number of 
+#'  samples
 #' @param in_signatures_df
 #'  A numeric data frame \code{W} with \code{n} rows and \code{l} columns,
-#'  \code{n} being the number of features and \code{l} being the number of signatures
+#'  \code{n} being the number of features and \code{l} being the number of 
+#'  signatures
 #' @param in_cutoff
 #'  A numeric value less than 1. Signatures from within \code{W}
 #'  with an overall exposure less than \code{in_cutoff} will be
@@ -119,8 +125,8 @@ LCD <- function(in_mutation_catalogue_df,
 #' @param in_filename
 #'  A path to generate a histogram of the signature exposures if non-NULL
 #' @param in_method
-#'  Indicate to which data the cutoff shall be applied: absolute exposures, relative 
-#'  exposures
+#'  Indicate to which data the cutoff shall be applied: absolute exposures, 
+#'  relative exposures
 #' @param in_convention
 #'  Indicate whether LCD or LCD_strict should be used
 #' @param in_per_sample_cutoff
@@ -128,8 +134,8 @@ LCD <- function(in_mutation_catalogue_df,
 #'  with an exposure per sample less than \code{in_cutoff} will be
 #'  discarded.
 #'  
-#' @return A list with entries \code{exposures}, \code{signatures}, \code{choice}
-#'          and \code{order}
+#' @return A list with entries \code{exposures}, \code{signatures}, 
+#'          \code{choice} and \code{order}
 #' \itemize{
 #'  \item \code{exposures}:
 #'    The exposures \code{H}, a numeric data frame with 
@@ -168,7 +174,7 @@ LCD <- function(in_mutation_catalogue_df,
 #' ## define raw data
 #' W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
 #' W_prim_df <- as.data.frame(W_prim)
-#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
 #' W <- as.matrix(W_df) 
 #' ## 1. Simple case: non-negativity already in raw data
 #' H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
@@ -201,19 +207,22 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
     sig_choice_ind <- which(average_rel_exposure_vector >= in_cutoff)
   } else {
     all_exposures_sum_df <- data.frame(sum=apply(all_exposures_df,1,sum))
-    all_exposures_sum_df$sum_norm <- all_exposures_sum_df$sum/sum(all_exposures_sum_df$sum)
+    all_exposures_sum_df$sum_norm <- 
+      all_exposures_sum_df$sum/sum(all_exposures_sum_df$sum)
     sig_choice_ind <- which(all_exposures_sum_df$sum_norm >= in_cutoff)
     if (!is.null(in_filename)) {
       break_vector <- seq(0,0.5,0.01)
       png(in_filename,width=400,height=400)
-      hist(all_exposures_sum_df$sum_norm,breaks=break_vector,xlab="exposures per sig",main="Sum over whole cohort")    
+      hist(all_exposures_sum_df$sum_norm,breaks=break_vector,
+           xlab="exposures per sig",main="Sum over whole cohort")    
       dev.off()
     }
   }
-  choice_signatures_df <- in_signatures_df[,sig_choice_ind,drop=F]
+  choice_signatures_df <- in_signatures_df[,sig_choice_ind,drop=FALSE]
   # now rerun the decomposition with only the chosen signatures
   if(in_convention=="strict"){
-    #out_exposures_df <- LCD_strict(in_mutation_catalogue_df,choice_signatures_df)    
+    #out_exposures_df <- LCD_strict(in_mutation_catalogue_df,
+    #                               choice_signatures_df)    
     out_exposures_df <- LCD(in_mutation_catalogue_df,choice_signatures_df)    
   } else{
     out_exposures_df <- LCD(in_mutation_catalogue_df,
@@ -221,16 +230,20 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
                             in_per_sample_cutoff=in_per_sample_cutoff)
   }
   out_exposures_sum_df <- data.frame(sum=apply(out_exposures_df,1,sum))
-  out_exposures_sum_df$sum_norm <- out_exposures_sum_df$sum/sum(out_exposures_sum_df$sum)
+  out_exposures_sum_df$sum_norm <- 
+    out_exposures_sum_df$sum/sum(out_exposures_sum_df$sum)
   exposure_order <- order(out_exposures_sum_df$sum,decreasing=TRUE)
   # compute QC and error measures
-  fit_catalogue_df <- as.data.frame(as.matrix(choice_signatures_df) %*% as.matrix(out_exposures_df))
+  fit_catalogue_df <- as.data.frame(
+    as.matrix(choice_signatures_df) %*% as.matrix(out_exposures_df))
   residual_catalogue_df <- in_mutation_catalogue_df - fit_catalogue_df
   rss <- sum(residual_catalogue_df^2)
-  cosDist_fit_orig_per_matrix <- cosineDist(in_mutation_catalogue_df,fit_catalogue_df)
+  cosDist_fit_orig_per_matrix <- cosineDist(in_mutation_catalogue_df,
+                                            fit_catalogue_df)
   cosDist_fit_orig_per_col <- rep(0,dim(in_mutation_catalogue_df)[2])
   for(i in dim(in_mutation_catalogue_df)[2]){
-    cosDist_fit_orig_per_col[i] <- cosineDist(in_mutation_catalogue_df[,i],fit_catalogue_df[,i])
+    cosDist_fit_orig_per_col[i] <- cosineDist(in_mutation_catalogue_df[,i],
+                                              fit_catalogue_df[,i])
   }
   total_counts <- colSums(in_mutation_catalogue_df)
   sum_ind <- rev(order(total_counts))
@@ -378,7 +391,7 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
       dev.off()
     }
   }
-  choice_signatures_df <- in_signatures_df[,sig_choice_ind,drop=F]
+  choice_signatures_df <- in_signatures_df[,sig_choice_ind,drop=FALSE]
   # now rerun the decomposition with only the chosen signatures
   out_exposures_df <- LCD(in_mutation_catalogue_df,
                           choice_signatures_df,
@@ -394,8 +407,8 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
     out_exposures_sum_df$sum/sum(out_exposures_sum_df$sum)
   exposure_order <- order(out_exposures_sum_df$sum,decreasing=TRUE)
   # compute QC and error measures
-  fit_catalogue_df <- 
-    as.data.frame(as.matrix(choice_signatures_df) %*% as.matrix(out_exposures_df))
+  fit_catalogue_df <- as.data.frame(
+    as.matrix(choice_signatures_df) %*% as.matrix(out_exposures_df))
   residual_catalogue_df <- in_mutation_catalogue_df - fit_catalogue_df
   rss <- sum(residual_catalogue_df^2)
   cosDist_fit_orig_per_matrix <- cosineDist(in_mutation_catalogue_df,
@@ -530,12 +543,13 @@ LCD_complex_cutoff_perPID <- function(in_mutation_catalogue_df,
   complex_COSMIC_list_list <- lapply(
     seq_along(in_mutation_catalogue_df), FUN=function(current_col){
       current_mut_cat <- in_mutation_catalogue_df[,current_col,drop=FALSE]
-      complex_COSMIC_list <- LCD_complex_cutoff(current_mut_cat,
-                                                in_signatures_df,
-                                                in_cutoff_vector=in_cutoff_vector,
-                                                in_filename=NULL,
-                                                in_method=in_method,
-                                                in_rescale=in_rescale)
+      complex_COSMIC_list <- LCD_complex_cutoff(
+        current_mut_cat,
+        in_signatures_df,
+        in_cutoff_vector=in_cutoff_vector,
+        in_filename=NULL,
+        in_method=in_method,
+        in_rescale=in_rescale)
       return(complex_COSMIC_list)
   })
   exposures_list <- lapply(complex_COSMIC_list_list,FUN=function(x) {
@@ -546,13 +560,16 @@ LCD_complex_cutoff_perPID <- function(in_mutation_catalogue_df,
   sig_choice_ind <- match(rownames(exposures_df),names(in_signatures_df))
   choice_signatures_df <- in_signatures_df[,sig_choice_ind,drop=FALSE]
   exposure_order <- order(rowSums(exposures_df),decreasing=TRUE)
-  fit_catalogue_df <- as.data.frame(as.matrix(choice_signatures_df) %*% as.matrix(exposures_df))
+  fit_catalogue_df <- as.data.frame(
+    as.matrix(choice_signatures_df) %*% as.matrix(exposures_df))
   residual_catalogue_df <- in_mutation_catalogue_df - fit_catalogue_df
   rss <- sum(residual_catalogue_df^2)
-  cosDist_fit_orig_per_matrix <- cosineDist(in_mutation_catalogue_df,fit_catalogue_df)
+  cosDist_fit_orig_per_matrix <- cosineDist(in_mutation_catalogue_df,
+                                            fit_catalogue_df)
   cosDist_fit_orig_per_col <- rep(0,dim(in_mutation_catalogue_df)[2])
   for(i in dim(in_mutation_catalogue_df)[2]){
-    cosDist_fit_orig_per_col[i] <- cosineDist(in_mutation_catalogue_df[,i],fit_catalogue_df[,i])
+    cosDist_fit_orig_per_col[i] <- cosineDist(in_mutation_catalogue_df[,i],
+                                              fit_catalogue_df[,i])
   }
   total_counts <- colSums(in_mutation_catalogue_df)
   sum_ind <- rev(order(total_counts))
@@ -621,14 +638,16 @@ norm_res=function(x,b,in_matrix){
 #'  without stratification, is set to equal \code{in_F_df}. This is equivalent
 #'  to forcing the LCD_SMC procedure to use e.g. the exposures of a previously
 #'  performed NMF decomposition.
-#' @return A list with entries \code{exposures_all_df} and \code{sub_exposures_list}
+#' @return A list with entries \code{exposures_all_df} and 
+#'          \code{sub_exposures_list}
 #' \itemize{
 #'  \item \code{exposures_all_df}:
 #'    The overall exposures \code{H} without stratification, numeric data frame
 #'    with \code{l} rows and \code{m} columns, \code{l} being the number of 
 #'    signatures and \code{m} being the number of samples, solving the 
 #'    minimization \eqn{min(||W*H - V||)}. If the optional parmeter 
-#'    \code{in_F_df} was specified, \code{exposures_all_df} equals \code{in_F_df}.
+#'    \code{in_F_df} was specified, \code{exposures_all_df} equals 
+#'    \code{in_F_df}.
 #'  \item \code{sub_exposures_list}:
 #'    The list of \code{s} strata specific exposures Hi, all are numerical data 
 #'    frames with \code{l} rows and \code{m} columns, \code{l} being the number
@@ -642,13 +661,15 @@ norm_res=function(x,b,in_matrix){
 #' ## define raw data
 #' W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
 #' W_prim_df <- as.data.frame(W_prim)
-#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
 #' W <- as.matrix(W_df) 
 #' H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
-#' ## define indices where sign is going to be swapped for different strata (perturbation)
+#' ## define indices where sign is going to be swapped for different strata 
+#' ## (perturbation)
 #' sign_ind_1 <- c(5,7)
 #' sign_ind_2 <- c(1)
-#' ## alter the matrix H to yield a new mutational catalogue for every stratum (perturbation)
+#' ## alter the matrix H to yield a new mutational catalogue for every stratum 
+#' ## (perturbation)
 #' H_1 <- H
 #' H_2 <- H
 #' H_1[sign_ind_1] <- (-1)*H[sign_ind_1]
@@ -658,9 +679,9 @@ norm_res=function(x,b,in_matrix){
 #' V_1 <- W %*% H_1 # matrix multiplication
 #' V_2 <- W %*% H_2 # matrix multiplication
 #' V <- V_1 + V_2
-#' V_1_df <- as.data.frame(V_1) # corresponds to the mutational catalogue of stratum 1
-#' V_2_df <- as.data.frame(V_2) # corresponds to the mutational catalogue of stratum 2
-#' V_df <- as.data.frame(V) # corresponds to the mutational catalogue of the whole cohort
+#' V_1_df <- as.data.frame(V_1) # mutational catalog of stratum 1
+#' V_2_df <- as.data.frame(V_2) # mutational catalog of stratum 2
+#' V_df <- as.data.frame(V) # mutational catalog of the whole cohort
 #' V_list <- list()  # make list of data frames
 #' V_list[[1]] <- V_1_df
 #' V_list[[2]] <- V_2_df
@@ -680,7 +701,8 @@ norm_res=function(x,b,in_matrix){
 #' @importFrom limSolve lsei
 #' @export
 #' 
-LCD_SMC <- function(in_mutation_sub_catalogue_list,in_signatures_df,in_F_df=NULL){
+LCD_SMC <- function(in_mutation_sub_catalogue_list,
+                    in_signatures_df,in_F_df=NULL){
   ## find general properties
   number_of_strata <- length(in_mutation_sub_catalogue_list)
   number_of_sigs <- dim(in_signatures_df)[2]
@@ -688,7 +710,9 @@ LCD_SMC <- function(in_mutation_sub_catalogue_list,in_signatures_df,in_F_df=NULL
   number_of_features <- dim(in_mutation_sub_catalogue_list[[1]])[1]
   ## 1. construct composite signatures_matrix
   signatures_matrix_element <- as.matrix(in_signatures_df)
-  zero_element <- matrix(rep(0,dim(signatures_matrix_element)[1]*dim(signatures_matrix_element)[2]),ncol=dim(signatures_matrix_element)[2])
+  zero_element <- matrix(
+    rep(0,dim(signatures_matrix_element)[1]*dim(signatures_matrix_element)[2]),
+    ncol=dim(signatures_matrix_element)[2])
   temp_matrix <- NULL
   for (i in seq_len(number_of_strata)) {
     temp_row <- NULL
@@ -711,12 +735,13 @@ LCD_SMC <- function(in_mutation_sub_catalogue_list,in_signatures_df,in_F_df=NULL
   ## 3. account for boundary conditions
   ## 3.a) account for equality boundary condition
   if (!is.null(in_F_df)) {
-    # This condition is fulfilled when an exposures file has been supplied to the function.
+    # This condition is fulfilled when an exposures file has been supplied.
     F_df <- in_F_df
   } else {
-    # This is the standard case when no exposures file has been supplied and the exposures
-    # have to be computed by LCD.
-    sum_df <- data.frame(matrix(rep(0,number_of_PIDs*number_of_features),ncol=number_of_PIDs))
+    # This is the standard case when no exposures file has been supplied and the
+    # exposures have to be computed by LCD.
+    sum_df <- data.frame(matrix(rep(0,number_of_PIDs*number_of_features),
+                                ncol=number_of_PIDs))
     for (i in seq_len(number_of_strata)) {
       sum_df <- sum_df + in_mutation_sub_catalogue_list[[i]]
     }
@@ -734,13 +759,17 @@ LCD_SMC <- function(in_mutation_sub_catalogue_list,in_signatures_df,in_F_df=NULL
   H <- rep(0,dim(signatures_matrix)[2])
   out_exposures_df <- data.frame()
   for (i in seq_len(ncol(pasted_mutation_catalogue_df))) {
-    temp_fractions <- lsei(A = signatures_matrix, B = pasted_mutation_catalogue_df[,i], E=E, F=F_df[,i], G=G, H=H)
-    out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- as.vector(temp_fractions$X)
+    temp_fractions <- lsei(A = signatures_matrix, 
+                           B = pasted_mutation_catalogue_df[,i], 
+                           E=E, F=F_df[,i], G=G, H=H)
+    out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- 
+      as.vector(temp_fractions$X)
     rm(temp_fractions)
   }
   out_list <- list()
   for (i in seq_len(number_of_strata)) {
-    out_list[[i]] <- as.data.frame(out_exposures_df[seq((number_of_sigs*(i-1)+1),(number_of_sigs*i),1),])
+    out_list[[i]] <- as.data.frame(
+      out_exposures_df[seq((number_of_sigs*(i-1)+1),(number_of_sigs*i),1),])
     colnames(out_list[[i]]) <- colnames(in_mutation_sub_catalogue_list[[1]])
     rownames(out_list[[i]]) <- colnames(in_signatures_df)
   }

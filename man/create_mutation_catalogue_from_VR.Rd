@@ -14,10 +14,12 @@ first columns are those of a standard vcf file, followed by an arbitrary
 number of custom or used defined columns. One of these can carry a PID
 (patient or sample identifyier) and one can carry subgroup information.}
 
-\item{in_refGenome}{The reference genome handed over to \code{\link[SomaticSignatures]{mutationContext}}
+\item{in_refGenome}{The reference genome handed over to 
+\code{\link[SomaticSignatures]{mutationContext}}
 and used to extract the motif context of the variants in \code{in_vr}.}
 
-\item{in_wordLength}{The size of the motifs to be extracted by \code{\link[SomaticSignatures]{mutationContext}}}
+\item{in_wordLength}{The size of the motifs to be extracted by 
+\code{\link[SomaticSignatures]{mutationContext}}}
 
 \item{in_PID.field}{Indicates the name of the column in which the PID (patient or sample
 identifier) is encoded}
@@ -27,7 +29,8 @@ identifier) is encoded}
 \item{in_rownames}{Optional parameter to specify rownames of the mutational catalogue \code{V}
 i.e. the names of the features.}
 
-\item{adapt_rownames}{Rownames of the output \code{matrix} will be adapted if \code{adapt_rownames=1}}
+\item{adapt_rownames}{Rownames of the output \code{matrix} will be adapted if 
+\code{adapt_rownames=1}}
 }
 \value{
 A list with entries
@@ -66,7 +69,9 @@ NULL
  head(temp_list$matrix)
  test_list <- split(lymphoma_test_df,f=lymphoma_test_df$PID)
  other_list <- list()
- for(i in seq_len(length(test_list))){other_list[[i]] <- test_list[[i]][c(1:80),]}
+ for(i in seq_len(length(test_list))){
+   other_list[[i]] <- test_list[[i]][c(1:80),]
+ }
  other_df <- do.call(rbind,other_list)
  other_vr <- makeVRangesFromDataFrame(
    other_df,in_seqnames.field="CHROM",

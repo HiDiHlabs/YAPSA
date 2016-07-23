@@ -17,7 +17,8 @@ check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
   
   OS = Sys.info()["sysname"]
   if(OS == "Windows") {
-    res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, show.output.on.console = FALSE)
+    res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, 
+                 show.output.on.console = FALSE)
   } else {
     res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
   }
@@ -28,7 +29,9 @@ check_perl = function(module = NULL, inc = NULL, perl_bin = "perl") {
 #' @importFrom GetoptLong qq
 #' @importFrom GetoptLong qq.options
 #' 
-check_bedtools = function(module = NULL, inc = NULL, bedtools_bin = "bedtools") {
+check_bedtools = function(module = NULL, 
+                          inc = NULL, 
+                          bedtools_bin = "bedtools") {
   
   op = qq.options("code.pattern")
   qq.options("code.pattern" = "@\\{CODE\\}")
@@ -40,7 +43,8 @@ check_bedtools = function(module = NULL, inc = NULL, bedtools_bin = "bedtools") 
   
   OS = Sys.info()["sysname"]
   if(OS == "Windows") {
-    res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, show.output.on.console = FALSE)
+    res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE, 
+                 show.output.on.console = FALSE)
   } else {
     res = system(cmd, ignore.stdout = TRUE, ignore.stderr = TRUE)
   }
@@ -52,10 +56,14 @@ check_bedtools = function(module = NULL, inc = NULL, bedtools_bin = "bedtools") 
 ## example:
 ## in_fasta <- "/ibios/co02/reference/Reference_1KG/hs37d5.fa"
 ## in_word_length <- 3
-## project_folder <- "/icgc/dkfzlsdf/analysis/hipo/hipo_028/somaticSignatures/nucleotide_distrib"
+## project_folder <- file.path("/icgc/dkfzlsdf/analysis/hipo/hipo_028",
+##                             "somaticSignatures/nucleotide_distrib")
 ## out_csv <- "kmer_frequencies_in_ref.csv"
 ## 
-run_kmer_frequency_pl <- function(in_fasta,in_word_length,project_folder,out_csv) {
+run_kmer_frequency_pl <- function(in_fasta,
+                                  in_word_length,
+                                  project_folder,
+                                  out_csv) {
   if(!check_perl()) {
     cat("YAPSA:::run_kmer_frequency_pl::Error:unable to find path to perl")
     return(1)
@@ -65,15 +73,19 @@ run_kmer_frequency_pl <- function(in_fasta,in_word_length,project_folder,out_csv
   script_command <- file.path(package_path,"foreign","kmer_frequencies.pl")
   script_options_command <- paste0("-r ",in_fasta, " -w ",in_word_length)
   output_command <- paste0("> ",file.path(project_folder,out_csv))
-  this_command <- paste(perl_command,script_command,script_options_command,output_command,collapse=" ")
+  this_command <- paste(perl_command,script_command,script_options_command,
+                        output_command,collapse=" ")
   system(this_command,intern=TRUE)
   return(0)
 }
 
 ## example:
 ## in_ref_genome <- "/ibios/co02/reference/Reference_1KG/hs37d5.fa"
-## in_target_capture_bed <- "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/targetRegions/Agilent5withUTRs_chr.bed.gz"
-## project_folder <- "/icgc/dkfzlsdf/analysis/hipo/hipo_028/somaticSignatures/nucleotide_distrib"
+## in_target_capture_bed <- file.path("/icgc/ngs_share/assemblies",
+##                                    "hg19_GRCh37_1000genomes/targetRegions",
+##                                    "Agilent5withUTRs_chr.bed.gz")
+## project_folder <- file.path("/icgc/dkfzlsdf/analysis/hipo/hipo_028",
+##                             "somaticSignatures/nucleotide_distrib")
 ## out_target_capture_fasta <- "hs37d5_Agilent5withUTR_targetCapture.fa"
 ## 
 run_bedtools_getfasta <- function(in_ref_genome,in_target_capture_bed,
@@ -83,8 +95,9 @@ run_bedtools_getfasta <- function(in_ref_genome,in_target_capture_bed,
     return(1)
   }
   bedtools_command <- "bedtools getfasta"
-  bedtools_options_command <- paste0("-fi ",in_ref_genome, " -bed ",in_target_capture_bed,
-                                     " -fo ",file.path(project_folder,out_target_capture_fasta))
+  bedtools_options_command <- 
+    paste0("-fi ",in_ref_genome, " -bed ",in_target_capture_bed,
+           " -fo ",file.path(project_folder,out_target_capture_fasta))
   this_command <- paste(bedtools_command,bedtools_options_command,collapse=" ")
   system(this_command)
   return(0)
@@ -109,32 +122,35 @@ run_bedtools_getfasta <- function(in_ref_genome,in_target_capture_bed,
 
 #' Provide normalized correction factors for kmer content
 #' 
-#' This function is analogous to \code{\link[SomaticSignatures]{normalizeMotifs}}. If an 
-#' analysis of mutational signatures is performed on e.g. Whole Exome Sequencing (WES)
-#' data, the signatures and exposures have to be adapted to the potentially different kmer
-#' (trinucleotide) content of the target capture. The present function takes as arguments
-#' paths to the used reference genome and target capture file. It the extracts the
-#' sequence of the target capture by calling \code{bedtools getfasta} on the system
-#' command prompt. \code{run_kmer_frequency_normalization} then calls a custom made perl
-#' script \code{kmer_frequencies.pl} also included in this package to count the occurences
-#' of the tripletts in both the whole reference genome and the created target capture
-#' sequence. These counts are used for normalization as in
-#' \code{\link[SomaticSignatures]{normalizeMotifs}}. Note that
-#' \code{\link[SomaticSignatures]{kmerFrequency}} provides a solution to approximate kmer
-#' frequencies by random sampling. As opposed to that approach, the function described
-#' here deterministically counts all occurences of the kmers in the respective genome.
+#' This function is analogous to 
+#' \code{\link[SomaticSignatures]{normalizeMotifs}}. If an 
+#' analysis of mutational signatures is performed on e.g. Whole Exome 
+#' Sequencing (WES) data, the signatures and exposures have to be adapted to 
+#' the potentially different kmer (trinucleotide) content of the target 
+#' capture. The present function takes as arguments paths to the used reference 
+#' genome and target capture file. It the extracts the sequence of the target 
+#' capture by calling \code{bedtools getfasta} on the system command prompt. 
+#' \code{run_kmer_frequency_normalization} then calls a custom made perl script 
+#' \code{kmer_frequencies.pl} also included in this package to count the 
+#' occurences of the tripletts in both the whole reference genome and the 
+#' created target capture sequence. These counts are used for normalization as 
+#' in \code{\link[SomaticSignatures]{normalizeMotifs}}. Note that
+#' \code{\link[SomaticSignatures]{kmerFrequency}} provides a solution to 
+#' approximate kmer frequencies by random sampling. As opposed to that 
+#' approach, the function described here deterministically counts all 
+#' occurences of the kmers in the respective genome.
 #' 
 #' @param in_ref_genome_fasta
 #'  Path to the reference genome fasta file used.
 #' @param in_target_capture_bed
-#'  Path to a bed file containing the information on the used target capture. May also be
-#'  a compressed bed.
+#'  Path to a bed file containing the information on the used target capture. 
+#'  May also be a compressed bed.
 #' @param in_word_length
 #'  Integer number defining the length of the features or motifs, e.g. 3 for
 #'  tripletts or 5 for pentamers
 #' @param project_folder
-#'  Path where the created files, especially the fasta file with the sequence of the
-#'  target capture and the count matrices, can be stored.
+#'  Path where the created files, especially the fasta file with the sequence 
+#'  of the target capture and the count matrices, can be stored.
 #' @param in_verbose
 #'  Verbose if \code{in_verbose=1}
 #'
@@ -148,39 +164,74 @@ run_bedtools_getfasta <- function(in_ref_genome,in_target_capture_bed,
 #'
 #' @export
 #' 
-run_kmer_frequency_normalization <- function(in_ref_genome_fasta,in_target_capture_bed,in_word_length,
-                                             project_folder,in_verbose=1) {
+run_kmer_frequency_normalization <- function(in_ref_genome_fasta,
+                                             in_target_capture_bed,
+                                             in_word_length,
+                                             project_folder,
+                                             in_verbose=1) {
   target_capture_fasta <- "hs37d5_Agilent5withUTR_targetCapture.fa"
   target_capture_kmer_counts_file <- "kmer_frequencies_in_targetCapture.csv"
   reference_genome_kmer_counts_file <- "kmer_frequencies_in_ref.csv"
-  if(!file.exists(file.path(project_folder,reference_genome_kmer_counts_file))) {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::reference_genome_kmer_counts_file doesn't exist yet. Create first.\n");}
-    run_kmer_frequency_pl(in_ref_genome_fasta,in_word_length,project_folder,reference_genome_kmer_counts_file)
+  if(!file.exists(file.path(project_folder,reference_genome_kmer_counts_file))){
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "reference_genome_kmer_counts_file doesn't exist yet. ",
+          "Create first.\n")
+    }
+    run_kmer_frequency_pl(in_ref_genome_fasta,in_word_length,project_folder,
+                          reference_genome_kmer_counts_file)
   } else {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::reference_genome_kmer_counts_file already exists.\n");}
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "reference_genome_kmer_counts_file already exists.\n");}
   }
   if(!file.exists(file.path(project_folder,target_capture_kmer_counts_file))) {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_kmer_counts_file doesn't exist yet. Create first.\n");}
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "target_capture_kmer_counts_file doesn't exist yet. ",
+          "Create first.\n")
+    }
     if(!file.exists(file.path(project_folder,target_capture_fasta))) {
-      if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_fasta doesn't exist yet. Create first.\n");}
+      if(in_verbose==1) {
+        cat("\nYAPS:::run_kmer_frequency_normalization::",
+            "target_capture_fasta doesn't exist yet. Create first.\n")
+      }
       run_bedtools_getfasta(in_ref_genome_fasta,in_target_capture_bed,
                             project_folder,target_capture_fasta)
     } else {
-      if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_fasta already exists.\n");}    
+      if(in_verbose==1) {
+        cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_fasta ",
+            "already exists.\n")
+      }    
     }
-    run_kmer_frequency_pl(file.path(project_folder,target_capture_fasta),in_word_length,project_folder,target_capture_kmer_counts_file)
+    run_kmer_frequency_pl(file.path(project_folder,target_capture_fasta),
+                          in_word_length,project_folder,
+                          target_capture_kmer_counts_file)
   } else {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_kmer_counts_file already exists.\n");}    
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "target_capture_kmer_counts_file already exists.\n")
+    }    
   }
-  if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::Now read counts into data frames...\n");}
-  reference_genome_kmer_frequency_df <- read.csv(file.path(project_folder,reference_genome_kmer_counts_file),header=FALSE,sep="\t")
+  if(in_verbose==1) {
+    cat("\nYAPS:::run_kmer_frequency_normalization::Now read counts into data ",
+        "frames...\n");}
+  reference_genome_kmer_frequency_df <- 
+    read.csv(file.path(project_folder,reference_genome_kmer_counts_file),
+             header=FALSE,sep="\t")
   names(reference_genome_kmer_frequency_df) <- c("triplet","count")
-  reference_genome_total_count <- sum(as.numeric(reference_genome_kmer_frequency_df$count))
-  reference_genome_kmer_frequency_df$rel_counts <- as.numeric(reference_genome_kmer_frequency_df$count) / reference_genome_total_count
-  target_capture_kmer_frequency_df <- read.csv(file.path(project_folder,target_capture_kmer_counts_file),header=FALSE,sep="\t")
+  reference_genome_total_count <- 
+    sum(as.numeric(reference_genome_kmer_frequency_df$count))
+  reference_genome_kmer_frequency_df$rel_counts <-
+    as.numeric(reference_genome_kmer_frequency_df$count) / reference_genome_total_count
+  target_capture_kmer_frequency_df <- 
+    read.csv(file.path(project_folder,target_capture_kmer_counts_file),
+             header=FALSE,sep="\t")
   names(target_capture_kmer_frequency_df) <- c("triplet","count")
-  target_capture_total_count <- sum(as.numeric(target_capture_kmer_frequency_df$count))
-  target_capture_kmer_frequency_df$rel_counts <- as.numeric(target_capture_kmer_frequency_df$count) / target_capture_total_count
+  target_capture_total_count <- 
+    sum(as.numeric(target_capture_kmer_frequency_df$count))
+  target_capture_kmer_frequency_df$rel_counts <- 
+    as.numeric(target_capture_kmer_frequency_df$count) / target_capture_total_count
   norms <- reference_genome_kmer_frequency_df$rel_counts / target_capture_kmer_frequency_df$rel_counts
   names(norms) <- reference_genome_kmer_frequency_df$triplet
   return(norms)
@@ -189,34 +240,38 @@ run_kmer_frequency_normalization <- function(in_ref_genome_fasta,in_target_captu
 
 #' Provide comprehensive correction factors for kmer content
 #' 
-#' This function is analogous to \code{\link[SomaticSignatures]{normalizeMotifs}}. If an 
-#' analysis of mutational signatures is performed on e.g. Whole Exome Sequencing (WES)
-#' data, the signatures and exposures have to be adapted to the potentially different kmer
-#' (trinucleotide) content of the target capture. The present function takes as arguments
-#' paths to the used reference genome and target capture file. It the extracts the
-#' sequence of the target capture by calling \code{bedtools getfasta} on the system
-#' command prompt. \code{run_kmer_frequency_normalization} then calls a custom made perl
-#' script \code{kmer_frequencies.pl} also included in this package to count the occurences
-#' of the tripletts in both the whole reference genome and the created target capture
-#' sequence. These counts are used for normalization as in
-#' \code{\link[SomaticSignatures]{normalizeMotifs}}. Note that
-#' \code{\link[SomaticSignatures]{kmerFrequency}} provides a solution to approximate kmer
-#' frequencies by random sampling. As opposed to that approach, the function described
-#' here deterministically counts all occurences of the kmers in the respective genome.
+#' This function is analogous to 
+#' \code{\link[SomaticSignatures]{normalizeMotifs}}. If an analysis of 
+#' mutational signatures is performed on e.g. Whole Exome Sequencing (WES)
+#' data, the signatures and exposures have to be adapted to the potentially 
+#' different kmer (trinucleotide) content of the target capture. The present 
+#' function takes as arguments paths to the used reference genome and target 
+#' capture file. It the extracts the sequence of the target capture by calling 
+#' \code{bedtools getfasta} on the system command prompt. 
+#' \code{run_kmer_frequency_normalization} then calls a custom made perl
+#' script \code{kmer_frequencies.pl} also included in this package to count the 
+#' occurences of the tripletts in both the whole reference genome and the 
+#' created target capture sequence. These counts are used for normalization as 
+#' in \code{\link[SomaticSignatures]{normalizeMotifs}}. Note that
+#' \code{\link[SomaticSignatures]{kmerFrequency}} provides a solution to 
+#' approximate kmer frequencies by random sampling. As opposed to that 
+#' approach, the function described here deterministically counts all 
+#' occurences of the kmers in the respective genome.
 #' 
 #' @param in_ref_genome_fasta
 #'  Path to the reference genome fasta file used.
 #' @param in_target_capture_bed
-#'  Path to a bed file containing the information on the used target capture. May also be
-#'  a compressed bed.
+#'  Path to a bed file containing the information on the used target capture. 
+#'  May also be a compressed bed.
 #' @param in_word_length
 #'  Integer number defining the length of the features or motifs, e.g. 3 for
 #'  tripletts or 5 for pentamers
 #' @param project_folder
-#'  Path where the created files, especially the fasta file with the sequence of the
-#'  target capture and the count matrices, can be stored.
+#'  Path where the created files, especially the fasta file with the sequence 
+#'  of the target capture and the count matrices, can be stored.
 #' @param target_capture_fasta
-#'  Name of the fasta file of the target capture to be created if not yet existent.
+#'  Name of the fasta file of the target capture to be created if not yet 
+#'  existent.
 #' @param in_verbose
 #'  Verbose if \code{in_verbose=1}
 #'
@@ -224,7 +279,8 @@ run_kmer_frequency_normalization <- function(in_ref_genome_fasta,in_target_captu
 #'  A list with 2 entries:
 #'  \itemize{
 #'    \item \code{rel_cor}:
-#'      The correction factors after normalization as in \code{\link{run_kmer_frequency_normalization}}
+#'      The correction factors after normalization as in 
+#'      \code{\link{run_kmer_frequency_normalization}}
 #'    \item \code{abs_cor}:
 #'      The correction factors without normalization.
 #'  }
@@ -236,42 +292,80 @@ run_kmer_frequency_normalization <- function(in_ref_genome_fasta,in_target_captu
 #'
 #' @export
 #' 
-run_kmer_frequency_correction <- function(in_ref_genome_fasta,in_target_capture_bed,in_word_length,
-                                          project_folder,target_capture_fasta="targetCapture.fa",
+run_kmer_frequency_correction <- function(in_ref_genome_fasta,
+                                          in_target_capture_bed,
+                                          in_word_length,
+                                          project_folder,
+                                          target_capture_fasta="targetCapture.fa",
                                           in_verbose=1) {
   #target_capture_fasta <- "hs37d5_Agilent5withUTR_targetCapture.fa"
   target_capture_kmer_counts_file <- "kmer_frequencies_in_targetCapture.csv"
   reference_genome_kmer_counts_file <- "kmer_frequencies_in_ref.csv"
   dir.create(project_folder,recursive=TRUE)
   if(!file.exists(file.path(project_folder,reference_genome_kmer_counts_file))) {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::reference_genome_kmer_counts_file doesn't exist yet. Create first.\n");}
-    run_kmer_frequency_pl(in_ref_genome_fasta,in_word_length,project_folder,reference_genome_kmer_counts_file)
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "reference_genome_kmer_counts_file doesn't exist yet. ",
+          "Create first.\n")
+    }
+    run_kmer_frequency_pl(in_ref_genome_fasta,in_word_length,project_folder,
+                          reference_genome_kmer_counts_file)
   } else {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::reference_genome_kmer_counts_file already exists.\n");}
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "reference_genome_kmer_counts_file already exists.\n")
+    }
   }
   if(!file.exists(file.path(project_folder,target_capture_kmer_counts_file))) {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_kmer_counts_file doesn't exist yet. Create first.\n");}
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "target_capture_kmer_counts_file doesn't exist yet. ",
+          "Create first.\n")
+    }
     if(!file.exists(file.path(project_folder,target_capture_fasta))) {
-      if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_fasta doesn't exist yet. Create first.\n");}
+      if(in_verbose==1) {
+        cat("\nYAPS:::run_kmer_frequency_normalization::",
+            "target_capture_fasta doesn't exist yet. Create first.\n")
+      }
       run_bedtools_getfasta(in_ref_genome_fasta,in_target_capture_bed,
                             project_folder,target_capture_fasta)
     } else {
-      if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_fasta already exists.\n");}    
+      if(in_verbose==1) {
+        cat("\nYAPS:::run_kmer_frequency_normalization::",
+            "target_capture_fasta already exists.\n")
+      }    
     }
-    run_kmer_frequency_pl(file.path(project_folder,target_capture_fasta),in_word_length,project_folder,target_capture_kmer_counts_file)
+    run_kmer_frequency_pl(file.path(project_folder,target_capture_fasta),
+                          in_word_length,project_folder,
+                          target_capture_kmer_counts_file)
   } else {
-    if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::target_capture_kmer_counts_file already exists.\n");}    
+    if(in_verbose==1) {
+      cat("\nYAPS:::run_kmer_frequency_normalization::",
+          "target_capture_kmer_counts_file already exists.\n")
+    }    
   }
-  if(in_verbose==1) {cat("\nYAPS:::run_kmer_frequency_normalization::Now read counts into data frames...\n");}
-  reference_genome_kmer_frequency_df <- read.csv(file.path(project_folder,reference_genome_kmer_counts_file),header=FALSE,sep="\t")
+  if(in_verbose==1) {
+    cat("\nYAPS:::run_kmer_frequency_normalization::Now read counts into ",
+        "data frames...\n")
+  }
+  reference_genome_kmer_frequency_df <- 
+    read.csv(file.path(project_folder,reference_genome_kmer_counts_file),
+             header=FALSE,sep="\t")
   names(reference_genome_kmer_frequency_df) <- c("triplet","count")
-  reference_genome_total_count <- sum(as.numeric(reference_genome_kmer_frequency_df$count))
-  reference_genome_kmer_frequency_df$rel_counts <- as.numeric(reference_genome_kmer_frequency_df$count) / reference_genome_total_count
-  target_capture_kmer_frequency_df <- read.csv(file.path(project_folder,target_capture_kmer_counts_file),header=FALSE,sep="\t")
+  reference_genome_total_count <- 
+    sum(as.numeric(reference_genome_kmer_frequency_df$count))
+  reference_genome_kmer_frequency_df$rel_counts <- 
+    as.numeric(reference_genome_kmer_frequency_df$count) / reference_genome_total_count
+  target_capture_kmer_frequency_df <- 
+    read.csv(file.path(project_folder,target_capture_kmer_counts_file),
+             header=FALSE,sep="\t")
   names(target_capture_kmer_frequency_df) <- c("triplet","count")
-  target_capture_total_count <- sum(as.numeric(target_capture_kmer_frequency_df$count))
-  target_capture_kmer_frequency_df$rel_counts <- as.numeric(target_capture_kmer_frequency_df$count) / target_capture_total_count
-  rel_norms <- reference_genome_kmer_frequency_df$rel_counts / target_capture_kmer_frequency_df$rel_counts
+  target_capture_total_count <- 
+    sum(as.numeric(target_capture_kmer_frequency_df$count))
+  target_capture_kmer_frequency_df$rel_counts <- 
+    as.numeric(target_capture_kmer_frequency_df$count) / target_capture_total_count
+  rel_norms <- 
+    reference_genome_kmer_frequency_df$rel_counts / target_capture_kmer_frequency_df$rel_counts
   names(rel_norms) <- reference_genome_kmer_frequency_df$triplet
   abs_norms <- reference_genome_kmer_frequency_df$count / target_capture_kmer_frequency_df$count
   names(abs_norms) <- reference_genome_kmer_frequency_df$triplet
@@ -344,7 +438,8 @@ run_annotate_vcf_pl <- function(in_data_file,
                                    " --bFileType=",in_anno_track_file_type,
                                    " --columnName ",in_new_column_name)
   output_command <- paste0("> ",file.path(out_file))
-  this_command <- paste(perl_command,script_command,script_options_command,output_command,collapse=" ")
+  this_command <- paste(perl_command,script_command,script_options_command,
+                        output_command,collapse=" ")
   system(this_command,intern=TRUE)
   return(0)
 }
@@ -363,14 +458,16 @@ run_annotate_vcf_pl <- function(in_data_file,
 #'  NULL
 #'  \dontrun{
 #'    species <- "hsa"
-#'    gene_lists_meta_df <- data.frame(name=c("BER","NHEJ","MMR"),
-#'                                     explanation=c("base excision repair",
-#'                                                   "non homologous end joining",
-#'                                                   "mismatch repair"))
+#'    gene_lists_meta_df <- data.frame(
+#'      name=c("BER","NHEJ","MMR"),
+#'      explanation=c("base excision repair",
+#'                    "non homologous end joining",
+#'                    "mismatch repair"))
 #'    number_of_pathways <- dim(gene_lists_meta_df)[1]
 #'    gene_lists_list <- list()
 #'    for (i in seq_len(number_of_pathways)) {
-#'      temp_list <- build_gene_list_for_pathway(gene_lists_meta_df$explanation[i],species)
+#'      temp_list <- 
+#'      build_gene_list_for_pathway(gene_lists_meta_df$explanation[i],species)
 #'      gene_lists_list <- c(gene_lists_list,list(temp_list))
 #'    }
 #'    gene_lists_list

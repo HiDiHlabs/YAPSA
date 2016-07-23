@@ -9,6 +9,11 @@ data(cutoffs)
 
 data(cutoffs)
 }
+\value{
+A data frame
+
+A data frame
+}
 \description{
 Data frame of signature specific cutoff values for the LCD analysis with
 relative exposures. All values represent optimal cutoffs. The optimal

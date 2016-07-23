@@ -12,8 +12,8 @@ plot_SMC_old(number_of_strata, output_path, decomposition_method,
 \arguments{
 \item{number_of_strata}{Number of strata as deduced from \code{link{SMC}}}
 
-\item{output_path}{Path to file where the results are going to be stored. If NULL, the results will
-be plotted to the running environment.}
+\item{output_path}{Path to file where the results are going to be stored. If NULL, the results 
+will be plotted to the running environment.}
 
 \item{decomposition_method}{String for the filename of the generated barplot.}
 

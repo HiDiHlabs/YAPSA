@@ -7,6 +7,9 @@
 \usage{
 data(cutoffs)
 }
+\value{
+A data frame
+}
 \description{
 Data frame of signature specific cutoff values for the LCD analysis with
 absolute exposures. All values represent optimal cutoffs. The optimal

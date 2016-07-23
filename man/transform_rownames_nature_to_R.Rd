@@ -18,8 +18,8 @@ A character vector of the translated rownames.
 Rownames or names of the features used differ between the different contexts
 a signature analysis is carried out in. The function
 \code{transform_rownames_MATLAB_to_R} changes from the convention used in
-stored mutational catalogues by Alexandrov et al. to the one used by the YAPSA
-pacakge.
+stored mutational catalogues by Alexandrov et al. to the one used by the 
+YAPSA pacakge.
 }
 \examples{
 NULL

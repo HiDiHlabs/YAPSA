@@ -7,6 +7,9 @@
 \usage{
 data(lymphoma_test)
 }
+\value{
+A data frame
+}
 \description{
 A data frame carrying point mutation calls. It represents a subset of the data stored in
 \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
@@ -20,7 +23,6 @@ data(lymphoma_test)
 head(lymphoma_test_df)
 dim(lymphoma_test_df)
 table(lymphoma_test_df$PID)
-
 }
 \author{
 Daniel Huebschmann \email{huebschmann.daniel@googlemail.com}

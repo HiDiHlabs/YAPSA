@@ -20,7 +20,8 @@ for rows with \code{rowSums=0} or columns with \code{colSums=0}, the
 normalization is left out.
 }
 \examples{
-test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+                             ncol=4))
 ## 1. Normalize over rows:
 normalize_df_per_dim(test_df,1)
 ## 2. Normalize over columns:

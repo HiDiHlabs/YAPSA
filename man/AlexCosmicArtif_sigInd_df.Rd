@@ -7,6 +7,9 @@
 \usage{
 data(sigs)
 }
+\value{
+A data frame
+}
 \description{
 A data frame with as many rows as there are signatures in
 \code{AlexCosmicValid_sig_df} and several columns: 

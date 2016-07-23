@@ -34,8 +34,9 @@ similarity matrix \code{1-dif_df} is then passed to
 }
 \examples{
 data(sigs)
-make_comparison_matrix(AlexCosmicValid_sig_df,in_nrect=9,
-                       in_palette=colorRampPalette(c("blue","green","red"))(n=100))
+make_comparison_matrix(
+ AlexCosmicValid_sig_df,in_nrect=9,
+ in_palette=colorRampPalette(c("blue","green","red"))(n=100))
 
 }
 \seealso{

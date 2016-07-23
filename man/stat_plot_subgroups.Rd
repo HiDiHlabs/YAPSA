@@ -24,6 +24,9 @@ PID information}
 
 \item{in_colour_vector}{If non-null, specifies the colours attributed to the subgroups}
 }
+\value{
+The function doesn't return any value, it plots instead.
+}
 \description{
 Plot one averaged signature exposure pattern per subgroup. Uses
 \code{\link{split_exposures_by_subgroups}}.

@@ -7,6 +7,9 @@
 \usage{
 data(sigs)
 }
+\value{
+A data frame
+}
 \description{
 Data frame of only the validated signatures published initially by Alexandrov
 et al. (Nature 2013), corresponding to the first 22 columns of

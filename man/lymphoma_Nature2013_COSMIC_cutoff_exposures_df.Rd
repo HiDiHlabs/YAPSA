@@ -7,6 +7,9 @@
 \usage{
 data(lymphoma_cohort_LCD_results)
 }
+\value{
+A data frame
+}
 \description{
 Data frame with exposures for testing the plot functions. Data taken from
 \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.

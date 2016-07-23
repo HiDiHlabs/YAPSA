@@ -88,7 +88,9 @@ compare_sets <- function(in_df_small,in_df_big) {
   temp_ind <- match(rownames(in_df_small),rownames(in_df_big))
   df_big <- in_df_big[temp_ind,]
   df_small <- in_df_small
-  distance_df <- as.data.frame(matrix(rep(1,number_of_sigs_small*number_of_sigs_big),ncol=number_of_sigs_big))
+  distance_df <- as.data.frame(
+    matrix(rep(1,number_of_sigs_small*number_of_sigs_big),
+           ncol=number_of_sigs_big))
   rownames(distance_df) <- sig_names_small
   colnames(distance_df) <- sig_names_big
   for (i in 1:number_of_sigs_small) {
@@ -96,9 +98,13 @@ compare_sets <- function(in_df_small,in_df_big) {
       distance_df[i,j] <- cosineDist(df_small[,i],df_big[,j])
     }
   }  
-  hierarchy_small_df <- t(apply(distance_df,1,function(l) return(colnames(distance_df)[order(l)])))
-  hierarchy_big_df <- t(apply(distance_df,2,function(l) return(rownames(distance_df)[order(l)])))
-  return(list(distance=distance_df,hierarchy_small=hierarchy_small_df,hierarchy_big=hierarchy_big_df))
+  hierarchy_small_df <- 
+    t(apply(distance_df,1,function(l) return(colnames(distance_df)[order(l)])))
+  hierarchy_big_df <- 
+    t(apply(distance_df,2,function(l) return(rownames(distance_df)[order(l)])))
+  return(list(distance=distance_df,
+              hierarchy_small=hierarchy_small_df,
+              hierarchy_big=hierarchy_big_df))
 }
 
 
@@ -138,7 +144,8 @@ repeat_df <- function(in_value,in_rows,in_cols) {
 #' @return The normalized numerical data frame
 #' 
 #' @examples
-#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+#'                              ncol=4))
 #' ## 1. Normalize over rows:
 #' normalize_df_per_dim(test_df,1)
 #' ## 2. Normalize over columns:
@@ -147,14 +154,16 @@ repeat_df <- function(in_value,in_rows,in_cols) {
 #' @export
 #' 
 normalize_df_per_dim <- function(in_df,in_dimension) {
-  out_df <- repeat_df(in_value = 0,in_rows = dim(in_df)[1],in_cols = dim(in_df)[2])
+  out_df <- repeat_df(in_value = 0,in_rows = dim(in_df)[1],
+                      in_cols = dim(in_df)[2])
   if(in_dimension==1) {
     choice_ind <- which(rowSums(in_df)>0)
     out_df[choice_ind,] <- in_df[choice_ind,]/rowSums(in_df)[choice_ind]      
   } else if (in_dimension==2) {
     t_df <- t(in_df)
     choice_ind <- which(rowSums(t_df)>0)
-    temp_df <- repeat_df(in_value = 0,in_rows = dim(in_df)[2],in_cols = dim(in_df)[1])
+    temp_df <- repeat_df(in_value = 0,in_rows = dim(in_df)[2],
+                         in_cols = dim(in_df)[1])
     temp_df[choice_ind,] <- t_df[choice_ind,]/rowSums(t_df)[choice_ind]
     out_df <- as.data.frame(t(temp_df))
   } else {
@@ -179,7 +188,8 @@ normalize_df_per_dim <- function(in_df,in_dimension) {
 #' @return A vector of the means
 #' 
 #' @examples
-#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+#'                              ncol=4))
 #' ## 1. Average over non-zero rows:
 #' average_over_present(test_df,1)
 #' ## 2. Average over non-zero columns:
@@ -230,7 +240,8 @@ average_over_present <- function(in_df,in_dimension) {
 #' @return A vector of the standard deviations
 #' 
 #' @examples
-#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+#'                              ncol=4))
 #' ## 1. Compute standard deviation over non-zero rows:
 #' sd_over_present(test_df,1)
 #' ## 2. Compute standard deviation over non-zero columns:
@@ -331,7 +342,8 @@ stderrmean <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
 #' @seealso \code{\link{stderrmean}}
 #' 
 #' @examples
-#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+#' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+#'                              ncol=4))
 #' ## 1. Compute standard deviation over non-zero rows:
 #' stderrmean_over_present(test_df,1)
 #' ## 2. Compute standard deviation over non-zero columns:
@@ -370,16 +382,19 @@ stderrmean_over_present <- function(in_df,in_dimension) {
 
 #' Translate chromosome names to the hg19 naming convention
 #'
-#' In hg19 naming convention, chromosome names start with the prefix \emph{chr} and
-#' the gonosomes are called \emph{X} and \emph{Y}. If data analysis is performed e.g.
-#' with \code{\link[BSgenome.Hsapiens.UCSC.hg19]{BSgenome.Hsapiens.UCSC.hg19}}, this
+#' In hg19 naming convention, chromosome names start with the prefix \emph{chr} 
+#' and the gonosomes are called \emph{X} and \emph{Y}. If data analysis is 
+#' performed e.g. with 
+#' \code{\link[BSgenome.Hsapiens.UCSC.hg19]{BSgenome.Hsapiens.UCSC.hg19}}, this
 #' naming convention is needed. The inverse transform is done with
 #' \code{\link{translate_to_1kG}}.
 #'
 #' @param in_df
-#'  Data frame which carries one column with chromosome information to be reformatted
+#'  Data frame which carries one column with chromosome information to be 
+#'  reformatted
 #' @param in_CHROM.field
-#'  String indicating which column of \code{in_df} carries the chromosome information
+#'  String indicating which column of \code{in_df} carries the chromosome 
+#'  information
 #'  
 #' @return A data frame identical to \code{in_df}, but with the names in the
 #'  chromosome column replaced
@@ -419,9 +434,11 @@ translate_to_hg19 <- function(in_df,in_CHROM.field="CHROM") {
 #' \code{\link{translate_to_hg19}}.
 #'
 #' @param in_df
-#'  Data frame which carries one column with chromosome information to be reformatted
+#'  Data frame which carries one column with chromosome information to be 
+#'  reformatted
 #' @param in_CHROM.field
-#'  String indicating which column of \code{in_df} carries the chromosome information
+#'  String indicating which column of \code{in_df} carries the chromosome 
+#'  information
 #'  
 #' @return A data frame identical to \code{in_df}, but with the names in the
 #'  chromosome column replaced
@@ -429,7 +446,8 @@ translate_to_hg19 <- function(in_df,in_CHROM.field="CHROM") {
 #' @seealso \code{\link{translate_to_1kG}}
 #' 
 #' @examples
-#' test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),dummy=c("a","b","c","d"))
+#' test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),
+#'                       dummy=c("a","b","c","d"))
 #' hg19_df <- translate_to_hg19(test_df, in_CHROM.field = "CHROM")
 #' onekG_df <- translate_to_1kG(hg19_df, in_CHROM.field = "CHROM")
 #' onekG_df
@@ -446,7 +464,8 @@ translate_to_1kG <- function(in_df,in_CHROM.field="chr") {
   logical_chr_vector <- grepl("^[0-9]+$",out_df[,chrom_ind])
   if(!(all(logical_chr_vector))) {
     replace_ind <- which(!logical_chr_vector)
-    out_df[replace_ind,chrom_ind] <- gsub("chr","",out_df[replace_ind,chrom_ind])
+    out_df[replace_ind,chrom_ind] <- gsub("chr","",
+                                          out_df[replace_ind,chrom_ind])
   }
   return(out_df)
 }
@@ -454,98 +473,115 @@ translate_to_1kG <- function(in_df,in_CHROM.field="chr") {
 
 #' Attribute the nucleotide exchange for an SNV
 #'
-#' SNVs are grouped into 6 different categories (12/2 as reverse complements are summed
-#' over). This function defines the attribution.
+#' SNVs are grouped into 6 different categories (12/2 as reverse complements are 
+#' summed over). This function defines the attribution.
 #'
 #' @param in_dat
-#'  Data frame which carries one column for the reference base and one column for the
-#'  variant base
+#'  Data frame which carries one column for the reference base and one column 
+#'  for the variant base
 #' @param in_REF.field
 #'  String indicating which column of \code{in_dat} carries the reference base
 #' @param in_ALT.field
 #'  String indicating which column of \code{in_dat} carries the variant base
 #'  
-#' @return A character vector with as many rows as there are in \code{in_dat} which
-#'  can be annotated (i.e. appended) to the input data frame.
+#' @return A character vector with as many rows as there are in \code{in_dat} 
+#'  which can be annotated (i.e. appended) to the input data frame.
 #' 
 #' @examples
-#' test_df <- data.frame(CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
-#'                        POS=c(1,2,3,4,5,6,1,2,3,4,5,6,7,8),
-#'                        REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
-#'                        ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"))
-#' test_df$change <- attribute_nucleotide_exchanges(test_df,in_REF.field = "REF",in_ALT.field = "ALT")
+#' test_df <- data.frame(
+#'  CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
+#'  POS=c(1,2,3,4,5,6,1,2,3,4,5,6,7,8),
+#'  REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
+#'  ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"))
+#' test_df$change <- attribute_nucleotide_exchanges(
+#'  test_df,in_REF.field = "REF",in_ALT.field = "ALT")
 #' test_df
 #' 
 #' @export
 #' 
-attribute_nucleotide_exchanges <- function(in_dat,in_REF.field="REF",in_ALT.field="ALT") {
+attribute_nucleotide_exchanges <- function(in_dat,in_REF.field="REF",
+                                           in_ALT.field="ALT") {
   name_list <- names(in_dat)
   ## exception handling for input fields
   if(tolower(in_REF.field) %in% tolower(name_list)) {
-    cat("attribute_nucleotide_exchanges::in_REF.field found. Retrieving REF information.\n")
+    cat("attribute_nucleotide_exchanges::in_REF.field found. ",
+        "Retrieving REF information.\n")
     REF_ind <- min(which(tolower(name_list)==tolower(in_REF.field)))
   } else {
-    cat("attribute_nucleotide_exchanges::error: in_REF.field not found. Return NULL.\n")
+    cat("attribute_nucleotide_exchanges::error: in_REF.field not found. ",
+        "Return NULL.\n")
     return(NULL)
   }
   if(tolower(in_ALT.field) %in% tolower(name_list)) {
-    cat("attribute_nucleotide_exchanges::in_ALT.field found. Retrieving ALT information.\n")
+    cat("attribute_nucleotide_exchanges::in_ALT.field found. ",
+        "Retrieving ALT information.\n")
     ALT_ind <- min(which(tolower(name_list)==tolower(in_ALT.field)))
   } else {
-    cat("attribute_nucleotide_exchanges::error: in_ALT.field not found. Return NULL.\n")
+    cat("attribute_nucleotide_exchanges::error: in_ALT.field not found. ",
+        "Return NULL.\n")
     return(NULL)
   }
   ## adapt nomenclature for nucleotide exchanges
   complement <- c('A' = 'T', 'C' = 'G','G' = 'C', 'T' = 'A', 'N' = 'N')
   change_vec <- rep("dummy",dim(in_dat)[1])
   sel <- which(in_dat[,REF_ind] == 'C' | in_dat[,REF_ind] == 'T')
-  change_vec[sel] <- paste0(as.character(in_dat[sel,REF_ind]),as.character(in_dat[sel,ALT_ind]))
+  change_vec[sel] <- 
+    paste0(as.character(in_dat[sel,REF_ind]),as.character(in_dat[sel,ALT_ind]))
   sel <- which(in_dat[,REF_ind] == 'A' | in_dat[,REF_ind] == 'G')
-  change_vec[sel] <- paste0(complement[as.character(in_dat[sel,REF_ind])],complement[as.character(in_dat[sel,ALT_ind])])  
-  change_vec <- factor(change_vec, levels = c("CA", "CG", "CT", "TA", "TC", "TG"))
+  change_vec[sel] <- 
+    paste0(complement[as.character(in_dat[sel,REF_ind])],
+           complement[as.character(in_dat[sel,ALT_ind])])  
+  change_vec <- factor(change_vec, 
+                       levels = c("CA", "CG", "CT", "TA", "TC", "TG"))
   return(change_vec)
 }
 
 
 #' Annotate the intermutation distance of variants per PID
 #'
-#' The function annotates the intermutational distance to a PID wide data frame by
-#' applying \code{\link[circlize]{rainfallTransform}} to every chromosome-specific
-#' subfraction of the PID wide data.
+#' The function annotates the intermutational distance to a PID wide data frame 
+#' by applying \code{\link[circlize]{rainfallTransform}} to every 
+#' chromosome-specific subfraction of the PID wide data.
 #'
 #' @param in_df
-#'  Data frame which carries (at least) one column for the chromosome and one column
-#'  for the position.
+#'  Data frame which carries (at least) one column for the chromosome and one 
+#'  column for the position.
 #' @param in_CHROM.field
-#'  String indicating which column of \code{in_df} carries the chromosome information
+#'  String indicating which column of \code{in_df} carries the chromosome 
+#'  information
 #' @param in_POS.field
-#'  String indicating which column of \code{in_df} carries the position information
+#'  String indicating which column of \code{in_df} carries the position 
+#'  information
 #' @param in_mode
 #'  String passed to \code{\link[circlize]{rainfallTransform}} indicating which
 #'  method to choose for the computation of the intermutational distance.
 #'  
-#' @return A data frame identical to \code{in_df}, but with the intermutation distance
-#' annotated as an additional column on the right named \code{dist}.
+#' @return A data frame identical to \code{in_df}, but with the intermutation 
+#'  distance annotated as an additional column on the right named \code{dist}.
 #'  
 #' @seealso \code{\link{annotate_intermut_dist_cohort}}
 #' @seealso \code{\link[circlize]{rainfallTransform}}
 #' 
 #' @examples
-#' test_df <- data.frame(CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
-#'                        POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
-#'                        REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
-#'                        ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"))
-#' min_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-#'                                            in_mode="min")
-#' max_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-#'                                            in_mode="max")
+#' test_df <- data.frame(
+#'  CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
+#'  POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
+#'  REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
+#'  ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"))
+#' min_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",
+#'                                           in_POS.field="POS",
+#'                                           in_mode="min")
+#' max_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",
+#'                                           in_POS.field="POS",
+#'                                           in_mode="max")
 #' min_dist_df
 #' max_dist_df
 #' 
 #' @importFrom circlize rainfallTransform
 #' @export
 #' 
-annotate_intermut_dist_PID <- function(in_df,in_CHROM.field="CHROM",in_POS.field="POS",in_mode="min") {
+annotate_intermut_dist_PID <- function(in_df,in_CHROM.field="CHROM",
+                                       in_POS.field="POS",in_mode="min") {
   CHROM_ind <- which(names(in_df)==in_CHROM.field)
   POS_ind <- which(names(in_df)==in_POS.field)
   inflate_df <- data.frame()
@@ -1097,6 +1133,7 @@ test_exposureAffected <- function(in_exposure_vector,
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
 #' @references Alexandrov et al. (Nature 2013)
+#' @return A data frame
 #' 
 NULL
 
@@ -1127,6 +1164,7 @@ NULL
 #' @name AlexInitialArtif_sigInd_df
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1144,6 +1182,7 @@ NULL
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
 #' @references Alexandrov et al. (Nature 2013)
+#' @return A data frame
 #' 
 NULL
 
@@ -1174,6 +1213,7 @@ NULL
 #' @name AlexInitialValid_sigInd_df
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1194,6 +1234,7 @@ NULL
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
 #' @references Alexandrov et al. (Nature 2013)
+#' @return A data frame
 #' 
 NULL
 
@@ -1223,6 +1264,7 @@ NULL
 #' @name AlexCosmicValid_sigInd_df
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1243,6 +1285,7 @@ NULL
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
 #' @references Alexandrov et al. (Nature 2013)
+#' @return A data frame
 #' 
 NULL
 
@@ -1272,6 +1315,7 @@ NULL
 #' @name AlexCosmicArtif_sigInd_df
 #' @usage data(sigs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1291,6 +1335,7 @@ NULL
 #' @usage data(lymphoma_PID)
 #' @references \url{http://www.ncbi.nlm.nih.gov/pubmed/23945592}
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1315,6 +1360,7 @@ NULL
 #' head(lymphoma_test_df)
 #' dim(lymphoma_test_df)
 #' table(lymphoma_test_df$PID)
+#' @return A data frame
 #' 
 NULL
 
@@ -1333,6 +1379,7 @@ NULL
 #' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
 #' @seealso \code{\link{COSMIC_subgroups_df}}
 #' @seealso \code{\link{chosen_AlexInitialArtif_sigInd_df}}
+#' @return A data frame
 #' 
 NULL
 
@@ -1352,6 +1399,7 @@ NULL
 #' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
 #' @seealso \code{\link{COSMIC_subgroups_df}}
 #' @seealso \code{\link{chosen_AlexInitialArtif_sigInd_df}}
+#' @return A data frame
 #' 
 NULL
 
@@ -1369,6 +1417,7 @@ NULL
 #' 
 #' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
 #' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
+#' @return A data frame
 #' 
 NULL
 
@@ -1386,6 +1435,7 @@ NULL
 #' 
 #' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
 #' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
+#' @return A data frame
 #' 
 NULL
 
@@ -1403,6 +1453,7 @@ NULL
 #' 
 #' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
 #' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
+#' @return A data frame
 #' 
 NULL
 
@@ -1425,6 +1476,7 @@ NULL
 #' @name cutoffCosmicValid_rel_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1447,6 +1499,7 @@ NULL
 #' @name cutoffCosmicValid_rel_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1469,6 +1522,7 @@ NULL
 #' @name cutoffCosmicArtif_rel_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1491,6 +1545,7 @@ NULL
 #' @name cutoffCosmicValid_abs_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1513,6 +1568,7 @@ NULL
 #' @name cutoffCosmicArtif_abs_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1535,6 +1591,7 @@ NULL
 #' @name cutoffInitialValid_rel_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1557,6 +1614,7 @@ NULL
 #' @name cutoffInitialArtif_rel_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1579,6 +1637,7 @@ NULL
 #' @name cutoffInitialValid_abs_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1601,6 +1660,7 @@ NULL
 #' @name cutoffInitialArtif_abs_df
 #' @usage data(cutoffs)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A data frame
 #' 
 NULL
 
@@ -1622,6 +1682,7 @@ NULL
 #' @name targetCapture_cor_factors
 #' @usage data(targetCapture_cor_factors)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A list of lists of data frames
 #' 
 NULL
 
@@ -1635,5 +1696,6 @@ NULL
 #' @name exchange_colour_vector
 #' @usage data(exchange_colour_vector)
 #' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' @return A named character vector
 #' 
 NULL

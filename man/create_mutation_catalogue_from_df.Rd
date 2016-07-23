@@ -34,18 +34,21 @@ identifier) is encoded}
 \item{this_subgroup.field}{Indicates the name of the column in which the subgroup information
 is encoded}
 
-\item{this_refGenome}{The reference genome handed over to \code{\link{create_mutation_catalogue_from_VR}}
+\item{this_refGenome}{The reference genome handed over to 
+\code{\link{create_mutation_catalogue_from_VR}}
 and indirectly to \code{\link[SomaticSignatures]{mutationContext}}
 and used to extract the motif context of the variants in \code{in_vr}.}
 
-\item{this_wordLength}{The size of the motifs to be extracted by \code{\link[SomaticSignatures]{mutationContext}}}
+\item{this_wordLength}{The size of the motifs to be extracted by 
+\code{\link[SomaticSignatures]{mutationContext}}}
 
 \item{this_verbose}{Verbose if \code{this_verbose=1}}
 
 \item{this_rownames}{Optional parameter to specify rownames of the mutational catalogue \code{V}
 i.e. the names of the features.}
 
-\item{this_adapt_rownames}{Rownames of the output \code{matrix} will be adapted if \code{this_adapt_rownames=1}}
+\item{this_adapt_rownames}{Rownames of the output \code{matrix} will be adapted if 
+\code{this_adapt_rownames=1}}
 }
 \value{
 A list with entries

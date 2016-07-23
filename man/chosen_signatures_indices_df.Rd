@@ -7,6 +7,9 @@
 \usage{
 data(lymphoma_cohort_LCD_results)
 }
+\value{
+A data frame
+}
 \description{
 Signature information for the data stored in
 \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}} and 

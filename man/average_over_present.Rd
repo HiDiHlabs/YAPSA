@@ -20,7 +20,8 @@ are left out, if averaging over rows, zero columns (i.e. those with
 \code{colSums=0}) are left out.
 }
 \examples{
-test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+                             ncol=4))
 ## 1. Average over non-zero rows:
 average_over_present(test_df,1)
 ## 2. Average over non-zero columns:

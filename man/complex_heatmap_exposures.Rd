@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_functions.R
 \name{complex_heatmap_exposures}
 \alias{complex_heatmap_exposures}
-\title{Heatmap to cluster the PIDs on their signature exposures (with ComplexHeatmap)}
+\title{Heatmap to cluster the PIDs on their signature exposures (ComplexHeatmap)}
 \usage{
 complex_heatmap_exposures(in_exposures_df, in_subgroups_df,
   in_signatures_ind_df, in_data_type = "norm exposures",
@@ -19,8 +19,8 @@ signature contributes how much to which PID (patient identifier or sample).}
 \item{in_subgroups_df}{A data frame indicating which PID (patient or sample identifyier) belongs
 to which subgroup}
 
-\item{in_signatures_ind_df}{A data frame containing meta information about the signatures, especially the
-asserted colour}
+\item{in_signatures_ind_df}{A data frame containing meta information about the signatures, especially 
+the asserted colour}
 
 \item{in_data_type}{Title in the figure}
 
@@ -36,7 +36,7 @@ subgroups is encoded in \code{in_subgroups_df}. If NULL, a rainbow palette
 is used instead.}
 
 \item{in_palette}{Palette with colours for the heatmap. Default is
-\code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red'))}}
+\code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white','yellow','orange','red'))}}
 
 \item{in_cutoff}{A numeric value less than 1. Signatures from within \code{W}
 with an overall exposure less than \code{in_cutoff} will be
@@ -62,20 +62,21 @@ The PIDs are clustered according to their signature exposures. unses package
 }
 }
 \details{
-It might be necessary to install the newest version of the development branch
- of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang Gu:
- \code{devtools::install_github("jokergoo/circlize")}
+It might be necessary to install the newest version of the development 
+ branch of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang 
+ Gu: \code{devtools::install_github("jokergoo/circlize")} and
  \code{devtools::install_github("jokergoo/ComplexHeatmap")}
 }
 \examples{
  data(lymphoma_cohort_LCD_results)
- complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
-                           COSMIC_subgroups_df,
-                           chosen_signatures_indices_df,
-                           in_data_type="norm exposures",
-                           in_subgroup_colour_column="col",
-                           in_method="manhattan",
-                           in_subgroup_column="subgroup")
+ complex_heatmap_exposures(
+   rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
+   COSMIC_subgroups_df,
+   chosen_signatures_indices_df,
+   in_data_type="norm exposures",
+   in_subgroup_colour_column="col",
+   in_method="manhattan",
+   in_subgroup_column="subgroup")
 
 }
 \seealso{

@@ -32,7 +32,8 @@ for subgroup inforamtion.
 }
 \examples{
  data(lymphoma_cohort_LCD_results)
- temp_anno_color <- aggregate(col~subgroup,data=COSMIC_subgroups_df,function(l) return(l[1]))
+ temp_anno_color <- aggregate(col~subgroup,data=COSMIC_subgroups_df,
+                              function(l) return(l[1]))
  plot_colour_legend_subgroups(COSMIC_subgroups_df,temp_anno_color$col)
 
 }

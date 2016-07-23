@@ -21,7 +21,8 @@ standard error of the mean over rows, zero columns (i.e. those with
 \code{colSums=0}) are left out. Uses the function \code{\link{stderrmean}}
 }
 \examples{
-test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+                             ncol=4))
 ## 1. Compute standard deviation over non-zero rows:
 stderrmean_over_present(test_df,1)
 ## 2. Compute standard deviation over non-zero columns:

@@ -7,6 +7,9 @@
 \usage{
 data(sigs)
 }
+\value{
+A data frame
+}
 \description{
 Data frame of the updated signatures list maintained by Ludmil Alexandrov at
 \url{http://cancer.sanger.ac.uk/cosmic/signatures}. The data was downloaded from

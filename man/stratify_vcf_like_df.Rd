@@ -41,12 +41,14 @@ to some attribution in a specified field or column.
 NULL
 \dontrun{
  data(lymphoma_test)
- strata_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-                                        in_outlier_cutoffs=c(-4,4),
-                                        in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-                                        in_labels=c("small","intermediate","big"))
+ strata_list <- cut_breaks_as_intervals(
+   lymphoma_test_df$random_norm,
+   in_outlier_cutoffs=c(-4,4),
+   in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
+   in_labels=c("small","intermediate","big"))
  lymphoma_test_df$random_cat <- strata_list$category_vector
- stratification_list <- stratify_vcf_like_df(lymphoma_test_df,"random_cat",in_verbose=0)
+ stratification_list <- stratify_vcf_like_df(lymphoma_test_df,"random_cat",
+                                             in_verbose=0)
  stratification_list$name_list
  for (i in seq_len(3)){
    cat("\\nStratum ",i,"\\n")

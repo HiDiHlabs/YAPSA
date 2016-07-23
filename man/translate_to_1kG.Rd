@@ -7,9 +7,11 @@
 translate_to_1kG(in_df, in_CHROM.field = "chr")
 }
 \arguments{
-\item{in_df}{Data frame which carries one column with chromosome information to be reformatted}
+\item{in_df}{Data frame which carries one column with chromosome information to be 
+reformatted}
 
-\item{in_CHROM.field}{String indicating which column of \code{in_df} carries the chromosome information}
+\item{in_CHROM.field}{String indicating which column of \code{in_df} carries the chromosome 
+information}
 }
 \value{
 A data frame identical to \code{in_df}, but with the names in the
@@ -23,7 +25,8 @@ naming convention is needed. The inverse transform is done with
 \code{\link{translate_to_hg19}}.
 }
 \examples{
-test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),dummy=c("a","b","c","d"))
+test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),
+                      dummy=c("a","b","c","d"))
 hg19_df <- translate_to_hg19(test_df, in_CHROM.field = "CHROM")
 onekG_df <- translate_to_1kG(hg19_df, in_CHROM.field = "CHROM")
 onekG_df

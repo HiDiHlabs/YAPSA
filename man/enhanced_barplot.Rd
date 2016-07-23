@@ -36,26 +36,29 @@ The function doesn't return any value.
 }
 \description{
 The exposures \code{H}, determined by NMF or by \code{\link{LCD}}, are
-displayed as a stacked barplot by calling \code{\link[ComplexHeatmap]{Heatmap}}.
+displayed as a stacked barplot by calling 
+\code{\link[ComplexHeatmap]{Heatmap}}.
 The x-axis displays the PIDs (patient identifier or sample), the y-axis
 the counts attributed to the different signatures with their respective
 colours per PID. It is analogous to \code{\link{plot_exposures}}.
 }
 \details{
-It might be necessary to install the newest version of the development branch
- of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang Gu:
- \code{devtools::install_github("jokergoo/circlize")}
+It might be necessary to install the newest version of the development 
+ branch of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang
+ Gu: \code{devtools::install_github("jokergoo/circlize")} and 
  \code{devtools::install_github("jokergoo/ComplexHeatmap")}
 }
 \examples{
  data(lymphoma_cohort_LCD_results)
- temp_anno_color <- aggregate(col~subgroup,data=COSMIC_subgroups_df,function(l) return(l[1]))
+ temp_anno_color <- aggregate(col~subgroup,data=COSMIC_subgroups_df,
+                              function(l) return(l[1]))
  my_anno_color <- temp_anno_color$col
  names(my_anno_color) <- temp_anno_color$subgroup
- enhanced_barplot(lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,order(COSMIC_subgroups_df$index)],
-                  chosen_signatures_indices_df$colour,
-                  COSMIC_subgroups_df$subgroup[order(COSMIC_subgroups_df$index)],
-                  my_anno_color)  
+ enhanced_barplot(
+   lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,order(COSMIC_subgroups_df$index)],
+   chosen_signatures_indices_df$colour,
+   COSMIC_subgroups_df$subgroup[order(COSMIC_subgroups_df$index)],
+   my_anno_color)  
  
 }
 \seealso{

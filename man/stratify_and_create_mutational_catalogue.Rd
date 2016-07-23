@@ -92,10 +92,11 @@ NULL
  library(BSgenome.Hsapiens.UCSC.hg19)
  data(lymphoma_test)
  word_length <- 3
- strata_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-                                        in_outlier_cutoffs=c(-4,4),
-                                        in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-                                        in_labels=c("small","intermediate","big"))
+ strata_list <- cut_breaks_as_intervals(
+   lymphoma_test_df$random_norm,
+   in_outlier_cutoffs=c(-4,4),
+   in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
+   in_labels=c("small","intermediate","big"))
  lymphoma_test_df$random_cat <- strata_list$category_vector
  temp_list <- stratify_and_create_mutational_catalogue(
    lymphoma_test_df,"random_cat",

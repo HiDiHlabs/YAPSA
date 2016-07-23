@@ -42,7 +42,8 @@ This function does this task for the comparison by cosine similarity of
 signature exposures. Output of this function is the basis for applying
 \code{\link{plot_strata}} and \code{\link{make_comparison_matrix}}. It
 is called by the wrapper functions \code{\link{compare_SMCs}},
-\code{\link{run_plot_strata_general}} or \code{\link{run_comparison_general}}.
+\code{\link{run_plot_strata_general}} or 
+\code{\link{run_comparison_general}}.
 }
 \seealso{
 \code{\link{plot_strata}}

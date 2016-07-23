@@ -7,6 +7,9 @@
 \usage{
 data(exchange_colour_vector)
 }
+\value{
+A named character vector
+}
 \description{
 Vector attributing colours to nucleotide exchanges used when displaying SNV
 information, e.g. in a rainfall plot.

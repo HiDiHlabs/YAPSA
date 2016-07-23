@@ -37,7 +37,7 @@ are known
 ## define raw data
 W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
 W_prim_df <- as.data.frame(W_prim)
-W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
 W <- as.matrix(W_df) 
 ## 1. Simple case: non-negativity already in raw data
 H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
@@ -58,7 +58,7 @@ H_compl <- H
 H_compl[sign_ind] <- (-1)*H[sign_ind]
 H_compl_df <- as.data.frame(H_compl) # corresponds to the exposures
 V_compl <- W \%*\% H_compl # matrix multiplication
-V_compl_df <- as.data.frame(V_compl) # corresponds to the mutational catalogue
+V_compl_df <- as.data.frame(V_compl) # corresponds to the mutational catalog
 exposures_df <- YAPSA:::LCD(V_compl_df,W_df)
 exposures <- as.matrix(exposures_df)
 

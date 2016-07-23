@@ -41,7 +41,8 @@ The function doesn't return any value.
 }
 \description{
 The exposures \code{H}, determined by NMF or by \code{\link{LCD}}, are
-displayed as a stacked barplot by calling \code{\link[ComplexHeatmap]{Heatmap}}.
+displayed as a stacked barplot by calling 
+\code{\link[ComplexHeatmap]{Heatmap}}.
 The x-axis displays the PIDs (patient identifier or sample), the y-axis
 the counts attributed to the different signatures with their respective
 colours per PID. It is analogous to \code{\link{plot_exposures}}. As many
@@ -55,14 +56,14 @@ The annotation data is handled in a way similar to
 }
 }
 \details{
-It might be necessary to install the newest version of the development branch
- of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang Gu:
- \code{devtools::install_github("jokergoo/circlize")}
+It might be necessary to install the newest version of the development 
+ branch of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang 
+ Gu: \code{devtools::install_github("jokergoo/circlize")} and 
  \code{devtools::install_github("jokergoo/ComplexHeatmap")}
 
-It might be necessary to install the newest version of the development branch
- of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang Gu:
- \code{devtools::install_github("jokergoo/circlize")}
+It might be necessary to install the newest version of the development 
+ branch of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang 
+ Gu: \code{devtools::install_github("jokergoo/circlize")} and
  \code{devtools::install_github("jokergoo/ComplexHeatmap")}
 }
 \examples{

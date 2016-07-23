@@ -17,8 +17,8 @@ A character vector of the translated rownames.
 \description{
 Rownames or names of the features used differ between the different contexts
 a signature analysis is carried out in. The function
-\code{transform_rownames_YAPSA_to_deconstructSigs} changes from the convention
- used in the YAPSA package to the one used by the deconstructSigs
+\code{transform_rownames_YAPSA_to_deconstructSigs} changes from the 
+convention used in the YAPSA package to the one used by the deconstructSigs
 pacakge.
 }
 \examples{

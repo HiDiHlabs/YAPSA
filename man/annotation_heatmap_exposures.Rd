@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_functions.R
 \name{annotation_heatmap_exposures}
 \alias{annotation_heatmap_exposures}
-\title{Heatmap to cluster the PIDs on their signature exposures (with ComplexHeatmap)}
+\title{Heatmap to cluster the PIDs on their signature exposures (ComplexHeatmap)}
 \usage{
 annotation_heatmap_exposures(in_exposures_df, in_annotation_df,
   in_annotation_col, in_signatures_ind_df, in_data_type = "norm exposures",
@@ -21,8 +21,8 @@ to which subgroup for all layers of annotation}
 
 \item{in_annotation_col}{A list indicating colour attributions for all layers of annotation}
 
-\item{in_signatures_ind_df}{A data frame containing meta information about the signatures, especially the
-asserted colour}
+\item{in_signatures_ind_df}{A data frame containing meta information about the signatures, especially
+the asserted colour}
 
 \item{in_data_type}{Title in the figure}
 
@@ -31,7 +31,7 @@ of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
 \code{binary} or \code{minkowski}}
 
 \item{in_palette}{Palette with colours or colour codes for the heatmap. Default is
-\code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white', 'yellow', 'orange', 'red'))}}
+\code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white','yellow','orange','red'))}}
 
 \item{in_cutoff}{A numeric value less than 1. Signatures from within \code{W}
 with an overall exposure less than \code{in_cutoff} will be
@@ -64,9 +64,9 @@ than one annotation row for the PIDs. This function calls:
 }
 }
 \details{
-It might be necessary to install the newest version of the development branch
- of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang Gu:
- \code{devtools::install_github("jokergoo/circlize")}
+It might be necessary to install the newest version of the development 
+ branch of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang 
+ Gu: \code{devtools::install_github("jokergoo/circlize")} and
  \code{devtools::install_github("jokergoo/ComplexHeatmap")}
 }
 \examples{

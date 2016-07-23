@@ -1,10 +1,10 @@
 Package: YAPSA
 Type: Package
-Title: Yet Another Package for somatic Signature analysis
+Title: Yet Another Package for Signature Analysis
 Version: 0.99.0
 Date: 2015-08-04
 Author: Daniel Huebschmann, Zuguang Gu, Matthias Schlesner
-Maintainer: Daniel Huebschmann <d.huebschmann@dkfz.de>
+Maintainer: Daniel Huebschmann <huebschmann.daniel@googlemail.com>
 Imports:
     limSolve,
     SomaticSignatures,
@@ -20,7 +20,7 @@ Imports:
     PMCMR,
     ComplexHeatmap (>= 1.11.5),
     KEGGREST,
-    BSgenome.Hsapiens.UCSC.hg19
+    grDevices
 Depends:
     GenomicRanges,
     ggplot2,
@@ -33,6 +33,7 @@ Description: This package provides functions and routines useful in
     mutational catalogue) are provided.
 License: GPL-3
 Suggests:
+    BSgenome.Hsapiens.UCSC.hg19,
     testthat,
     BiocStyle,
     knitr,

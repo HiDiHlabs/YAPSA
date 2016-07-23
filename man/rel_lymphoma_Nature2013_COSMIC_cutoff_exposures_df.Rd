@@ -7,6 +7,9 @@
 \usage{
 data(lymphoma_cohort_LCD_results)
 }
+\value{
+A data frame
+}
 \description{
 Data frame with normalized or relative exposures for testing the plot functions.
 Data taken from

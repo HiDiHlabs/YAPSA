@@ -21,14 +21,16 @@ Build a gene list for a given pathway name
  NULL
  \dontrun{
    species <- "hsa"
-   gene_lists_meta_df <- data.frame(name=c("BER","NHEJ","MMR"),
-                                    explanation=c("base excision repair",
-                                                  "non homologous end joining",
-                                                  "mismatch repair"))
+   gene_lists_meta_df <- data.frame(
+     name=c("BER","NHEJ","MMR"),
+     explanation=c("base excision repair",
+                   "non homologous end joining",
+                   "mismatch repair"))
    number_of_pathways <- dim(gene_lists_meta_df)[1]
    gene_lists_list <- list()
    for (i in seq_len(number_of_pathways)) {
-     temp_list <- build_gene_list_for_pathway(gene_lists_meta_df$explanation[i],species)
+     temp_list <- 
+     build_gene_list_for_pathway(gene_lists_meta_df$explanation[i],species)
      gene_lists_list <- c(gene_lists_list,list(temp_list))
    }
    gene_lists_list

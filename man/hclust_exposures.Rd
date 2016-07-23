@@ -24,16 +24,16 @@ of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
 is encoded in \code{in_subgroups_df}}
 
 \item{in_palette}{Palette with colours or colour codes for the labels (the text) of the leaves
-in the dendrogram. Typically one colour per subgroup. If none is specified, a
-rainbow palette of the length of the number of subgroups will be used as
+in the dendrogram. Typically one colour per subgroup. If none is specified, 
+a rainbow palette of the length of the number of subgroups will be used as
 default.}
 
 \item{in_cutoff}{A numeric value less than 1. Signatures from within \code{W}
 with an overall exposure less than \code{in_cutoff} will be
 discarded for the clustering.}
 
-\item{in_filename}{A path to save the dendrogram. If none is specified, the figure will be plotted
-to the running environment.}
+\item{in_filename}{A path to save the dendrogram. If none is specified, the figure will be 
+plotted to the running environment.}
 
 \item{in_shift_factor}{Graphical parameter to adjust figure to be created}
 
