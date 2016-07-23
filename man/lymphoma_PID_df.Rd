@@ -12,7 +12,8 @@ A data frame
 }
 \description{
 A data frame carrying subgroup information for a subcohort of samples used in the vignette.
-Data in the vignette is downloaded from \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
+Data in the vignette is downloaded from 
+\url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
 In the file available under that link somatic point mutation calls from several samples are 
 listed in a vcf-like format. One column encodes the sample the variant was found in. In the
 vignette we want to restrict the analysis to only a fraction of these involved samples. The

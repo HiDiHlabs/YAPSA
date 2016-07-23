@@ -1323,7 +1323,8 @@ NULL
 #' Subgroup information for some samples in the vignette
 #' 
 #' A data frame carrying subgroup information for a subcohort of samples used in the vignette.
-#' Data in the vignette is downloaded from \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
+#' Data in the vignette is downloaded from 
+#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
 #' In the file available under that link somatic point mutation calls from several samples are 
 #' listed in a vcf-like format. One column encodes the sample the variant was found in. In the
 #' vignette we want to restrict the analysis to only a fraction of these involved samples. The
@@ -1342,12 +1343,14 @@ NULL
 
 #' Test data for complex functions
 #' 
-#' A data frame carrying point mutation calls. It represents a subset of the data stored in
+#' A data frame carrying point mutation calls. It represents a subset of the 
+#' data stored in
 #' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
-#' In the file available under that link somatic point mutation calls from several samples are 
-#' listed in a vcf-like format. One column encodes the sample the variant was found in. The
-#' data frame \code{lymphoma_test_df} has only the variants occuring in the sample identifiers
-#' (PIDs) 4112512, 4194218 and 4121361.
+#' In the file available under that link somatic point mutation calls from 
+#' several samples are listed in a vcf-like format. One column encodes the 
+#' sample the variant was found in. The data frame \code{lymphoma_test_df} has 
+#' only the variants occuring in the sample identifiers (PIDs) 4112512, 4194218 
+#' and 4121361.
 #' 
 #' @docType data
 #' @name lymphoma_test_df
@@ -1360,6 +1363,30 @@ NULL
 #' head(lymphoma_test_df)
 #' dim(lymphoma_test_df)
 #' table(lymphoma_test_df$PID)
+#' @return A data frame
+#' 
+NULL
+
+
+#' Example data for the vignette
+#' 
+#' A data frame carrying point mutation calls. It represents a subset of the 
+#' data stored in
+#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
+#' In the file available under that link somatic point mutation calls from 
+#' several samples are listed in a vcf-like format. One column encodes the 
+#' sample the variant was found in.
+#' 
+#' @docType data
+#' @name lymphoma_Nature2013_raw_df
+#' @usage data(lymphoma_Nature2013_raw)
+#' @references \url{http://www.ncbi.nlm.nih.gov/pubmed/23945592}
+#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
+#' 
+#' @examples
+#' data(lymphoma_Nature2013_raw)
+#' head(lymphoma_Nature2013_raw_df)
+#' dim(lymphoma_Nature2013_raw_df)
 #' @return A data frame
 #' 
 NULL

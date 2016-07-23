@@ -11,12 +11,14 @@ data(lymphoma_test)
 A data frame
 }
 \description{
-A data frame carrying point mutation calls. It represents a subset of the data stored in
+A data frame carrying point mutation calls. It represents a subset of the 
+data stored in
 \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
-In the file available under that link somatic point mutation calls from several samples are 
-listed in a vcf-like format. One column encodes the sample the variant was found in. The
-data frame \code{lymphoma_test_df} has only the variants occuring in the sample identifiers
-(PIDs) 4112512, 4194218 and 4121361.
+In the file available under that link somatic point mutation calls from 
+several samples are listed in a vcf-like format. One column encodes the 
+sample the variant was found in. The data frame \code{lymphoma_test_df} has 
+only the variants occuring in the sample identifiers (PIDs) 4112512, 4194218 
+and 4121361.
 }
 \examples{
 data(lymphoma_test)

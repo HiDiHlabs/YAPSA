@@ -10,17 +10,65 @@ library(BiocStyle)
 
 # Introduction {#introduction}
 
-The concept of mutational signatures was introduced in a series of papers by Ludmil Alexandrov et al. [@Alex2013] and [@Alex_CellRep2013]. A computational framework was published [@Alex_package2012] with the purpose to detect a limited number of mutational processes which then describe the whole set of SNVs (single nucleotide variants) in a cohort of cancer samples. The general approach [@Alex2013] is as follows:
+The concept of mutational signatures was introduced in a series of papers by 
+Ludmil Alexandrov et al. [@Alex2013] and [@Alex_CellRep2013]. A computational 
+framework was published [@Alex_package2012] with the purpose to detect a 
+limited number of mutational processes which then describe the whole set of 
+SNVs (single nucleotide variants) in a cohort of cancer samples. The general 
+approach [@Alex2013] is as follows:
 
-1. The SNVs are categorized by their nucleotide exchange. In total there are $4 \times 3 = 12$ different nucleotide exchanges, but if summing over reverse complements only $12 / 2 = 6$ different categories are left. For every SNV detected, the motif context around the position of the SNV is extracted. This may be a trinucleotide context if taking one base upstream and one base downstream of the position of the SNV, but larger motifs may be taken as well (e.g. pentamers). Taking into account the motif context increases combinatorial complexity: in the case of the trinucleotide context, there are $4 \times 6 \times 4 = 96$ different variant categories. These categories are called **features** in the following text. The number of features will be called $n$.
-2. A cohort consists of different samples with the number of samples denoted by $m$. For each sample we can count the occurences of each feature, yielding an $n$-dimensional vector ($n$ being the number of features) per sample. For a cohort, we thus get an $n \times m$ -dimensional matrix, called the **mutational catalogue** $V$. It can be understood as a summary indicating which sample has how many variants of which category, but omitting the information of the genomic coordinates of the variants.
-3. The mutational catalogue $V$ is quite big and still carries a lot of complexity. For many analyses a  reduction of complexity is desirable. One way to achieve such a complexity reduction is a matrix decomposition: we would like to find two smaller matrices $W$ and $H$ which if multiplied would span a high fraction of the complexity of the big matrix $V$ (the mutational catalogue). Remember that $V$ is an $n \times m$ -dimensional matrix, $n$ being the number of features and $m$ being the number of samples. $W$ in this setting is an $n \times l$ -dimensional matrix and $H$ is an $l \times m$ -dimensional matrix. According to the nomeclature defined in [@Alex2013], the columns of $W$ are called the **mutational signatures** and the columns of $H$ are called **exposures**. $l$ denotes the number of mutational signatures. Hence the signatures are $n$-dimensional vectors (with $n$ being the number of features), while the exposures are $l$-dimensional vectors ($l$ being the number of signatures). Note that as we are dealing with count data, we would like to have only positive entries in $W$ and $H$. A mathematical method which is able to do such a decomposition is the **NMF** (**nonnegative matrix factorization**). It basically solves the problem as illustrated in the following figure:
+1. The SNVs are categorized by their nucleotide exchange. In total there are 
+$4 \times 3 = 12$ different nucleotide exchanges, but if summing over reverse 
+complements only $12 / 2 = 6$ different categories are left. For every SNV 
+detected, the motif context around the position of the SNV is extracted. This 
+may be a trinucleotide context if taking one base upstream and one base 
+downstream of the position of the SNV, but larger motifs may be taken as well 
+(e.g. pentamers). Taking into account the motif context increases combinatorial 
+complexity: in the case of the trinucleotide context, there are 
+$4 \times 6 \times 4 = 96$ different variant categories. These categories are 
+called **features** in the following text. The number of features will be 
+called $n$.
+2. A cohort consists of different samples with the number of samples denoted by 
+$m$. For each sample we can count the occurences of each feature, yielding an 
+$n$-dimensional vector ($n$ being the number of features) per sample. For a 
+cohort, we thus get an $n \times m$ -dimensional matrix, called the 
+**mutational catalogue** $V$. It can be understood as a summary indicating 
+which sample has how many variants of which category, but omitting the 
+information of the genomic coordinates of the variants.
+3. The mutational catalogue $V$ is quite big and still carries a lot of 
+complexity. For many analyses a  reduction of complexity is desirable. One way 
+to achieve such a complexity reduction is a matrix decomposition: we would like 
+to find two smaller matrices $W$ and $H$ which if multiplied would span a high 
+fraction of the complexity of the big matrix $V$ (the mutational catalogue). 
+Remember that $V$ is an $n \times m$ -dimensional matrix, $n$ being the number 
+of features and $m$ being the number of samples. $W$ in this setting is an 
+$n \times l$ -dimensional matrix and $H$ is an $l \times m$ -dimensional 
+matrix. According to the nomeclature defined in [@Alex2013], the columns of 
+$W$ are called the **mutational signatures** and the columns of $H$ are called 
+**exposures**. $l$ denotes the number of mutational signatures. Hence the 
+signatures are $n$-dimensional vectors (with $n$ being the number of features), 
+while the exposures are $l$-dimensional vectors ($l$ being the number of 
+signatures). Note that as we are dealing with count data, we would like to have 
+only positive entries in $W$ and $H$. A mathematical method which is able to do 
+such a decomposition is the **NMF** (**nonnegative matrix factorization**). It 
+basically solves the problem as illustrated in the following figure:
 
 ![NMF, Image taken from <https://en.wikipedia.org/wiki/Non-negative_matrix_factorization>](https://upload.wikimedia.org/wikipedia/commons/f/f9/NMF.png)
 
-Of course the whole concept only leads to a reduction in complexity if $l < n$, i.e. if the number of signatures is smaller than the number of features, as indicated in the above figure. Note that the NMF itself solves the above problem for a given number of signatures $l$. The framework of Ludmil Alexandrov et al. [@Alex2013] performs not only the NMF decomposition itself, but also identifies the appropriate number of signatures by an iterative procedure.
+Of course the whole concept only leads to a reduction in complexity if $l < n$, 
+i.e. if the number of signatures is smaller than the number of features, as 
+indicated in the above figure. Note that the NMF itself solves the above 
+problem for a given number of signatures $l$. The framework of Ludmil 
+Alexandrov et al. [@Alex2013] performs not only the NMF decomposition itself, 
+but also identifies the appropriate number of signatures by an iterative 
+procedure.
 
-Another package to perform analyses of mutational signatures is available [@Gehring_article2015] which also allows the matrix decomposition to be performed by PCA (principal component analysis). Both methods have in common that they can be used for **discovery**, i.e. for the **extraction of new signatures**. However, they only work well if the analyzed data set has a minimum size, i.e. a minimum number of samples and minimum numbers of counts per feature per sample.
+Another package to perform analyses of mutational signatures is available 
+[@Gehring_article2015] which also allows the matrix decomposition to be 
+performed by PCA (principal component analysis). Both methods have in common 
+that they can be used for **discovery**, i.e. for the **extraction of new 
+signatures**. However, they only work well if the analyzed 
+data set has a minimum size, i.e. a minimum number of samples and minimum numbers of counts per feature per sample.
 
   
 # The YAPSA package {#YAPSA_package}
@@ -201,7 +249,7 @@ PID_df <- subset(lymphoma_Nature2013_df,PID==choice_PID)
 trellis_rainfall_plot(PID_df,in_point_size=unit(0.5,"mm"))
 ```
 
-![Example rainfall plot in a trellis structure.](YAPSA_files/figure-html/make_rainfall_plot-1.png) 
+![Example rainfall plot in a trellis structure.](YAPSA_files/figure-html/make_rainfall_plot-1.png)
 
 This shows a rainfall plot typical for a lymphoma sample with clusters of increased mutation density e.g. at the immunoglobulin loci.
 \newpage
@@ -494,7 +542,7 @@ abs_plot <- plot_exposures(lymphoma_Nature2013_COSMIC_exposures_df,
 abs_plot
 ```
 
-![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_abs_exposures_no_cutoff-1.png) 
+![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_abs_exposures_no_cutoff-1.png)
 
 Second as relative exposures:
 
@@ -507,7 +555,7 @@ rel_plot <- plot_relative_exposures(lymphoma_Nature2013_COSMIC_exposures_df,
 rel_plot
 ```
 
-![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_rel_exposures_no_cutoff-1.png) 
+![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_rel_exposures_no_cutoff-1.png)
 
 We can see that all signatures are present in the exposures, even though some have a very small contribution.
 \newpage
@@ -568,7 +616,7 @@ abs_plot <- plot_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
 abs_plot
 ```
 
-![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_abs_exposures_cutoff-1.png) 
+![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_abs_exposures_cutoff-1.png)
 
 And relative exposures:
 
@@ -581,7 +629,7 @@ rel_plot <- plot_relative_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_
 rel_plot
 ```
 
-![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_rel_exposures_cutoff-1.png) 
+![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 5% for the LCD (Linear Combination Decomposition).](YAPSA_files/figure-html/plot_rel_exposures_cutoff-1.png)
 \newpage
 
 
@@ -603,7 +651,7 @@ complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                           in_subgroup_column="subgroup")
 ```
 
-![Clustering of Samples and Signatures based on the relative exposures of the COSMIC signatures in the lymphoma mutational catalogues.](YAPSA_files/figure-html/apply_heatmap_exposures-1.png) 
+![Clustering of Samples and Signatures based on the relative exposures of the COSMIC signatures in the lymphoma mutational catalogues.](YAPSA_files/figure-html/apply_heatmap_exposures-1.png)
 
 If you are interested only in the clustering and not in the heatmap information, you could also use `hclust_exposures`:
 
@@ -632,7 +680,7 @@ complex_heatmap_exposures(rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                           in_subgroup_column="cluster")
 ```
 
-![PIDs labelled by the clusters extracted from the signature analysis.](YAPSA_files/figure-html/cluster_PIDs_sig_info-1.png) 
+![PIDs labelled by the clusters extracted from the signature analysis.](YAPSA_files/figure-html/cluster_PIDs_sig_info-1.png)
 \newpage
 
 
@@ -682,7 +730,7 @@ mut_density_list <- run_SMC(lymphoma_Nature2013_df,
                             in_strata_order_ind=strata_order_ind)
 ```
 
-![SMC (Stratification of the Mutational Catalogue) based on mutation density.](YAPSA_files/figure-html/SMC_mut_density-1.png) 
+![SMC (Stratification of the Mutational Catalogue) based on mutation density.](YAPSA_files/figure-html/SMC_mut_density-1.png)
 
 This produces a multi-panel figure with 4 rows of plots. The first row visualizes the signature distribution over the whole cohort without stratification, followed by one row of plots per stratum. Hence in our example we have four rows of graphs with three (exclusive) strata as input. Each row consists of three plots. The left plots show absolute exposures in the respective stratum as stacked barplots on a per sample basis. The middle plots show relative exposures in the respective stratum on a per sample basis as stacked barplots. The right plots shows cohort-wide averages of the relative exposures in the respective stratum. The error bars indicate the standard error of the mean (SEM).
 
