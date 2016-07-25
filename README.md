@@ -225,8 +225,7 @@ Now we can start using main functions of the YAPSA package: `LCD` and
 
 ### Building a mutational catalogue
 
-This section uses functions which are to a large extent wrappers for functions 
-in the package `SomaticSignatures` by Julian Gehring.
+Prepare.
 
 
 ```r
@@ -234,26 +233,18 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 lymphoma_Nature2013_df <- translate_to_hg19(lymphoma_Nature2013_df,"CHROM")
 lymphoma_Nature2013_df$change <- 
   attribute_nucleotide_exchanges(lymphoma_Nature2013_df)
-```
-
-```
-## attribute_nucleotide_exchanges::in_REF.field found.  Retrieving REF information.
-## attribute_nucleotide_exchanges::in_ALT.field found.  Retrieving ALT information.
-```
-
-```r
 lymphoma_Nature2013_df <- 
   lymphoma_Nature2013_df[order(lymphoma_Nature2013_df$PID,
                                lymphoma_Nature2013_df$CHROM,
                                lymphoma_Nature2013_df$POS),]
-lymphoma_Nature2013_df <- annotate_intermut_dist_cohort(lymphoma_Nature2013_df,
-                                                        in_PID.field="PID")
 ```
+
+This section uses functions which are to a large extent wrappers for functions 
+in the package `SomaticSignatures` by Julian Gehring.
 
 
 ```r
 word_length <- 3
-
 lymphomaNature2013_mutCat_list <- 
   create_mutation_catalogue_from_df(
     lymphoma_Nature2013_df,
@@ -269,37 +260,15 @@ several entries. We will use the one called `matrix`.
 
 
 ```r
-names(lymphomaNature2013_mutCat_list)
-```
-
-```
-## [1] "matrix" "frame"
-```
-
-```r
 lymphomaNature2013_mutCat_df <- as.data.frame(
   lymphomaNature2013_mutCat_list$matrix)
-kable(lymphomaNature2013_mutCat_df[c(1:9),c(5:10)])
 ```
-
-           4116738   4119027   4121361   4125240   4133511   4135350
---------  --------  --------  --------  --------  --------  --------
-C>A ACA        127        31        72        34        49        75
-C>A ACC        104        36        39        19        36        80
-C>A ACG         13         2         2         1         6         8
-C>A ACT        102        33        48        22        47        56
-C>A CCA        139        43        47        29        51        70
-C>A CCC         66        34        35         7        25        42
-C>A CCG          9         7         6         3         7        11
-C>A CCT        167        47        50        32        58        84
-C>A GCA         90        47        66        29        45        66
 
 ### LCD analysis with signature-specific cutoffs
 
 When using `LCD_complex_cutoff`, we have to supply a vector of cutoffs with as 
-many entries as there are signatures. In the analysis carried out above, these 
-were all equal, but this is not a necessary condition. Indeed it may make sense 
-to provide different cutoffs for different signatures.
+many entries as there are signatures. It may make sense to provide different 
+cutoffs for different signatures.
 
 
 ```r
@@ -316,7 +285,7 @@ specific_cutoff_vector
 
 In this example, the cutoff for signatures AC1 and AC5 is thus set to 0, whereas 
 the cutoffs for all other signatures remains at 0.06. Running the function
-`LCD_complex_cutoff` is completely analogous:
+`LCD_complex_cutoff`:
 
 
 ```r
@@ -362,8 +331,8 @@ choice of cutoffs, the extracted signatures may vary considerably.
 To identify groups of samples which were exposed to similar mutational 
 processes, the exposure vectors of the samples can be compared. The YAPSA 
 package provides a custom function for this task: `complex_heatmap_exposures`, 
-which uses the package *[ComplexHeatmap](http://bioconductor.org/packages/ComplexHeatmap)* by Zuguang Gu 
-[@ComplexHeatmap2015]. It produces output as follows:
+which uses the package *[ComplexHeatmap](http://bioconductor.org/packages/ComplexHeatmap)* by Zuguang Gu. It produces 
+output as follows:
 
 
 ```r
@@ -416,193 +385,6 @@ complex_heatmap_exposures(CosmicValid_cutoffGen_LCDlist$norm_exposures,
 
 ## Performing a stratification based on mutation density
 
-We will now use the intermutational distances computed above. We set cutoffs 
-for the intermutational distance at 1000 and 100000 bp, leading to three 
-strata. We annotate to every variant in which stratum it falls.
-
-
-```r
-lymphoma_Nature2013_df$density_cat <- cut(lymphoma_Nature2013_df$dist,
-                                          c(0,1001,100001,Inf),
-                                          right=FALSE,
-                                          labels=c("high","intermediate","background"))
-```
-
-The following table shows the distribution of variants over strata:
-
-
-```r
-temp_df <- data.frame(table(lymphoma_Nature2013_df$density_cat))
-names(temp_df) <- c("Stratum","Cohort-wide counts")
-kable(temp_df, caption=paste0("Strata for the SMC of mutation density"))
-```
-
-
-
-Table: Strata for the SMC of mutation density
-
-Stratum         Cohort-wide counts
--------------  -------------------
-high                          6818
-intermediate                 62131
-background                   50675
-
-We now have everything at hand to carry out a stratified signature analysis:
-
-
-```r
-strata_order_ind <- c(1,3,2)
-mut_density_list <- run_SMC(lymphoma_Nature2013_df,
-                            CosmicValid_cutoffGen_LCDlist$signatures,
-                            CosmicValid_cutoffGen_LCDlist$out_sig_ind_df,
-                            COSMIC_subgroups_df,
-                            column_name="density_cat",
-                            refGenome=BSgenome.Hsapiens.UCSC.hg19,
-                            cohort_method_flag="norm_PIDs",
-                            in_strata_order_ind=strata_order_ind)
-```
-
-![SMC (Stratification of the Mutational Catalogue) based on mutation density.](README_files/figure-html/SMC_mut_density-1.png)
-
-This produces a multi-panel figure with 
-4 rows of plots. The 
-first row visualizes the signature distribution over the whole cohort without 
-stratification, followed by one row of plots per stratum. Hence in our example 
-we have four rows of graphs with three (exclusive) strata as input. Each row 
-consists of three plots. The left plots show absolute exposures in the 
-respective stratum as stacked barplots on a per sample basis. The middle plots 
-show relative exposures in the respective stratum on a per sample basis as 
-stacked barplots. The right plots shows cohort-wide averages of the relative 
-exposures in the respective stratum. The error bars indicate the standard error 
-of the mean (SEM).
-
-To test for statistical significance of potential differences in the signature 
-exposures (i.e. signature enrichment and depletion patterns) between the 
-different strata, we can use the Kruskal-Wallis test, as the data is grouped 
-into (potentially more than two) categories and might not follow a normal 
-distribution. As we are testing the different signatures on the same 
-stratification, we have to correct for multiple testing. In order to control 
-the false discovery rate (FDR), the Benjamini-Hochberg correction is 
-appropriate.
-
-
-```r
-stat_mut_density_list <- stat_test_SMC(mut_density_list,in_flag="norm")
-kable(stat_mut_density_list$kruskal_df,
-      caption=paste0("Results of Kruskal tests for cohort-wide exposures over",
-                     " strata per signature without and with correction for ",
-                     "multiple testing."))
-```
-
-
-
-Table: Results of Kruskal tests for cohort-wide exposures over strata per signature without and with correction for multiple testing.
-
-        Kruskal_statistic   df   Kruskal_p_val   Kruskal_p_val_BH
------  ------------------  ---  --------------  -----------------
-AC1            49.9620038    2       0.0000000          0.0000000
-AC3             0.6985189    2       0.7052101          0.7052101
-AC5            10.2070496    2       0.0060753          0.0091129
-AC8            19.4325695    2       0.0000603          0.0001809
-AC9             5.8243570    2       0.0543572          0.0652286
-AC17           10.4314799    2       0.0054304          0.0091129
-
-In the following paragraph we perform post-hoc tests for those signatures where 
-the Kruskal-Wallis test, as evaluated above, has given a significant result.
-\newpage
-
-
-```r
-significance_level <- 0.05
-for(i in seq_len(dim(stat_mut_density_list$kruskal_df)[1])){
-  if(stat_mut_density_list$kruskal_df$Kruskal_p_val_BH[i]<significance_level){
-    print(paste0("Signature: ",rownames(stat_mut_density_list$kruskal_df)[i]))
-    print(stat_mut_density_list$kruskal_posthoc_list[[i]])
-  }
-}
-```
-
-```
-## [1] "Signature: AC1"
-## 
-## 	Pairwise comparisons using Tukey and Kramer (Nemenyi) test	
-##                    with Tukey-Dist approximation for independent samples 
-## 
-## data:  sig_exposures_vector and sig_strata_vector 
-## 
-##              background high   
-## high         2.3e-11    -      
-## intermediate 0.028      5.3e-05
-## 
-## P value adjustment method: none 
-## [1] "Signature: AC5"
-## 
-## 	Pairwise comparisons using Tukey and Kramer (Nemenyi) test	
-##                    with Tukey-Dist approximation for independent samples 
-## 
-## data:  sig_exposures_vector and sig_strata_vector 
-## 
-##              background high  
-## high         0.1706     -     
-## intermediate 0.3466     0.0041
-## 
-## P value adjustment method: none 
-## [1] "Signature: AC8"
-## 
-## 	Pairwise comparisons using Tukey and Kramer (Nemenyi) test	
-##                    with Tukey-Dist approximation for independent samples 
-## 
-## data:  sig_exposures_vector and sig_strata_vector 
-## 
-##              background high   
-## high         0.0051     -      
-## intermediate 0.5240     7.7e-05
-## 
-## P value adjustment method: none 
-## [1] "Signature: AC17"
-## 
-## 	Pairwise comparisons using Tukey and Kramer (Nemenyi) test	
-##                    with Tukey-Dist approximation for independent samples 
-## 
-## data:  sig_exposures_vector and sig_strata_vector 
-## 
-##              background high  
-## high         0.0078     -     
-## intermediate 0.3201     0.2674
-## 
-## P value adjustment method: none
-```
-
-
-From this analysis, we can see that a distinct signature enrichment and 
-depletion pattern emerges:
-
-1. Stratum of high mutation density: Enrichment of signatures AC5 (significant) 
-and AC9, depletion of signatures AC1 (significant), AC2, AC8 (significant) and 
-AC17
-2. Background: signature distribution very similar to the one of the complete 
-mutational catalogue (first row)
-3. Stratum of intermediate mutation density: intermediate signature enrichment 
-and depletion pattern between the strata of high mutation density and 
-background. 
-
-
-# Features of the package not covered in this vignette
-
-* Normalization of a mutational catalogue if the sequencing was not performed 
-on the whole genome level, but instead a target capture approach like Whole 
-Exome Sequencing (WES) or panel sequencing has been used. If the target capture 
-regions are supplied as a .bed file, the trinucleotide content (or more general 
-the motif content) of the target capture regions is extracted and the 
-mutational catalogue normalized to this different background motif distribution 
-to make the signature analysis comparable. For this purpose, a perl script 
-called `kmer_frenquencies.pl` and a wrapper function `run_kmer_frequency_pl` in 
-R are available.
-* An external perl script `annotate_vcf` and a corresponding wrapper function 
-in R are available to annotate whatever feature is available to the vcf-like 
-file from which the mutational catalogue is then created. This additionally 
-annotated information may then be used for stratification.
-* Automatic report generation for either whole cohorts or individual samples.
-
-
-# References
+This type of analysis is performed using the function `run_SMC` where SMC stands 
+for __stratification of the mutational catalogue__. For details on this 
+function please consult the vignette.
