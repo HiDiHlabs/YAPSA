@@ -3,78 +3,73 @@ Daniel Huebschmann
 26/08/2015  
 
 
-# Introduction {#introduction}
+# Citation
+
+The package is currently being submitted to 
+[Bioconductor](https://www.bioconductor.org/). Please use it once it is 
+accepted there and a suitable citation is provided.
+
+
+# General design
+
+## Introduction
 
 The concept of mutational signatures was introduced in a series of papers by 
-Ludmil Alexandrov et al. [@Alex2013] and [@Alex_CellRep2013]. A computational 
-framework was published [@Alex_package2012] with the purpose to detect a 
-limited number of mutational processes which then describe the whole set of 
-SNVs (single nucleotide variants) in a cohort of cancer samples. The general 
-approach [@Alex2013] is as follows:
+Ludmil Alexandrov, Serena Nik-Zainal, Michael Stratton and others (for precise 
+citations please refer to the vignette of the package). The general 
+approach is as follows:
 
 1. The SNVs are categorized by their nucleotide exchange. In total there are 
-$4 \times 3 = 12$ different nucleotide exchanges, but if summing over reverse 
-complements only $12 / 2 = 6$ different categories are left. For every SNV 
+`4 x 3 = 12` different nucleotide exchanges, but if summing over reverse 
+complements only `12 / 2 = 6` different categories are left. For every SNV 
 detected, the motif context around the position of the SNV is extracted. This 
 may be a trinucleotide context if taking one base upstream and one base 
 downstream of the position of the SNV, but larger motifs may be taken as well 
 (e.g. pentamers). Taking into account the motif context increases combinatorial 
 complexity: in the case of the trinucleotide context, there are 
-$4 \times 6 \times 4 = 96$ different variant categories. These categories are 
+`4 x 6 x 4 = 96` different variant categories. These categories are 
 called **features** in the following text. The number of features will be 
-called $n$.
+called `n`.
 2. A cohort consists of different samples with the number of samples denoted by 
-$m$. For each sample we can count the occurences of each feature, yielding an 
-$n$-dimensional vector ($n$ being the number of features) per sample. For a 
-cohort, we thus get an $n \times m$ -dimensional matrix, called the 
-**mutational catalogue** $V$. It can be understood as a summary indicating 
+`m`. For each sample we can count the occurences of each feature, yielding an 
+`n`-dimensional vector (`n` being the number of features) per sample. For a 
+cohort, we thus get an `n x m` -dimensional matrix, called the 
+**mutational catalogue** `V`. It can be understood as a summary indicating 
 which sample has how many variants of which category, but omitting the 
 information of the genomic coordinates of the variants.
-3. The mutational catalogue $V$ is quite big and still carries a lot of 
+3. The mutational catalogue `V` is quite big and still carries a lot of 
 complexity. For many analyses a  reduction of complexity is desirable. One way 
 to achieve such a complexity reduction is a matrix decomposition: we would like 
-to find two smaller matrices $W$ and $H$ which if multiplied would span a high 
-fraction of the complexity of the big matrix $V$ (the mutational catalogue). 
-Remember that $V$ is an $n \times m$ -dimensional matrix, $n$ being the number 
-of features and $m$ being the number of samples. $W$ in this setting is an 
-$n \times l$ -dimensional matrix and $H$ is an $l \times m$ -dimensional 
-matrix. According to the nomeclature defined in [@Alex2013], the columns of 
-$W$ are called the **mutational signatures** and the columns of $H$ are called 
-**exposures**. $l$ denotes the number of mutational signatures. Hence the 
-signatures are $n$-dimensional vectors (with $n$ being the number of features), 
-while the exposures are $l$-dimensional vectors ($l$ being the number of 
+to find two smaller matrices `W` and `H` which if multiplied would span a high 
+fraction of the complexity of the big matrix `V` (the mutational catalogue). 
+Remember that `V` is an `n x m` -dimensional matrix, `n` being the number 
+of features and `m` being the number of samples. `W` in this setting is an 
+`n x l` -dimensional matrix and `H` is an `l x m` -dimensional 
+matrix. The columns of 
+`W` are called the **mutational signatures** and the columns of `H` are called 
+**exposures**. `l` denotes the number of mutational signatures. Hence the 
+signatures are `n`-dimensional vectors (with `n` being the number of features), 
+while the exposures are `l`-dimensional vectors (`l` being the number of 
 signatures). Note that as we are dealing with count data, we would like to have 
-only positive entries in $W$ and $H$. A mathematical method which is able to do 
+only positive entries in `W` and `H`. A mathematical method which is able to do 
 such a decomposition is the **NMF** (**nonnegative matrix factorization**). It 
 basically solves the problem as illustrated in the following figure:
 
 ![NMF, Image taken from <https://en.wikipedia.org/wiki/Non-negative_matrix_factorization>](https://upload.wikimedia.org/wikipedia/commons/f/f9/NMF.png)
 
-Of course the whole concept only leads to a reduction in complexity if $l < n$, 
+Of course the whole concept only leads to a reduction in complexity if `l < n`, 
 i.e. if the number of signatures is smaller than the number of features, as 
 indicated in the above figure. Note that the NMF itself solves the above 
-problem for a given number of signatures $l$. The framework of Ludmil 
-Alexandrov et al. [@Alex2013] performs not only the NMF decomposition itself, 
-but also identifies the appropriate number of signatures by an iterative 
-procedure.
+problem for a given number of signatures `l`. Addinional criteria exist to 
+evaluate the true number of signatures.
 
-Another package to perform analyses of mutational signatures is available 
-[@Gehring_article2015] which also allows the matrix decomposition to be 
-performed by PCA (principal component analysis). Both methods have in common 
-that they can be used for **discovery**, i.e. for the **extraction of new 
-signatures**. However, they only work well if the analyzed 
-data set has a minimum size, i.e. a minimum number of samples and minimum 
-numbers of counts per feature per sample.
+## The YAPSA package
 
-  
-# The YAPSA package {#YAPSA_package}
-
-In a context where mutational signatures $W$ are already known (because they 
-were decribed and published as in [@Alex2013] or they are available in a 
+In a context where mutational signatures `W` are already known (because they 
+were decribed and published or they are available in a 
 database as under <http://cancer.sanger.ac.uk/cosmic/signatures>), we might 
-want to just find the exposures $H$ for these known signatures in the 
-mutational catalogue $V$ of a given cohort. Mathematically, this is a different 
-and potentially simpler task. 
+want to just find the exposures `H` for these known signatures in the 
+mutational catalogue `V` of a given cohort. 
 
 The **YAPSA**-package (Yet Another Package for Signature Analysis) presented 
 here provides the function `LCD` (**l**inear **c**ombination **d**ecomposition) 
@@ -84,117 +79,46 @@ sample and thus be used e.g. for signature analysis in personalized oncology.
 In contrast to NMF, `LCD` is very fast and requires very little computational 
 resources. The YAPSA package provides additional functions for signature 
 analysis, e.g. for stratifying the mutational catalogue to determine signature 
-exposures in different strata, part of which will be discussed later in this 
-vignette.
+exposures in different strata, part of which is discussed in the vignette of 
+the package.
 
 
-## Linear Combination Decomposition (LCD) {#LCD}
+# Install
 
-In the following, we will denote the columns of $V$ by $V_{(\cdot j)}$, which 
-corresponds to the mutational catalogue of sample $j$. Analogously we denote 
-the columns of $H$ by $H_{(\cdot j)}$, which is the exposure vector of sample 
-$j$. Then `LCD` is designed to solve the optimization problem:
+As long as `YAPSA` is not yet accepted on 
+[Bioconductor](https://www.bioconductor.org/) it may be downloaded and installed 
+from [github](https://github.com/):
 
-(@LCD_formula) $$
-\begin{aligned}
-\min_{H_{(\cdot j)} \in \mathbb{R}^l}||W \cdot H_{(\cdot j)} - V_{(\cdot j)}|| \quad \forall j \in \{1...m\} \\
-\textrm{under the constraint of non-negativity:} \quad H_{(ij)} >= 0 \quad \forall i \in \{1...l\} \quad \forall j \in \{1...m\}
-\end{aligned}
-$$
 
-Remember that $j$ is the index over samples, $m$ is the number of samples, 
-$i$ is the index over signatures and $l$ is the number of signatures. `LCD` 
-uses the function `lsei` from the package *[limSolve](http://cran.fhcrc.org/web/packages/limSolve/index.html)* 
-[@limsolve_package2009] and [@limsolve2009]. Note that the optimization 
-procedure is carried out for every $V_{(\cdot j)}$, i.e. for every column of 
-$V$ separately. Of course $W$ is constant, i.e. the same for every 
-$V_{(\cdot j)}$.
+```r
+library(devtools)
+install_github("huebschm/YAPSA")
+```
 
-This procedure is highly sensitive: as soon as a signature has a contribution 
-or an exposure in at least one sample of a cohort, it will be reported (within 
-the floating point precision of the operating system). This might blur the 
-picture and counteracts the initial purpose of complexity reduction. Therefore 
-there is a function `LCD_complex_cutoff`. This function takes as a second 
-argument a cutoff (a value between zero and one). In the analysis, it will keep 
-only those signatures which have a cumulative (over the cohort) normalized 
-exposure greater than this cutoff. In fact it runs the LCD-procedure twice: 
-once to find initial exposures, summing over the cohort and excluding the ones 
-with too low a contribution as described just above, and a second time doing 
-the analysis only with the signatures left over. Beside the exposures H 
-corresponding to this reduced set of signatures, the function 
-`LCD_complex_cutoff` also returns the reduced set of signatures itself.
+Of course, `devtools` has to be installed:
 
-Another R package for the supervised analysis of mutational signatures is 
-available: *[deconstructSigs](http://cran.fhcrc.org/web/packages/deconstructSigs/index.html)* [@Rosenthal_2016]. One difference 
-between `LCD_complex_cutoff` as described here in `YAPSA` and the corresponding 
-function `whichSignatures` in *[deconstructSigs](http://cran.fhcrc.org/web/packages/deconstructSigs/index.html)* is that 
-`LCD_complex_cutoff` accepts different cutoffs and signature-specific cutoffs 
-(accounting for potentially different detectability of different signatures), 
-whereas in `whichSignatures` in *[deconstructSigs](http://cran.fhcrc.org/web/packages/deconstructSigs/index.html)* a general fixed 
-cutoff is set to be 0.06.
 
-## Stratification of the Mutational Catalogue (SMC)
+```r
+install.packages("devtools")
+```
 
-For some questions it is useful to assign the SNVs detected in the samples of a 
-cohort to categories. In the following these categories have to be exclusive, 
-i.e. one SNV must be in one and only one category. The categories will be 
-called **strata** in the following and the procedure **stratification**. The 
-number of strata will be denoted by $s$. For example one could evaluate whether 
-an SNV falls into a region of high, intermediate or low mutation density by 
-applying meaningful cutoffs on intermutation distance. Following the above 
-convention, there are three strata: high, intermediate and low mutation 
-density. If we have already performed an analysis of mutational signatures for 
-the whole mutational catalogue of the cohort, we have identified a set of 
-signatures of interest and the corresponding exposures. We now could ask the 
-question if some of the signatures are enriched or depleted in one or the other 
-stratum, yielding a strata-specific signature enrichment and depletion pattern. 
-The function `SMC` (Stratification of the Mutational Catalogue) solves the 
-stratified optimization problem:
+`YAPSA` uses the newest versions of the pacakges `circlize` and `ComplexHeatmap` 
+by Zuguang Gu. These are not in the release branch of Bioconductor, therefore 
+they may need to be installed from [github](https://github.com/) as well:
 
-(@SMC_formula) $$
-\begin{aligned}
-\min_{H_{(\cdot j)}^k \in \mathbb{R}^l}||W \cdot H_{(\cdot j)}^{k} - V_{(\cdot j)}^{k}|| \quad \forall j,k \\
-\textrm{under the constraint of non-negativity:} \quad H_{(ij)}^{k} >= 0 \quad \forall i,j,k \\
-\textrm{and the additional contraint:} \quad \sum_{k=1}^{s} H^{k} = H \\
-\textrm{where H is defined by the optimization:} \quad \min_{H_{(\cdot j)} \in \mathbb{R}^l}||W \cdot H_{(\cdot j)} - V_{(\cdot j)}|| \quad \forall j \\
-\textrm{also under the constraint of non-negativity:} \quad H_{(ij)} >= 0 \quad \forall i,j \quad \textrm{and} \quad V = \sum_{k=1}^{s} V^{k}
-\end{aligned}
-$$
 
-Remember that $j$ is the index over samples, $m$ is the number of samples, $i$ 
-is the index over signatures, $l$ is the number of signatures, $k$ is the index 
-over strata and $s$ is the number of strata. Note that the last two lines of 
-equation (@SMC_formula) correspond to equation (@LCD_formula). The very last 
-part of equation (@SMC_formula) reflects the additivity of the stratified 
-mutational catalogues $V^{k}$ which is due to the fact that by definition the 
-sets of SNVs they were constructed from (i.e. the strata) are exclusive.
+```r
+install_github("jokergoo/circlize")
+install_github("jokergoo/ComplexHeatmap")
+```
 
-The SMC-procedure can also be applied when an NMF analysis has been performed 
-and the exposures $\widetilde{H}$ of this NMF analysis should be used as input 
-and constraint for the SMC. It then solves the task:
+If you ran into dependency conflicts before, try rerunning 
+`install_github("huebschm/YAPSA")` now.
 
-(@SMC_NMF_input_formula) $$
-\begin{aligned}
-\min_{H_{(\cdot j)}^k \in \mathbb{R}^l}||W \cdot H_{(\cdot j)}^{k} - V_{(\cdot j)}^{k}|| \quad \forall j,k \\
-\textrm{under the constraint of non-negativity:} \quad H_{(ij)}^{k} >= 0 \quad \forall i,j,k \\
-\textrm{and the additional contraint:} \quad \sum_{k=1}^{s} H^{k} = \widetilde{H} \\
-\end{aligned}
-$$
 
-Applying `SMC` that way, the initial LCD decomposition of the unstratified 
-mutational catalogue is omitted and it's result replaced by the exposures 
-extracted by the NMF analysis.
+# Usage
 
-  
-# Example: a cohort of B-cell lymphomas
-
-We will now apply some functions of the YAPSA package to Whole Genome 
-Sequencing datasets published in Alexandrov et al. [-@Alex2013] First we have 
-to load this data and get an overview ([first subsection](#example-data)). Then 
-we will load data on published signatures 
-([second subsection](#loading-the-signature-information)). Only in the 
-[third subsection](#performing-an-lcd-analysis) we will actually start using 
-the YAPSA functions.
+## Example: a cohort of B-cell lymphomas
 
 
 ```r
@@ -203,11 +127,6 @@ library(knitr)
 opts_chunk$set(echo=TRUE)
 opts_chunk$set(fig.show='asis')
 ```
-
-## Example data
-
-In the following, we will load and get an overview of the data used in the 
-analysis by Alexandrov et al. [@Alex2013]
 
 ### Loading example data
 
