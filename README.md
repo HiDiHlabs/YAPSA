@@ -130,28 +130,14 @@ opts_chunk$set(fig.show='asis')
 
 ### Loading example data
 
+Load data in a vcf-like format:
+
 
 ```r
 data("lymphoma_Nature2013_raw")
 ```
 
-This created a data frame with 128639 rows. It 
-is equivalent to executing the R code
-
-
-```r
-lymphoma_Nature2013_ftp_path <- paste0(
-  "ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/",
-  "somatic_mutation_data/Lymphoma B-cell/",
-  "Lymphoma B-cell_clean_somatic_mutations_",
-  "for_signature_analysis.txt")
-lymphoma_Nature2013_raw_df <- read.csv(file=lymphoma_Nature2013_ftp_path,
-                                       header=FALSE,sep="\t")
-```
-
-The format is inspired by the vcf format with one line per called variant. Note 
-that the files provided at that url have no header information, therefore we 
-have to add some. We will also slightly adapt the data structure:
+Adapt the data structure:
 
 
 ```r
@@ -160,24 +146,20 @@ names(lymphoma_Nature2013_raw_df) <- c("PID","TYPE","CHROM","START",
 lymphoma_Nature2013_df <- subset(lymphoma_Nature2013_raw_df,TYPE=="subs",
                                  select=c(CHROM,START,REF,ALT,PID))
 names(lymphoma_Nature2013_df)[2] <- "POS"
-kable(head(lymphoma_Nature2013_df))
+head(lymphoma_Nature2013_df)
 ```
 
+```
+##   CHROM       POS REF ALT      PID
+## 1     1 183502381   G   A 07-35482
+## 2    18  60985506   T   A 07-35482
+## 3    18  60985748   G   T 07-35482
+## 4    18  60985799   T   C 07-35482
+## 5     2 242077457   A   G 07-35482
+## 6     6  13470412   C   T 07-35482
+```
 
-
-CHROM          POS  REF   ALT   PID      
-------  ----------  ----  ----  ---------
-1        183502381  G     A     07-35482 
-18        60985506  T     A     07-35482 
-18        60985748  G     T     07-35482 
-18        60985799  T     C     07-35482 
-2        242077457  A     G     07-35482 
-6         13470412  C     T     07-35482 
-
-Here, we have selected only the variants characterized as `subs` (those are the 
-single nucleotide variants we are interested in for the mutational signatures 
-analysis, small indels are filtered out by this step), so we are left with 
-128212 variants or rows. Note that there are 48 different samples:
+Note that there are 48 different samples:
 
 
 ```r
@@ -227,296 +209,45 @@ unique(lymphoma_Nature2013_df$SUBGROUP)
 ## Levels: WGS_B WGS_D WGS_F WGS_I
 ```
 
-
-### Displaying example data
-
-Rainfall plots provide a quick overview of the mutational load of a sample. To 
-this end we have to compute the intermutational distances. But first we still 
-do some reformatting...
-
-
-```r
-lymphoma_Nature2013_df <- translate_to_hg19(lymphoma_Nature2013_df,"CHROM")
-lymphoma_Nature2013_df$change <- 
-  attribute_nucleotide_exchanges(lymphoma_Nature2013_df)
-lymphoma_Nature2013_df <- 
-  lymphoma_Nature2013_df[order(lymphoma_Nature2013_df$PID,
-                               lymphoma_Nature2013_df$CHROM,
-                               lymphoma_Nature2013_df$POS),]
-lymphoma_Nature2013_df <- annotate_intermut_dist_cohort(lymphoma_Nature2013_df,
-                                                        in_PID.field="PID")
-data("exchange_colour_vector")
-lymphoma_Nature2013_df$col <- exchange_colour_vector[lymphoma_Nature2013_df$change]
-```
-
-Now we can select one sample and make the rainfall plot. The plot function used 
-here relies on the package *[gtrellis](http://bioconductor.org/packages/gtrellis)* by Zuguang Gu 
-[@gtrellis2015].
-
-
-```r
-choice_PID <- "4121361"
-PID_df <- subset(lymphoma_Nature2013_df,PID==choice_PID)
-trellis_rainfall_plot(PID_df,in_point_size=unit(0.5,"mm"))
-```
-
-![Example rainfall plot in a trellis structure.](README_files/figure-html/make_rainfall_plot-1.png)
-
-This shows a rainfall plot typical for a lymphoma sample with clusters of 
-increased mutation density e.g. at the immunoglobulin loci.
-\newpage
-
-
-## Loading the signature information
-
 As stated [above](#LCD), one of the functions in the YAPSA package (`LCD`) is 
 designed to do mutational signatures analysis with known signatures. There are 
 (at least) two possible sources for signature data: i) the ones published 
-initially by Alexandrov et al. [@Alex2013], and ii) an updated and curated 
-current set of mutational signatures is maintained by Ludmil Alexandrov at <http://cancer.sanger.ac.uk/cosmic/signatures>. The following three subsections 
-describe how you can load the data from these resources. Alternatively, you can 
-bypass the three following subsections because the signature datasets are also 
-included in this package:
+initially by Alexandrov, and ii) an updated and curated 
+current set of mutational signatures is maintained by Ludmil Alexandrov at <http://cancer.sanger.ac.uk/cosmic/signatures>.
 
 
 ```r
 data(sigs)
 ```
 
-However, the curated set of signatures might change in the future, therefore it 
-is recommended to rebuild it from the above mentioned website as described in 
-the following subsections.
-
-
-### Loading the initial set of signatures
-
-We first load the (older) set of signatures as published in Alexandrov et al. 
-[@Alex2013]:
-
-
-```r
-Alex_signatures_path <- paste0("ftp://ftp.sanger.ac.uk/pub/cancer/",
-                               "AlexandrovEtAl/signatures.txt")
-AlexInitialArtif_sig_df <- read.csv(Alex_signatures_path,header=TRUE,sep="\t")
-kable(AlexInitialArtif_sig_df[c(1:9),c(1:4)])
-```
-
-
-
-Substitution.Type   Trinucleotide   Somatic.Mutation.Type    Signature.1A
-------------------  --------------  ----------------------  -------------
-C>A                 ACA             A[C>A]A                        0.0112
-C>A                 ACC             A[C>A]C                        0.0092
-C>A                 ACG             A[C>A]G                        0.0015
-C>A                 ACT             A[C>A]T                        0.0063
-C>A                 CCA             C[C>A]A                        0.0067
-C>A                 CCC             C[C>A]C                        0.0074
-C>A                 CCG             C[C>A]G                        0.0009
-C>A                 CCT             C[C>A]T                        0.0073
-C>A                 GCA             G[C>A]A                        0.0083
-
-We will now reformat the data frame:
-
-
-```r
-Alex_rownames <- paste(AlexInitialArtif_sig_df[,1],
-                       AlexInitialArtif_sig_df[,2],sep=" ")
-select_ind <- grep("Signature",names(AlexInitialArtif_sig_df))
-AlexInitialArtif_sig_df <- AlexInitialArtif_sig_df[,select_ind]
-number_of_Alex_sigs <- dim(AlexInitialArtif_sig_df)[2]
-names(AlexInitialArtif_sig_df) <- gsub("Signature\\.","A",
-                                       names(AlexInitialArtif_sig_df))
-rownames(AlexInitialArtif_sig_df) <- Alex_rownames
-kable(AlexInitialArtif_sig_df[c(1:9),c(1:6)],
-      caption="Exemplary data from the initial Alexandrov signatures.")
-```
-
-
-
-Table: Exemplary data from the initial Alexandrov signatures.
-
-              A1A      A1B       A2       A3       A4       A5
---------  -------  -------  -------  -------  -------  -------
-C>A ACA    0.0112   0.0104   0.0105   0.0240   0.0365   0.0149
-C>A ACC    0.0092   0.0093   0.0061   0.0197   0.0309   0.0089
-C>A ACG    0.0015   0.0016   0.0013   0.0019   0.0183   0.0022
-C>A ACT    0.0063   0.0067   0.0037   0.0172   0.0243   0.0092
-C>A CCA    0.0067   0.0090   0.0061   0.0194   0.0461   0.0097
-C>A CCC    0.0074   0.0047   0.0012   0.0161   0.0614   0.0050
-C>A CCG    0.0009   0.0013   0.0006   0.0018   0.0088   0.0028
-C>A CCT    0.0073   0.0098   0.0011   0.0157   0.0432   0.0111
-C>A GCA    0.0083   0.0169   0.0093   0.0107   0.0376   0.0119
-
-This results in a data frame for signatures, containing 27 
-signatures as column vectors. It is worth noting that in the initial 
-publication, only a subset of these 27 signatures were 
-validated by an orthogonal sequencing technology. So we can filter down:
-
-
-```r
-AlexInitialValid_sig_df <- AlexInitialArtif_sig_df[,grep("^A[0-9]+",
-                                          names(AlexInitialArtif_sig_df))]
-number_of_Alex_validated_sigs <- dim(AlexInitialValid_sig_df)[2]
-```
-
-We are left with 22 signatures.
-
-
-### Loading the updated set of mutational signatures
-
-An updated and curated set of mutational signatures is maintained by Ludmil 
-Alexandrov at <http://cancer.sanger.ac.uk/cosmic/signatures>. We will use this 
-set for the following analysis:
-
-
-```r
-Alex_COSMIC_signatures_path <- 
-  paste0("http://cancer.sanger.ac.uk/cancergenome/",
-         "assets/signatures_probabilities.txt")
-AlexCosmicValid_sig_df <- read.csv(Alex_COSMIC_signatures_path,
-                                      header=TRUE,sep="\t")
-Alex_COSMIC_rownames <- paste(AlexCosmicValid_sig_df[,1],
-                              AlexCosmicValid_sig_df[,2],sep=" ")
-COSMIC_select_ind <- grep("Signature",names(AlexCosmicValid_sig_df))
-AlexCosmicValid_sig_df <- AlexCosmicValid_sig_df[,COSMIC_select_ind]
-number_of_Alex_COSMIC_sigs <- dim(AlexCosmicValid_sig_df)[2]
-names(AlexCosmicValid_sig_df) <- gsub("Signature\\.","AC",
-                                         names(AlexCosmicValid_sig_df))
-rownames(AlexCosmicValid_sig_df) <- Alex_COSMIC_rownames
-kable(AlexCosmicValid_sig_df[c(1:9),c(1:6)],
-      caption="Exemplary data from the updated Alexandrov signatures.")
-```
-
-
-
-Table: Exemplary data from the updated Alexandrov signatures.
-
-                 AC1         AC2         AC3      AC4         AC5      AC6
---------  ----------  ----------  ----------  -------  ----------  -------
-C>A ACA    0.0110983   0.0006827   0.0221723   0.0365   0.0149415   0.0017
-C>A ACC    0.0091493   0.0006191   0.0178717   0.0309   0.0089609   0.0028
-C>A ACG    0.0014901   0.0000993   0.0021383   0.0183   0.0022078   0.0005
-C>A ACT    0.0062339   0.0003239   0.0162651   0.0243   0.0092069   0.0019
-C>G ACA    0.0018011   0.0002635   0.0240026   0.0097   0.0116710   0.0013
-C>G ACC    0.0025809   0.0002699   0.0121603   0.0054   0.0072921   0.0012
-C>G ACG    0.0005925   0.0002192   0.0052754   0.0031   0.0023038   0.0000
-C>G ACT    0.0029640   0.0006110   0.0232777   0.0054   0.0116962   0.0018
-C>T ACA    0.0295145   0.0074416   0.0178722   0.0120   0.0218392   0.0312
-
-This results in a data frame containing 30 
-signatures as column vectors. For reasons of convenience and comparability with 
-the initial signatures, we reorder the features. To this end, we adhere to the 
-convention chosen in the initial publication by Alexandrov et al. [@Alex2013] 
-for the initial signatures.
-
-
-```r
-COSMIC_order_ind <- match(Alex_rownames,Alex_COSMIC_rownames)
-AlexCosmicValid_sig_df <- AlexCosmicValid_sig_df[COSMIC_order_ind,]
-kable(AlexCosmicValid_sig_df[c(1:9),c(1:6)],
-      caption=paste0("Exemplary data from the updated Alexandrov ",
-                     "signatures, rows reordered."))
-```
-
-
-
-Table: Exemplary data from the updated Alexandrov signatures, rows reordered.
-
-                 AC1         AC2         AC3      AC4         AC5      AC6
---------  ----------  ----------  ----------  -------  ----------  -------
-C>A ACA    0.0110983   0.0006827   0.0221723   0.0365   0.0149415   0.0017
-C>A ACC    0.0091493   0.0006191   0.0178717   0.0309   0.0089609   0.0028
-C>A ACG    0.0014901   0.0000993   0.0021383   0.0183   0.0022078   0.0005
-C>A ACT    0.0062339   0.0003239   0.0162651   0.0243   0.0092069   0.0019
-C>A CCA    0.0065959   0.0006774   0.0187817   0.0461   0.0096749   0.0101
-C>A CCC    0.0073424   0.0002137   0.0157605   0.0614   0.0049523   0.0241
-C>A CCG    0.0008928   0.0000068   0.0019634   0.0088   0.0028006   0.0091
-C>A CCT    0.0071866   0.0004163   0.0147229   0.0432   0.0110135   0.0571
-C>A GCA    0.0082326   0.0003520   0.0096965   0.0376   0.0118922   0.0024
-
-Note that the order of the features, i.e. nucleotide exchanges in their 
-trinucleotide content, is changed from the fifth line on as indicated by the 
-row names.
-
-
-### Preparation for later analysis
-
-For every set of signatures, the functions in the YAPSA package require an 
-additional data frame containing meta information about the signatures. In that 
-data frame you can specify the order in which the signatures are going to be 
-plotted and the colours asserted to the different signatures. In the following 
-subsection we will set up such a data frame. However, the respective data 
-frames are also stored in the package. If loaded by `data(sigs)` the following 
-code block can be bypassed.
-
-
-```r
-signature_colour_vector <- c("darkgreen","green","pink","goldenrod",
-                             "lightblue","blue","orangered","yellow",
-                             "orange","brown","purple","red",
-                             "darkblue","magenta","maroon","yellowgreen",
-                             "violet","lightgreen","sienna4","deeppink",
-                             "darkorchid","seagreen","grey10","grey30",
-                             "grey50","grey70","grey90")
-bio_process_vector <- c("spontaneous deamination","spontaneous deamination",
-                        "APOBEC","BRCA1_2","Smoking","unknown",
-                        "defect DNA MMR","UV light exposure","unknown",
-                        "IG hypermutation","POL E mutations","temozolomide",
-                        "unknown","APOBEC","unknown","unknown","unknown",
-                        "unknown","unknown","unknown","unknown","unknown",
-                        "nonvalidated","nonvalidated","nonvalidated",
-                        "nonvalidated","nonvalidated")
-AlexInitialArtif_sigInd_df <- data.frame(sig=colnames(AlexInitialArtif_sig_df))
-AlexInitialArtif_sigInd_df$index <- seq_len(dim(AlexInitialArtif_sigInd_df)[1])
-AlexInitialArtif_sigInd_df$colour <- signature_colour_vector
-AlexInitialArtif_sigInd_df$process <- bio_process_vector
-
-COSMIC_signature_colour_vector <- c("green","pink","goldenrod",
-                                    "lightblue","blue","orangered","yellow",
-                                    "orange","brown","purple","red",
-                                    "darkblue","magenta","maroon",
-                                    "yellowgreen","violet","lightgreen",
-                                    "sienna4","deeppink","darkorchid",
-                                    "seagreen","grey","darkgrey",
-                                    "black","yellow4","coral2","chocolate2",
-                                    "navyblue","plum","springgreen")
-COSMIC_bio_process_vector <- c("spontaneous deamination","APOBEC",
-                               "defect DNA DSB repair hom. recomb.",
-                               "tobacco mutatgens, benzo(a)pyrene",
-                               "unknown",
-                               "defect DNA MMR, found in MSI tumors",
-                               "UV light exposure","unknown","POL eta and SHM",
-                               "altered POL E",
-                               "alkylating agents, temozolomide",
-                               "unknown","APOBEC","unknown",
-                               "defect DNA MMR","unknown","unknown",
-                               "unknown","unknown",
-                               "associated w. small indels at repeats",
-                               "unknown","aristocholic acid","unknown",
-                               "aflatoxin","unknown","defect DNA MMR",
-                               "unknown","unknown","tobacco chewing","unknown")
-AlexCosmicValid_sigInd_df <- data.frame(sig=colnames(AlexCosmicValid_sig_df))
-AlexCosmicValid_sigInd_df$index <- seq_len(dim(AlexCosmicValid_sigInd_df)[1])
-AlexCosmicValid_sigInd_df$colour <- COSMIC_signature_colour_vector
-AlexCosmicValid_sigInd_df$process <- COSMIC_bio_process_vector
-```
-
-
-## Performing an LCD analysis
-
-Now we can start using the functions from the YAPSA package. We will start with 
-a mutational signatures analysis using known signatures (the ones we loaded in 
-the above paragraph). For this, we will use the functions `LCD` and 
+Now we can start using main functions of the YAPSA package: `LCD` and 
 `LCD_complex_cutoff`.
 
 ### Building a mutational catalogue
 
 This section uses functions which are to a large extent wrappers for functions 
-in the package SomaticSignatures by Julian Gehring [@Gehring_article2015].
+in the package `SomaticSignatures` by Julian Gehring.
 
 
 ```r
 library(BSgenome.Hsapiens.UCSC.hg19)
+lymphoma_Nature2013_df <- translate_to_hg19(lymphoma_Nature2013_df,"CHROM")
+lymphoma_Nature2013_df$change <- 
+  attribute_nucleotide_exchanges(lymphoma_Nature2013_df)
+```
+
+```
+## attribute_nucleotide_exchanges::in_REF.field found.  Retrieving REF information.
+## attribute_nucleotide_exchanges::in_ALT.field found.  Retrieving ALT information.
+```
+
+```r
+lymphoma_Nature2013_df <- 
+  lymphoma_Nature2013_df[order(lymphoma_Nature2013_df$PID,
+                               lymphoma_Nature2013_df$CHROM,
+                               lymphoma_Nature2013_df$POS),]
+lymphoma_Nature2013_df <- annotate_intermut_dist_cohort(lymphoma_Nature2013_df,
+                                                        in_PID.field="PID")
 ```
 
 
@@ -562,208 +293,6 @@ C>A CCC         66        34        35         7        25        42
 C>A CCG          9         7         6         3         7        11
 C>A CCT        167        47        50        32        58        84
 C>A GCA         90        47        66        29        45        66
-\newpage
-
-
-### LCD analysis without any cutoff
-
-The `LCD` function performs the decomposition of a mutational catalogue into a 
-priori known signatures and the respective exposures to these signatures as 
-described in the second section of this vignette. We use the "new" signatures 
-from the COSMIC website.
-
-
-```r
-current_sig_df <- AlexCosmicValid_sig_df
-current_sigInd_df <- AlexCosmicValid_sigInd_df
-lymphomaNature2013_COSMICExposures_df <-
-  LCD(lymphomaNature2013_mutCat_df,current_sig_df)
-```
-
-Some adaptation (extracting and reformatting the information which sample 
-belongs to which subgroup):
-
-
-```r
-COSMIC_subgroups_df <- 
-  make_subgroups_df(lymphomaNature2013_COSMICExposures_df,
-                    lymphoma_Nature2013_df)
-```
-
-The resulting signature exposures can be plotted using custom plotting 
-functions. First as absolute exposures:
-
-
-```r
-exposures_barplot(
-  in_exposures_df = lymphomaNature2013_COSMICExposures_df,
-  in_subgroups_df = COSMIC_subgroups_df)
-```
-
-![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](README_files/figure-html/exposures_barplot_LCD-1.png)
-
-Here, as no colour information was given to the plotting function 
-`exposures_barplot`, the identified signatures are coloured in a rainbow 
-palette. If you want to assign colours to the signatures, this is possible via a data 
-structure of type `sigInd_df`.
-
-
-```r
-exposures_barplot(
-  in_exposures_df = lymphomaNature2013_COSMICExposures_df,
-  in_signatures_ind_df = current_sigInd_df,
-  in_subgroups_df = COSMIC_subgroups_df)
-```
-
-![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](README_files/figure-html/exposures_barplot_LCD_sig_ind-1.png)
-
-This figure has a colour coding which suits our needs, but there is one slight 
-inconsistency: colour codes are assigned to all 30 
-provided signatures, even though some of them might not have any contributions 
-in this cohort:
-
-
-```r
-rowSums(lymphomaNature2013_COSMICExposures_df)
-```
-
-```
-##         AC1         AC2         AC3         AC4         AC5         AC6 
-##  7600.27742  6876.08962  7532.33628     0.00000 11400.47725   165.58975 
-##         AC7         AC8         AC9        AC10        AC11        AC12 
-##  1360.82451 10792.42576 40780.45251   750.23999  2330.47206  1416.84002 
-##        AC13        AC14        AC15        AC16        AC17        AC18 
-##  1278.21673   972.57536  1277.88738  1616.08615 10715.25907  1345.94448 
-##        AC19        AC20        AC21        AC22        AC23        AC24 
-##  1269.86003   231.99919   909.70554    48.66650    61.22061     0.00000 
-##        AC25        AC26        AC27        AC28        AC29        AC30 
-##   639.25443   258.02212   382.52388  4768.13630    76.81403  4745.16264
-```
-
-This can be overcome by using `LCD_complex_cutoff`. Is requires an additional 
-parameter: `in_cutoff_vector`; this is already the more general framework which 
-will be explained in more detail in the following section.
-
-
-```r
-zero_cutoff_vector <- rep(0,dim(current_sig_df)[2])
-CosmicValid_cutoffZero_LCDlist <- LCD_complex_cutoff(
-  in_mutation_catalogue_df = lymphomaNature2013_mutCat_df,
-  in_signatures_df = current_sig_df,
-  in_cutoff_vector = zero_cutoff_vector,
-  in_sig_ind_df = current_sigInd_df)
-```
-
-We can re-create the subgroup information (even though this is identical to the
-already determined one):
-
-
-```r
-COSMIC_subgroups_df <- 
-  make_subgroups_df(CosmicValid_cutoffZero_LCDlist$exposures,
-                    lymphoma_Nature2013_df)
-```
-
-And if we plot this, we obtain:
-
-
-```r
-exposures_barplot(
-  in_exposures_df = CosmicValid_cutoffZero_LCDlist$exposures,
-  in_signatures_ind_df = CosmicValid_cutoffZero_LCDlist$out_sig_ind_df,
-  in_subgroups_df = COSMIC_subgroups_df)
-```
-
-![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](README_files/figure-html/exposures_barplot_abs_cutoffZero-1.png)
-
-Note that this time, only the 28 
-signatures which actually have a contribution to this cohort are displayed in 
-the legend.
-
-Of course, also relative exposures may be plotted:
-
-
-```r
-exposures_barplot(
-  in_exposures_df = CosmicValid_cutoffZero_LCDlist$norm_exposures,
-  in_signatures_ind_df = CosmicValid_cutoffZero_LCDlist$out_sig_ind_df,
-  in_subgroups_df = COSMIC_subgroups_df)
-```
-
-![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, no cutoff for the LCD (Linear Combination Decomposition).](README_files/figure-html/exposures_barplot_rel_cutoffZero-1.png)
-
-
-### LCD analysis with a generalized cutoff
-
-Now let's rerun the analysis with a cutoff to discard signatures with 
-insufficient cohort-wide contribution. 
-
-
-```r
-my_cutoff <- 0.06
-```
-
-The cutoff of 0.06 means that a signature is kept if it's exposure 
-represents at least 6% of all SNVs in the cohort. We will use 
-the function `LCD_complex_cutoff` instead of `LCD`.
-
-
-```r
-general_cutoff_vector <- rep(my_cutoff,dim(current_sig_df)[2])
-CosmicValid_cutoffGen_LCDlist <- LCD_complex_cutoff(
-  in_mutation_catalogue_df = lymphomaNature2013_mutCat_df,
-  in_signatures_df = current_sig_df,
-  in_cutoff_vector = general_cutoff_vector,
-  in_sig_ind_df = current_sigInd_df)
-```
-
-At the chosen cutoff of 0.06, we are left with 
-6 signatures. We can look 
-at these signatures in detail and their attributed biological processes:
-
-
-```r
-kable(CosmicValid_cutoffGen_LCDlist$out_sig_ind_df, row.names=FALSE,
-      caption=paste0("Signatures with cohort-wide exposures > ",my_cutoff))
-```
-
-
-
-Table: Signatures with cohort-wide exposures > 0.06
-
-sig     index  colour       process                            
------  ------  -----------  -----------------------------------
-AC1         1  green        spontaneous deamination            
-AC3         3  goldenrod    defect DNA DSB repair hom. recomb. 
-AC5         5  blue         unknown                            
-AC8         8  orange       unknown                            
-AC9         9  brown        POL eta and SHM                    
-AC17       17  lightgreen   unknown                            
-
-Again we can plot absolute exposures:
-
-
-```r
-exposures_barplot(
-  in_exposures_df = CosmicValid_cutoffGen_LCDlist$exposures,
-  in_signatures_ind_df = CosmicValid_cutoffGen_LCDlist$out_sig_ind_df,
-  in_subgroups_df = COSMIC_subgroups_df)
-```
-
-![Absoute exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 6% for the LCD (Linear Combination Decomposition).](README_files/figure-html/exposures_barplot_abs_cutoffGen-1.png)
-
-And relative exposures:
-
-
-```r
-exposures_barplot(
-  in_exposures_df = CosmicValid_cutoffGen_LCDlist$norm_exposures,
-  in_signatures_ind_df = CosmicValid_cutoffGen_LCDlist$out_sig_ind_df,
-  in_subgroups_df = COSMIC_subgroups_df)
-```
-
-![Relative exposures of the COSMIC signatures in the lymphoma mutational catalogues, cutoff of 6% for the LCD (Linear Combination Decomposition).](README_files/figure-html/exposures_barplot_rel_cutoffGen-1.png)
-
 
 ### LCD analysis with signature-specific cutoffs
 
