@@ -2,11 +2,6 @@
 Daniel Huebschmann  
 26/08/2015  
 
-  
-
-```r
-library(BiocStyle)
-```
 
 # Introduction {#introduction}
 
