@@ -468,6 +468,7 @@ we will load data on published signatures
 the YAPSA functions.
 
 ```{r}
+library(YAPSA)
 library(knitr)
 opts_chunk$set(echo=TRUE)
 opts_chunk$set(fig.show='asis')
@@ -524,7 +525,6 @@ For convenience later on, we annotate subgroup information to every variant
 also restrict the analysis to the Whole Genome Sequencing (WGS) datasets:
 
 ```{r annotate_subgroup, warning=FALSE, message=FALSE}
-library(YAPSA)
 lymphoma_Nature2013_df$SUBGROUP <- "unknown"
 DLBCL_ind <- grep("^DLBCL.*",lymphoma_Nature2013_df$PID)
 lymphoma_Nature2013_df$SUBGROUP[DLBCL_ind] <- "DLBCL_other"
@@ -1120,24 +1120,6 @@ mutational catalogue (first row)
 3. Stratum of intermediate mutation density: intermediate signature enrichment 
 and depletion pattern between the strata of high mutation density and 
 background. 
-
-
-# Features of the package not covered in this vignette
-
-* Normalization of a mutational catalogue if the sequencing was not performed 
-on the whole genome level, but instead a target capture approach like Whole 
-Exome Sequencing (WES) or panel sequencing has been used. If the target capture 
-regions are supplied as a .bed file, the trinucleotide content (or more general 
-the motif content) of the target capture regions is extracted and the 
-mutational catalogue normalized to this different background motif distribution 
-to make the signature analysis comparable. For this purpose, a perl script 
-called `kmer_frenquencies.pl` and a wrapper function `run_kmer_frequency_pl` in 
-R are available.
-* An external perl script `annotate_vcf` and a corresponding wrapper function 
-in R are available to annotate whatever feature is available to the vcf-like 
-file from which the mutational catalogue is then created. This additionally 
-annotated information may then be used for stratification.
-* Automatic report generation for either whole cohorts or individual samples.
 
 
 # References

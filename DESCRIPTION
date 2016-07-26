@@ -15,10 +15,10 @@ Imports:
     corrplot,
     dendextend,
     GetoptLong,
-    circlize (>= 0.3.8),
+    circlize,
     gtrellis,
     PMCMR,
-    ComplexHeatmap (>= 1.11.5),
+    ComplexHeatmap,
     KEGGREST,
     grDevices
 Depends:

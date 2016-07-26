@@ -1703,12 +1703,13 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,
 #'  Whether or not to show the PIDs on the x-axis
 #' @param in_annotation_legend_side
 #'  Where to put the legends of the annotation df, default is right.
-#' @param in_show_legend_bool_vector
-#'  Which legends to display
 #'
 #' @details
-#'  It might be necessary to install the newest version of the development 
-#'  branch of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang 
+#'  One additional parameter, in_show_legend_bool_vector, indicating which 
+#'  legends to display, is planned but deactivated in this version of the 
+#'  package. In order to use this features,
+#'  it will be necessary to install the newest version of 
+#'  the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang 
 #'  Gu: \code{devtools::install_github("jokergoo/circlize")} and
 #'  \code{devtools::install_github("jokergoo/ComplexHeatmap")}
 #'
@@ -1737,8 +1738,9 @@ annotation_heatmap_exposures <- function(in_exposures_df,
                                          in_column_anno_borders=FALSE,
                                          in_row_anno_borders=FALSE,
                                          in_show_PIDs=TRUE,
-                                         in_annotation_legend_side="right",
-                                         in_show_legend_bool_vector=rep(TRUE,length(in_annotation_col))){
+                                         in_annotation_legend_side="right"#,
+                                         #in_show_legend_bool_vector=rep(TRUE,length(in_annotation_col))
+                                         ){
   if(!in_row_anno_borders){
     row_anno = rowAnnotation(
       df = data.frame(signature = in_signatures_ind_df$index),
@@ -1758,18 +1760,20 @@ annotation_heatmap_exposures <- function(in_exposures_df,
   if(!in_column_anno_borders){
     column_anno = HeatmapAnnotation(
       df = in_annotation_df, 
-      col = in_annotation_col,
-      show_legend=in_show_legend_bool_vector,
-      show_annotation_name=TRUE,
-      annotation_name_offset=unit(2,"mm"))
+      col = in_annotation_col#,
+      # show_legend=in_show_legend_bool_vector,
+      # show_annotation_name=TRUE,
+      # annotation_name_offset=unit(2,"mm")
+      )
   } else {
     column_anno = HeatmapAnnotation(
       df = in_annotation_df, 
       col = in_annotation_col,
-      gp = gpar(col="black"),
-      show_legend=in_show_legend_bool_vector,
-      show_annotation_name=TRUE,
-      annotation_name_offset=unit(2,"mm"))    
+      gp = gpar(col="black")#,
+      # show_legend=in_show_legend_bool_vector,
+      # show_annotation_name=TRUE,
+      # annotation_name_offset=unit(2,"mm")
+      )    
   }
   if(in_show_PIDs){
     ht_list = row_anno + Heatmap(

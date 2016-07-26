@@ -102,9 +102,11 @@ Of course, `devtools` has to be installed:
 install.packages("devtools")
 ```
 
-`YAPSA` uses the newest versions of the pacakges `circlize` and `ComplexHeatmap` 
-by Zuguang Gu. These are not in the release branch of Bioconductor, therefore 
-they may need to be installed from [github](https://github.com/) as well:
+`YAPSA` already has preparations to use the newest versions of the pacakges 
+`circlize` and `ComplexHeatmap` by Zuguang Gu. These are currently not in the 
+release branch of Bioconductor. If you want your system to be ready for the 
+next coming update of `YAPSA` you may already now install the newest versions of 
+these packages from [github](https://github.com/) as well:
 
 
 ```r
@@ -188,7 +190,6 @@ also restrict the analysis to the Whole Genome Sequencing (WGS) datasets:
 
 
 ```r
-library(YAPSA)
 lymphoma_Nature2013_df$SUBGROUP <- "unknown"
 DLBCL_ind <- grep("^DLBCL.*",lymphoma_Nature2013_df$PID)
 lymphoma_Nature2013_df$SUBGROUP[DLBCL_ind] <- "DLBCL_other"
@@ -218,6 +219,8 @@ current set of mutational signatures is maintained by Ludmil Alexandrov at <http
 
 ```r
 data(sigs)
+current_sig_df <- AlexCosmicValid_sig_df
+current_sigInd_df <- AlexCosmicValid_sigInd_df
 ```
 
 Now we can start using main functions of the YAPSA package: `LCD` and 
@@ -272,6 +275,8 @@ cutoffs for different signatures.
 
 
 ```r
+my_cutoff <- 0.06
+general_cutoff_vector <- rep(my_cutoff,dim(current_sig_df)[2])
 specific_cutoff_vector <- general_cutoff_vector
 specific_cutoff_vector[c(1,5)] <- 0
 specific_cutoff_vector
@@ -294,6 +299,16 @@ CosmicValid_cutoffSpec_LCDlist <- LCD_complex_cutoff(
   in_signatures_df = current_sig_df,
   in_cutoff_vector = specific_cutoff_vector,
   in_sig_ind_df = current_sigInd_df)
+```
+
+Some adaptation (extracting and reformatting the information which sample 
+belongs to which subgroup):
+
+
+```r
+COSMIC_subgroups_df <- 
+  make_subgroups_df(CosmicValid_cutoffSpec_LCDlist$exposures,
+                    lymphoma_Nature2013_df)
 ```
 
 Plotting absolute exposures for visualization:
@@ -336,9 +351,9 @@ output as follows:
 
 
 ```r
-complex_heatmap_exposures(CosmicValid_cutoffGen_LCDlist$norm_exposures,
+complex_heatmap_exposures(CosmicValid_cutoffSpec_LCDlist$norm_exposures,
                           COSMIC_subgroups_df,
-                          CosmicValid_cutoffGen_LCDlist$out_sig_ind_df,
+                          CosmicValid_cutoffSpec_LCDlist$out_sig_ind_df,
                           in_data_type="norm exposures",
                           in_subgroup_colour_column="col",
                           in_method="manhattan",
@@ -353,7 +368,7 @@ information, you could also use `hclust_exposures`:
 
 ```r
 hclust_list <- 
-  hclust_exposures(CosmicValid_cutoffGen_LCDlist$norm_exposures,
+  hclust_exposures(CosmicValid_cutoffSpec_LCDlist$norm_exposures,
                    COSMIC_subgroups_df,
                    in_method="manhattan",
                    in_subgroup_column="subgroup")
@@ -370,9 +385,9 @@ COSMIC_subgroups_df$cluster <- cluster_vector
 subgroup_colour_vector <- rainbow(length(unique(COSMIC_subgroups_df$cluster)))
 COSMIC_subgroups_df$cluster_col <- 
   subgroup_colour_vector[factor(COSMIC_subgroups_df$cluster)]
-complex_heatmap_exposures(CosmicValid_cutoffGen_LCDlist$norm_exposures,
+complex_heatmap_exposures(CosmicValid_cutoffSpec_LCDlist$norm_exposures,
                           COSMIC_subgroups_df,
-                          CosmicValid_cutoffGen_LCDlist$out_sig_ind_df,
+                          CosmicValid_cutoffSpec_LCDlist$out_sig_ind_df,
                           in_data_type="norm exposures",
                           in_subgroup_colour_column="cluster_col",
                           in_method="manhattan",
