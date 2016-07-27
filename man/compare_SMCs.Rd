@@ -34,6 +34,10 @@ othogonal SMCs by cosine similarity of signature exposures. First calls
  \item \code{\link{make_comparison_matrix}}
 }
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{plot_strata}}
 

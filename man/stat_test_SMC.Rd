@@ -55,6 +55,10 @@ carried out by calling \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}.
 Additionally all data is tested for normality by Shapiro Wilk tests, so that
 the user may apply ANOVA and pairwise posthoc t-test where allowed.
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{run_SMC}}
 

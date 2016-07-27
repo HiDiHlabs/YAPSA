@@ -40,4 +40,8 @@ Function to iteratively add information to an annotation data structure as
 needed for \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and especially for 
 \code{\link{annotation_exposures_barplot}}
 }
+\examples{
+ NULL
+ 
+}
 

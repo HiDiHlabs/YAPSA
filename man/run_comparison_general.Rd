@@ -40,6 +40,10 @@ similar to \code{\link{compare_SMCs}}, but without calling
  \item \code{\link{make_comparison_matrix}}
 }
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{make_comparison_matrix}}
 

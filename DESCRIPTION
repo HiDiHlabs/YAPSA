@@ -1,7 +1,7 @@
 Package: YAPSA
 Type: Package
 Title: Yet Another Package for Signature Analysis
-Version: 0.99.1
+Version: 0.99.2
 Date: 2015-08-04
 Author: Daniel Huebschmann, Zuguang Gu, Matthias Schlesner
 Maintainer: Daniel Huebschmann <huebschmann.daniel@googlemail.com>
@@ -22,6 +22,7 @@ Imports:
     KEGGREST,
     grDevices
 Depends:
+    R (>= 3.3.1),
     GenomicRanges,
     ggplot2,
     grid
@@ -38,7 +39,7 @@ Suggests:
     BiocStyle,
     knitr,
     rmarkdown
-VignetteBuilder: rmarkdown
+VignetteBuilder: knitr
 LazyLoad: yes
 biocViews: Sequencing, DNASeq, SomaticMutation, Visualization,
     Clustering, GenomicVariation, StatisticalMethod, BiologicalQuestion

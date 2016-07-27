@@ -29,6 +29,10 @@ Plot the cohort wide signature exposures of all strata from
 different stratification axes together. Naturally called by
 \code{\link{compare_SMCs}}.
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{compare_SMCs}}
 }

@@ -475,6 +475,9 @@ SMC <- function(df_list,this_signatures_df,in_all_exposures_df,number_of_strata,
 #'    \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}).
 #' }
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{run_SMC}}
 #' @seealso \code{\link{SMC}}
 #' @seealso \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}

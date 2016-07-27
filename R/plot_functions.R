@@ -518,6 +518,9 @@ exposures_barplot <- function(in_exposures_df,in_signatures_ind_df=NULL,
 #'    of annotation
 #' }
 #'
+#' @examples
+#'  NULL
+#'  
 #' @export
 #' 
 add_annotation <- function(in_annotation_col,

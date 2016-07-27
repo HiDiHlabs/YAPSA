@@ -45,6 +45,10 @@ is called by the wrapper functions \code{\link{compare_SMCs}},
 \code{\link{run_plot_strata_general}} or 
 \code{\link{run_comparison_general}}.
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{plot_strata}}
 

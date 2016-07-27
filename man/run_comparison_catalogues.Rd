@@ -31,6 +31,10 @@ similar to \code{\link{run_comparison_general}}. First calls
  \item \code{\link{make_comparison_matrix}}
 }
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{make_comparison_matrix}}
 

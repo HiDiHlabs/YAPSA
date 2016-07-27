@@ -39,6 +39,10 @@ mutational catalogues. Output of this function is the basis for applying
 \code{\link{make_comparison_matrix}}. It is called by the wrapper function
 \code{\link{run_comparison_catalogues}}.
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{plot_strata}}
 

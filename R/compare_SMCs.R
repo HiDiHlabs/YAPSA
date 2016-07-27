@@ -36,6 +36,9 @@
 #'    and additional ones.
 #' }
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{plot_strata}}
 #' @seealso \code{\link{make_comparison_matrix}}
 #' @seealso \code{\link{compare_SMCs}}
@@ -120,6 +123,9 @@ make_strata_df <- function(in_stratification_lists_list,
 #'    and additional ones.
 #' }
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{plot_strata}}
 #' @seealso \code{\link{make_comparison_matrix}}
 #' @seealso \code{\link{run_comparison_catalogues}}
@@ -202,6 +208,9 @@ make_catalogue_strata_df <- function(in_stratification_lists_list,
 #'
 #' @return The function doesn't return any value.
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{compare_SMCs}}
 #'
 #' @import ggplot2
@@ -357,6 +366,9 @@ make_comparison_matrix <- function(in_strata_df,output_path=NULL,in_nrect=5,
 #'  
 #' @return The comparison matrix of cosine similarities.
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{plot_strata}}
 #' @seealso \code{\link{make_comparison_matrix}}
 #' 
@@ -407,6 +419,9 @@ compare_SMCs <- function(in_stratification_lists_list,
 #'  
 #' @return The function doesn't return any value.
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{plot_strata}}
 #' 
 #' @export
@@ -457,6 +472,9 @@ run_plot_strata_general <- function(in_stratification_lists_list,
 #'  
 #' @return The comparison matrix of cosine similarities.
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{make_comparison_matrix}}
 #' @seealso \code{\link{compare_SMCs}}
 #' @seealso \code{\link{run_comparison_catalogues}}
@@ -510,6 +528,9 @@ run_comparison_general <- function(in_stratification_lists_list,
 #'  
 #' @return The comparison matrix of cosine similarities.
 #' 
+#' @examples
+#'  NULL
+#'  
 #' @seealso \code{\link{make_comparison_matrix}}
 #' @seealso \code{\link{run_comparison_general}}
 #' 

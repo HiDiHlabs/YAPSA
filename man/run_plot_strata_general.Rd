@@ -36,6 +36,10 @@ First calls
  \item \code{\link{plot_strata}}
 }
 }
+\examples{
+ NULL
+ 
+}
 \seealso{
 \code{\link{plot_strata}}
 }
