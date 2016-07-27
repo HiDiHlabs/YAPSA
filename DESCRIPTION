@@ -22,7 +22,7 @@ Imports:
     KEGGREST,
     grDevices
 Depends:
-    R (>= 3.3.1),
+    R (>= 3.3.0),
     GenomicRanges,
     ggplot2,
     grid
