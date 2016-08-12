@@ -1,3 +1,7 @@
+# Copyright © 2014-2016  The YAPSA package contributors
+# This file is part of the YAPSA package. The YAPSA package is licenced under
+# GPL-3
+
 #' Linear Combination Decomposition
 #'
 #'\code{LCD} performs a mutational signatures decomposition of a given
@@ -24,7 +28,7 @@
 #'          \code{m} being the number of samples
 #' 
 #' @seealso \code{\link{LCD_cutoff}}
-#' @seealso \code{\link[limSolve]{lsei}}
+#' @seealso \code{\link[lsei]{lsei}}
 #' 
 #' @examples
 #' ## define raw data
@@ -55,7 +59,7 @@
 #' exposures_df <- YAPSA:::LCD(V_compl_df,W_df)
 #' exposures <- as.matrix(exposures_df)
 #' 
-#' @importFrom limSolve lsei
+#' @importFrom lsei lsei
 #' @export
 #' 
 # LCD <- function(in_mutation_catalogue_df,in_signatures_df){
@@ -64,11 +68,17 @@
 #   G <- diag(dim(signatures_matrix)[2])
 #   H <- rep(0,dim(signatures_matrix)[2])
 #   for (i in seq_len(ncol(in_mutation_catalogue_df))) {
-#     temp_fractions <- limSolve::lsei(A = signatures_matrix, 
-#                                      B = in_mutation_catalogue_df[,i],
-#                                      G=G, H=H, verbose=FALSE)
+# #     temp_fractions <- limSolve::lsei(A = signatures_matrix, 
+# #                                      B = in_mutation_catalogue_df[,i],
+# #                                      G=G, H=H, verbose=FALSE)
+#     temp_fractions <- lsei::lsei(a = signatures_matrix, 
+#                                      b = in_mutation_catalogue_df[,i],
+#                                      e=G, f=H)
+#     temp_exposures_vector <- round(temp_fractions,digits = 6)
+#     names(temp_exposures_vector) <- names(in_signatures_df)
 #     out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- 
-#       as.vector(temp_fractions$X)
+#       #as.vector(temp_fractions$X)
+#       as.vector(temp_exposures_vector)
 #     rm(temp_fractions)
 #   }
 #   colnames(out_exposures_df) <- colnames(in_mutation_catalogue_df)
@@ -83,10 +93,15 @@ LCD <- function(in_mutation_catalogue_df,
   G <- diag(dim(signatures_matrix)[2])
   H <- rep(0,dim(signatures_matrix)[2])
   for (i in seq_len(ncol(in_mutation_catalogue_df))) {
-    temp_fractions <- limSolve::lsei(A = signatures_matrix, 
-                                     B = in_mutation_catalogue_df[,i],
-                                     G=G, H=H, verbose=FALSE)
-    temp_exposures_vector <- as.vector(temp_fractions$X)
+    # temp_fractions <- limSolve::lsei(A = signatures_matrix,
+    #                                  B = in_mutation_catalogue_df[,i],
+    #                                  G=G, H=H, verbose=FALSE)
+    # temp_exposures_vector <- as.vector(temp_fractions$X)
+    temp_fractions <- lsei::lsei(a = signatures_matrix, 
+                                 b = in_mutation_catalogue_df[,i],
+                                 e=G, f=H)
+    temp_exposures_vector <- round(temp_fractions,digits = 6)
+    names(temp_exposures_vector) <- names(in_signatures_df)
     rel_exposures_vector <- temp_exposures_vector/sum(temp_exposures_vector)
     deselect_ind <- which(rel_exposures_vector<in_per_sample_cutoff)
     temp_exposures_vector[deselect_ind] <- 0
@@ -168,7 +183,7 @@ LCD <- function(in_mutation_catalogue_df,
 #' }
 #' 
 #' @seealso \code{\link{LCD}}
-#' @seealso \code{\link[limSolve]{lsei}}
+#' @seealso \code{\link[lsei]{lsei}}
 #' 
 #' @examples
 #' ## define raw data
@@ -184,7 +199,7 @@ LCD <- function(in_mutation_catalogue_df,
 #' exposures_small_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.05)
 #' exposures_big_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.4)
 #' 
-#' @importFrom limSolve lsei
+#' @importFrom lsei lsei
 #' @export
 #' 
 LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
@@ -350,12 +365,12 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
 #' @seealso \code{\link{LCD}}
 #' @seealso \code{\link{LCD_cutoff}}
 #' @seealso \code{\link{aggregate_exposures_by_category}}
-#' @seealso \code{\link[limSolve]{lsei}}
+#' @seealso \code{\link[lsei]{lsei}}
 #' 
 #' @examples
 #'  NULL
 #' 
-#' @importFrom limSolve lsei
+#' @importFrom lsei lsei
 #' @export
 #' 
 LCD_complex_cutoff <- function(in_mutation_catalogue_df,
@@ -655,7 +670,7 @@ norm_res=function(x,b,in_matrix){
 #' }
 #' 
 #' @seealso \code{\link{LCD}}
-#' @seealso \code{\link[limSolve]{lsei}}
+#' @seealso \code{\link[lsei]{lsei}}
 #' 
 #' @examples
 #' ## define raw data
@@ -698,7 +713,7 @@ norm_res=function(x,b,in_matrix){
 #' simple_exposures_2_df <- YAPSA:::LCD(V_2_df,W_df)
 #' simple_exposures_2 <- as.matrix(simple_exposures_2_df)
 #' 
-#' @importFrom limSolve lsei
+#' @importFrom lsei lsei
 #' @export
 #' 
 LCD_SMC <- function(in_mutation_sub_catalogue_list,
@@ -759,11 +774,17 @@ LCD_SMC <- function(in_mutation_sub_catalogue_list,
   H <- rep(0,dim(signatures_matrix)[2])
   out_exposures_df <- data.frame()
   for (i in seq_len(ncol(pasted_mutation_catalogue_df))) {
-    temp_fractions <- lsei(A = signatures_matrix, 
-                           B = pasted_mutation_catalogue_df[,i], 
-                           E=E, F=F_df[,i], G=G, H=H)
+    # temp_fractions <- limSolve::lsei(A = signatures_matrix, 
+    #                                  B = pasted_mutation_catalogue_df[,i], 
+    #                                  E=E, F=F_df[,i], G=G, H=H)
+    temp_fractions <- lsei::lsei(a = signatures_matrix, 
+                                 b = pasted_mutation_catalogue_df[,i], 
+                                 c=E, d=F_df[,i], e=G, f=H)
+    temp_exposures_vector <- round(temp_fractions,digits = 6)
+    names(temp_exposures_vector) <- names(in_signatures_df)
     out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- 
-      as.vector(temp_fractions$X)
+      #as.vector(temp_fractions$X)
+      as.vector(temp_exposures_vector)
     rm(temp_fractions)
   }
   out_list <- list()

@@ -1,3 +1,7 @@
+# Copyright © 2014-2016  The YAPSA package contributors
+# This file is part of the YAPSA package. The YAPSA package is licenced under
+# GPL-3
+
 #' Construct a VRanges Object from a data frame
 #'
 #' In this package, big data frames are generated from cohort wide vcf-like

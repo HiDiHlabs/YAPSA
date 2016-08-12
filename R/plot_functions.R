@@ -1,3 +1,7 @@
+# Copyright © 2014-2016  The YAPSA package contributors
+# This file is part of the YAPSA package. The YAPSA package is licenced under
+# GPL-3
+
 #' Plot the exposures of a cohort
 #'
 #' The exposures \code{H}, determined by NMF or by \code{\link{LCD}}, are

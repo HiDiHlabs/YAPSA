@@ -2,16 +2,15 @@
 
 ###############################################################################
 #                                                                 
-#  Copyright 2015 Matthias Schlesner and Daniel Huebschmann.
+#  Copyright 2014-2016  Matthias Schlesner and Daniel Huebschmann.
 #   
-#  This file is part of YAPS.
+#  This file is part of YAPSA.
 #
-#   YAPS is free software: you can redistribute it and/or modify
+#   YAPSA is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation, either version 3 of the License, or
-#   any later version.
+#   the Free Software Foundation, version 3 of the License.
 #
-#   YAPS is distributed in the hope that it will be useful,
+#   YAPSA is distributed in the hope that it will be useful,
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #   GNU General Public License for more details.

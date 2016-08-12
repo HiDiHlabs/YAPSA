@@ -1,12 +1,12 @@
 Package: YAPSA
 Type: Package
 Title: Yet Another Package for Signature Analysis
-Version: 0.99.4
+Version: 0.99.5
 Date: 2015-08-04
 Author: Daniel Huebschmann, Zuguang Gu, Matthias Schlesner
 Maintainer: Daniel Huebschmann <huebschmann.daniel@googlemail.com>
 Imports:
-    limSolve,
+    lsei,
     SomaticSignatures,
     VariantAnnotation,
     GenomeInfoDb,

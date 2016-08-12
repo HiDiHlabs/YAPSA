@@ -108,6 +108,6 @@ model) over the whole cohort.
 
 \code{\link{aggregate_exposures_by_category}}
 
-\code{\link[limSolve]{lsei}}
+\code{\link[lsei]{lsei}}
 }
 

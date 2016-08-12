@@ -95,6 +95,6 @@ simple_exposures_2 <- as.matrix(simple_exposures_2_df)
 \seealso{
 \code{\link{LCD}}
 
-\code{\link[limSolve]{lsei}}
+\code{\link[lsei]{lsei}}
 }
 

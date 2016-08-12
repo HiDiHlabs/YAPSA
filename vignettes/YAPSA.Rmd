@@ -226,31 +226,18 @@ references:
     DeconstructSigs: delineating mutational processes in single tumors 
     distinguishes DNA repair deficiencies and patterns of carcinoma evolution.
 - author:
-  - family: Soetaert
-    given: Karline
-  - family: Van den Meersche
-    given: Karel
-  - family: Van Oevelen
-    given: D
-  container-title: R-package version 1.5.1
-  id: limsolve_package2009
+  - family: Wang
+    given: Yong
+  - family: Lawson
+    given: Charles L.
+  - family: Hanson
+    given: Richard J
+  container-title: R-package version 1.1-1
+  id: lsei_package2015
   issued:
-    year: 2009
-  title: 'limSolve: Solving Linear Inverse Models'
-- author:
-  - family: Van den Meersche
-    given: Karel
-  - family: Soetaert
-    given: Karline
-  - family: Van Oevelen
-    given: D
-  container-title: Journal of Statistical Software, Code Snippets
-  id: limsolve2009
-  issued:
-    pages: 1-15
-    volume: 30
-    year: 2009
-  title: 'xsample(): An R Function for Sampling Linear Inverse Problems'
+    year: 2015
+  title: >
+    lsei: Solving Least Squares Problems under Equality/Inequality Constraints
 - title: 'Genome Level Trellis Layout'
   author:
   - family: Gu
@@ -375,8 +362,8 @@ $$
 
 Remember that $j$ is the index over samples, $m$ is the number of samples, 
 $i$ is the index over signatures and $l$ is the number of signatures. `LCD` 
-uses the function `lsei` from the package `r CRANpkg("limSolve")` 
-[@limsolve_package2009] and [@limsolve2009]. Note that the optimization 
+uses the function `lsei` from the package `r CRANpkg("lsei")` 
+[@lsei_package2015]. Note that the optimization 
 procedure is carried out for every $V_{(\cdot j)}$, i.e. for every column of 
 $V$ separately. Of course $W$ is constant, i.e. the same for every 
 $V_{(\cdot j)}$.
@@ -467,7 +454,7 @@ we will load data on published signatures
 [third subsection](#performing-an-lcd-analysis) we will actually start using 
 the YAPSA functions.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(YAPSA)
 library(knitr)
 opts_chunk$set(echo=TRUE)

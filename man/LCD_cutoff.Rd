@@ -93,6 +93,6 @@ exposures_big_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.4)
 \seealso{
 \code{\link{LCD}}
 
-\code{\link[limSolve]{lsei}}
+\code{\link[lsei]{lsei}}
 }
 

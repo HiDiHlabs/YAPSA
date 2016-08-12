@@ -1,3 +1,7 @@
+# Copyright © 2014-2016  The YAPSA package contributors
+# This file is part of the YAPSA package. The YAPSA package is licenced under
+# GPL-3
+
 #' Wrapper function for the Stratification of a Mutational Catalogue
 #'
 #'\code{run_SMC} takes as input a big dataframe constructed from a vcf-like 

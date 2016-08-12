@@ -66,6 +66,6 @@ exposures <- as.matrix(exposures_df)
 \seealso{
 \code{\link{LCD_cutoff}}
 
-\code{\link[limSolve]{lsei}}
+\code{\link[lsei]{lsei}}
 }
 
