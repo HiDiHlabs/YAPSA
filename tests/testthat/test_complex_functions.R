@@ -5,7 +5,7 @@ test_that("Test cosine_dist with 2-dim vectors", {
   expect_that(YAPSA:::cosineDist(a,b), equals(1))
   expect_that(YAPSA:::cosineDist(a,a), equals(0))
   expect_that(YAPSA:::cosineDist(b,b), equals(0))
-  expect_less_than(YAPSA:::cosineDist(a,d) - (1-cos(pi/4)),1e-08)
+  expect_lt(YAPSA:::cosineDist(a,d) - (1-cos(pi/4)),1e-08)
 })
 
 
@@ -31,7 +31,7 @@ test_that("Test cut_breaks_as_intervals with partially real data",{
                                        in_cutoff_ranges_list=my_cutoff_ranges_list,
                                        in_labels=c("small","intermediate","big"))
   expect_that(temp_list$cutoffs[c(1,4)],equals(my_outlier_cutoffs))
-  expect_less_than(max(abs(temp_list$cutoffs[c(2,3)]-
+  expect_lt(max(abs(temp_list$cutoffs[c(2,3)]-
                         c(min(my_cutoff_ranges_list[[1]]),max(my_cutoff_ranges_list[[2]])))),
                    my_precision)
 })

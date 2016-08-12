@@ -5,7 +5,7 @@ test_that("Test cosine_dist with 2-dim vectors", {
   expect_that(YAPSA:::cosineDist(a,b), equals(1))
   expect_that(YAPSA:::cosineDist(a,a), equals(0))
   expect_that(YAPSA:::cosineDist(b,b), equals(0))
-  expect_less_than(YAPSA:::cosineDist(a,d) - (1-cos(pi/4)),1e-08)
+  expect_lt(YAPSA:::cosineDist(a,d) - (1-cos(pi/4)),1e-08)
 })
 
 
@@ -116,7 +116,7 @@ test_that("Test sum_over_list_of_df", {
 
 test_that("Test the stderrmean function with small dummy vector",{
   A <- c(1,2,3)
-  expect_less_than(abs(stderrmean(A)-(1/(sqrt(3)))),1e-10)
+  expect_lt(abs(stderrmean(A)-(1/(sqrt(3)))),1e-10)
 })
 
 
@@ -215,7 +215,7 @@ test_that("Test annotate_intermut_dist_cohort on very simple synthetic data", {
 test_that("Test shapiro_if_possible on very simple synthetic data", {
   significance_threshold <- 0.05
   set.seed(1)
-  expect_less_than(shapiro_if_possible(runif(100,min=2,max=4)),significance_threshold)
+  expect_lt(shapiro_if_possible(runif(100,min=2,max=4)),significance_threshold)
   set.seed(1)
   expect_more_than(shapiro_if_possible(rnorm(100,mean=5,sd=3)),significance_threshold)
   expect_that(shapiro_if_possible(rep(4.3,100)),equals(0))

@@ -13,7 +13,7 @@ test_that("Test LCD (linear combination decomposition) with small hand made data
   ## apply function to be tested
   exposures_df <- YAPSA:::LCD(V_df,W_df)
   ## compare
-  expect_less_than(max(abs(exposures_df - H_df)),1e-05)
+  expect_lt(max(abs(exposures_df - H_df)),1e-05)
   
   ## 2. more complicated: raw data already contains negative elements
   ## define indices where sign is going to be swapped
@@ -50,7 +50,7 @@ test_that("Test LCD_cutoff with small hand made data frames", {
   exposures_small_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.05)
   exposures_big_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.4)
   ## compare
-  expect_less_than(max(abs(exposures_small_cutoff_list$exposures - H_df)),1e-05)
+  expect_lt(max(abs(exposures_small_cutoff_list$exposures - H_df)),1e-05)
   expect_that(dim(exposures_big_cutoff_list$exposures)[1], equals(dim(H_df)[1] - 1))
 })
 
