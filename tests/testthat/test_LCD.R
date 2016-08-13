@@ -101,8 +101,12 @@ test_that("Test LCD_SMC with small hand made data frames", {
   expect_that(exposures_strata_list$sub_exposures_list[[1]] + exposures_strata_list$sub_exposures_list[[2]],
               equals(simple_exposures_all_df))
   ## check if the positions not affected by the perturbation remain the same
-  expect_lt(max(abs(as.matrix(exposures_strata_list$sub_exposures_list[[1]])[other_ind_2]
-                           - simple_exposures_1[other_ind_2])),1e-05)
-  expect_lt(max(abs(as.matrix(exposures_strata_list$sub_exposures_list[[2]])[other_ind_1]
-                           - simple_exposures_2[other_ind_1])),1e-05)
+  # expect_lt(max(abs(as.matrix(exposures_strata_list$sub_exposures_list[[1]])[other_ind_2]
+  #                          - simple_exposures_1[other_ind_2])),1e-05)
+  expect_lt(max(abs(exposures_strata_list$sub_exposures_list[[1]][,other_col_ind_2+1]
+                    - as.data.frame(simple_exposures_1)[,other_col_ind_2+1])),1e-05)
+  # expect_lt(max(abs(as.matrix(exposures_strata_list$sub_exposures_list[[2]])[other_ind_1]
+  #                          - simple_exposures_2[other_ind_1])),1e-05)
+  expect_lt(max(abs(exposures_strata_list$sub_exposures_list[[2]][,other_col_ind_1+1]
+                    - as.data.frame(simple_exposures_2)[,other_col_ind_1+1])),1e-05)
 })
