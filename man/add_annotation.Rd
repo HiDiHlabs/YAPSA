@@ -12,10 +12,10 @@ add_annotation(in_annotation_col, in_annotation_df, in_attribution_vector,
 elements are structures corresponding to named colour vectors}
 
 \item{in_annotation_df}{Data frame, every column of which corresponds to a layer of annotation. It
-has as many rows as there are samples, every entry in a row corresponding to
-the attribute the samples has for the corresponding layer of annotation. The
-factor levels of a column of \code{in_annotation_df} correspond to the names
-of the corresponding element in \code{in_annotation_col}}
+has as many rows as there are samples, every entry in a row corresponding
+to the attribute the samples has for the corresponding layer of annotation.
+The factor levels of a column of \code{in_annotation_df} correspond to the
+names of the corresponding element in \code{in_annotation_col}}
 
 \item{in_attribution_vector}{A vector which is going to be cbinded to \code{in_annotatiin_df}, carrying
 the annotation information of the new layer to be added}
@@ -37,8 +37,8 @@ A list with entries
 }
 \description{
 Function to iteratively add information to an annotation data structure as
-needed for \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and especially for 
-\code{\link{annotation_exposures_barplot}}
+needed for \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and especially
+for \code{\link{annotation_exposures_barplot}}
 }
 \examples{
  NULL

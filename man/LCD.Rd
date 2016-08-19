@@ -8,14 +8,12 @@ LCD(in_mutation_catalogue_df, in_signatures_df, in_per_sample_cutoff = 0)
 }
 \arguments{
 \item{in_mutation_catalogue_df}{A numeric data frame \code{V} with \code{n}
-rows and \code{m} columns, 
-\code{n} being the number of features 
-and \code{m} being the number of samples}
+rows and \code{m} columns, \code{n} being the number of features and 
+\code{m} being the number of samples}
 
-\item{in_signatures_df}{A numeric data frame \code{W} with \code{n} rows and 
-\code{l} columns, \code{n} being 
-the number of features and \code{l} being the
-number of signatures}
+\item{in_signatures_df}{A numeric data frame \code{W} with \code{n} rows and
+\code{l} columns, \code{n} being the number of features and \code{l} being
+the number of signatures}
 
 \item{in_per_sample_cutoff}{A numeric value less than 1. Signatures from within \code{W}
 with an exposure per sample less than \code{in_cutoff} will be
@@ -64,8 +62,6 @@ exposures <- as.matrix(exposures_df)
 
 }
 \seealso{
-\code{\link{LCD_cutoff}}
-
 \code{\link[lsei]{lsei}}
 }
 

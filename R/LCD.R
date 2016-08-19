@@ -11,13 +11,11 @@
 #'are known
 #'
 #' @param in_mutation_catalogue_df A numeric data frame \code{V} with \code{n}
-#'                                  rows and \code{m} columns, 
-#'                                  \code{n} being the number of features 
-#'                                  and \code{m} being the number of samples
-#' @param in_signatures_df A numeric data frame \code{W} with \code{n} rows and 
-#'                          \code{l} columns, \code{n} being 
-#'                          the number of features and \code{l} being the
-#'                          number of signatures
+#'  rows and \code{m} columns, \code{n} being the number of features and 
+#'  \code{m} being the number of samples
+#' @param in_signatures_df A numeric data frame \code{W} with \code{n} rows and
+#'  \code{l} columns, \code{n} being the number of features and \code{l} being
+#'  the number of signatures
 #' @param in_per_sample_cutoff
 #'  A numeric value less than 1. Signatures from within \code{W}
 #'  with an exposure per sample less than \code{in_cutoff} will be
@@ -27,7 +25,6 @@
 #'          \code{m} columns, \code{l} being the number of signatures and
 #'          \code{m} being the number of samples
 #' 
-#' @seealso \code{\link{LCD_cutoff}}
 #' @seealso \code{\link[lsei]{lsei}}
 #' 
 #' @examples
@@ -62,29 +59,6 @@
 #' @importFrom lsei lsei
 #' @export
 #' 
-# LCD <- function(in_mutation_catalogue_df,in_signatures_df){
-#   signatures_matrix <- as.matrix(in_signatures_df)
-#   out_exposures_df <- data.frame()
-#   G <- diag(dim(signatures_matrix)[2])
-#   H <- rep(0,dim(signatures_matrix)[2])
-#   for (i in seq_len(ncol(in_mutation_catalogue_df))) {
-# #     temp_fractions <- limSolve::lsei(A = signatures_matrix, 
-# #                                      B = in_mutation_catalogue_df[,i],
-# #                                      G=G, H=H, verbose=FALSE)
-#     temp_fractions <- lsei::lsei(a = signatures_matrix, 
-#                                      b = in_mutation_catalogue_df[,i],
-#                                      e=G, f=H)
-#     temp_exposures_vector <- round(temp_fractions,digits = 6)
-#     names(temp_exposures_vector) <- names(in_signatures_df)
-#     out_exposures_df[seq(1,dim(signatures_matrix)[2],1),i] <- 
-#       #as.vector(temp_fractions$X)
-#       as.vector(temp_exposures_vector)
-#     rm(temp_fractions)
-#   }
-#   colnames(out_exposures_df) <- colnames(in_mutation_catalogue_df)
-#   rownames(out_exposures_df) <- colnames(in_signatures_df)
-#   return(out_exposures_df) 
-# }
 LCD <- function(in_mutation_catalogue_df,
                 in_signatures_df,
                 in_per_sample_cutoff=0){
@@ -115,92 +89,7 @@ LCD <- function(in_mutation_catalogue_df,
 }
 
 
-#' LCD with a cutoff on exposures
-#'
-#'\code{LCD_cutoff} performs a mutational signatures decomposition by 
-#'Linear Combination Decomposition (LCD) of a given
-#'mutational catalogue \code{V} with known signatures \code{W} by 
-#'solving the minimization problem \eqn{min(||W*H - V||)} 
-#'with additional constraints of non-negativity on H where W and V
-#'are known, but excludes signatures with an overall contribution less than
-#'a given cutoff over the whole cohort.
-#'
-#' @param in_mutation_catalogue_df
-#'  A numeric data frame \code{V} with \code{n} rows and \code{m} columns, 
-#'  \code{n} being the number of features and \code{m} being the number of 
-#'  samples
-#' @param in_signatures_df
-#'  A numeric data frame \code{W} with \code{n} rows and \code{l} columns,
-#'  \code{n} being the number of features and \code{l} being the number of 
-#'  signatures
-#' @param in_cutoff
-#'  A numeric value less than 1. Signatures from within \code{W}
-#'  with an overall exposure less than \code{in_cutoff} will be
-#'  discarded.
-#' @param in_filename
-#'  A path to generate a histogram of the signature exposures if non-NULL
-#' @param in_method
-#'  Indicate to which data the cutoff shall be applied: absolute exposures, 
-#'  relative exposures
-#' @param in_convention
-#'  Indicate whether LCD or LCD_strict should be used
-#' @param in_per_sample_cutoff
-#'  A numeric value less than 1. Signatures from within \code{W}
-#'  with an exposure per sample less than \code{in_cutoff} will be
-#'  discarded.
-#'  
-#' @return A list with entries \code{exposures}, \code{signatures}, 
-#'          \code{choice} and \code{order}
-#' \itemize{
-#'  \item \code{exposures}:
-#'    The exposures \code{H}, a numeric data frame with 
-#'    \code{l} rows and \code{m} columns, \code{l} being
-#'    the number of signatures and \code{m} being the number
-#'    of samples
-#'  \item \code{signatures}:
-#'    The reduced signatures that have exposures bigger
-#'    than \code{in_cutoff}
-#'  \item \code{choice}:
-#'    Index vector of the reduced signatures in the input
-#'    signatures
-#'  \item \code{order}: Order vector of the signatures by exposure
-#'  \item \code{residual_catalogue}:
-#'    Numerical data frame (matrix) of the difference between fit (product of
-#'    signatures and exposures) and input mutational catalogue
-#'  \item \code{rss}:
-#'    Residual sum of squares (i.e. sum of squares of the residual catalogue)
-#'  \item \code{cosDist_fit_orig_per_matrix}:
-#'    Cosine distance between the fit (product of signatures and exposures) and
-#'    input mutational catalogue computed after putting the matrix into vector
-#'    format (i.e. one scaler product for the whole matrix)
-#'  \item \code{cosDist_fit_orig_per_col}:
-#'    Cosine distance between the fit (product of signatures and exposures) and
-#'    input mutational catalogue computed per column (i.e. per sample, i.e. as
-#'    many scaler products as there are samples in the cohort)
-#'  \item \code{sum_ind}:
-#'    Decreasing order of mutational loads based on the input mutational
-#'    catalogue
-#' }
-#' 
-#' @seealso \code{\link{LCD}}
-#' @seealso \code{\link[lsei]{lsei}}
-#' 
-#' @examples
-#' ## define raw data
-#' W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
-#' W_prim_df <- as.data.frame(W_prim)
-#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
-#' W <- as.matrix(W_df) 
-#' ## 1. Simple case: non-negativity already in raw data
-#' H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
-#' H_df <- as.data.frame(H) # corresponds to the exposures
-#' V <- W %*% H # matrix multiplication
-#' V_df <- as.data.frame(V) # corresponds to the mutational catalogue
-#' exposures_small_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.05)
-#' exposures_big_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.4)
-#' 
 #' @importFrom lsei lsei
-#' @export
 #' 
 LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
                        in_cutoff=0.01,in_filename=NULL,
@@ -208,7 +97,6 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
                        in_per_sample_cutoff=0) {
   # first run analysis without cutoff
   if(in_convention=="strict"){
-    #all_exposures_df <- LCD_strict(in_mutation_catalogue_df,in_signatures_df)
     all_exposures_df <- LCD(in_mutation_catalogue_df,in_signatures_df)
   } else{
     all_exposures_df <- LCD(in_mutation_catalogue_df,
@@ -307,8 +195,8 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
 #'  with an exposure per sample less than \code{in_cutoff} will be
 #'  discarded.
 #' @param in_rescale
-#'  Boolean, if TRUE (default) the exposures are rescaled such that colSums over
-#'  exposures match colSums over mutational catalogue
+#'  Boolean, if TRUE (default) the exposures are rescaled such that colSums 
+#'  over exposures match colSums over mutational catalogue
 #' @param in_sig_ind_df
 #'  Data frame of type signature_indices_df, i.e. indicating name,
 #'  function and meta-information of the signatures. Default is NULL.
@@ -353,17 +241,16 @@ LCD_cutoff <- function(in_mutation_catalogue_df,in_signatures_df,
 #'    catalogue
 #'  \item \code{out_sig_ind}:
 #'    Data frame of the type \code{signature_indices_df}, i.e. indicating name,
-#'    function and meta-information of the signatures. Default is NULL, non-NULL
-#'    only if \code{in_sig_ind_df} is non-NULL.
+#'    function and meta-information of the signatures. Default is NULL, 
+#'    non-NULL only if \code{in_sig_ind_df} is non-NULL.
 #'  \item \code{aggregate_exposures_list}:
-#'    List of exposure data frames aggregated over different categories. Default
-#'    is NULL, non-NULL only if \code{in_sig_ind_df} and \code{in_cat_list} are 
-#'    non-NULL and if the categories specified in \code{in_cat_list} are among 
-#'    the column names of \code{in_sig_ind_df}.
+#'    List of exposure data frames aggregated over different categories. 
+#'    Default is NULL, non-NULL only if \code{in_sig_ind_df} and 
+#'    \code{in_cat_list} are non-NULL and if the categories specified in 
+#'    \code{in_cat_list} are among the column names of \code{in_sig_ind_df}.
 #' }
 #' 
 #' @seealso \code{\link{LCD}}
-#' @seealso \code{\link{LCD_cutoff}}
 #' @seealso \code{\link{aggregate_exposures_by_category}}
 #' @seealso \code{\link[lsei]{lsei}}
 #' 
@@ -466,86 +353,8 @@ LCD_complex_cutoff <- function(in_mutation_catalogue_df,
 #'\code{LCD_complex_cutoff_perPID} is a wrapper for
 #'\code{\link{LCD_complex_cutoff}} and runs individually for every PID.
 #'
-#' @param in_mutation_catalogue_df
-#'  A numeric data frame \code{V} with \code{n} rows and \code{m} columns, 
-#'  \code{n} being the number of features and \code{m} being the number of 
-#'  samples
-#' @param in_signatures_df
-#'  A numeric data frame \code{W} with \code{n} rows and \code{l} columns,
-#'  \code{n} being the number of features and \code{l} being the number of
-#'  signatures
-#' @param in_cutoff_vector
-#'  A numeric vector of values less than 1. Signatures from within \code{W}
-#'  with an overall exposure less than the respective value in 
-#'  \code{in_cutoff_vector} will be discarded.
-#' @param in_filename
-#'  A path to generate a histogram of the signature exposures if non-NULL
-#' @param in_method
-#'  Indicate to which data the cutoff shall be applied: absolute exposures,
-#'  relative exposures
-#' @param in_rescale
-#'  Boolean, if TRUE (default) the exposures are rescaled such that colSums over
-#'  exposures match colSums over mutational catalogue
-#' @param in_sig_ind_df
-#'  Data frame of type signature_indices_df, i.e. indicating name,
-#'  function and meta-information of the signatures. Default is NULL.
-#' @param in_cat_list
-#'  List of categories for aggregation. Have to be among the column names of 
-#'  \code{in_sig_ind_df}. Default is NULL.
-#'  
-#' @return A list with entries \code{exposures}, \code{signatures},
-#'          \code{choice} and \code{order}
-#' \itemize{
-#'  \item \code{exposures}:
-#'    The exposures \code{H}, a numeric data frame with 
-#'    \code{l} rows and \code{m} columns, \code{l} being
-#'    the number of signatures and \code{m} being the number
-#'    of samples
-#'  \item \code{norm_exposures}:
-#'    The normalized exposures \code{H}, a numeric data frame with 
-#'    \code{l} rows and \code{m} columns, \code{l} being
-#'    the number of signatures and \code{m} being the number
-#'    of samples
-#'  \item \code{signatures}:
-#'    The reduced signatures that have exposures bigger
-#'    than \code{in_cutoff}
-#'  \item \code{choice}:
-#'    Index vector of the reduced signatures in the input
-#'    signatures
-#'  \item \code{order}: Order vector of the signatures by exposure
-#'  \item \code{residual_catalogue}:
-#'    Numerical data frame (matrix) of the difference between fit (product of
-#'    signatures and exposures) and input mutational catalogue
-#'  \item \code{rss}:
-#'    Residual sum of squares (i.e. sum of squares of the residual catalogue)
-#'  \item \code{cosDist_fit_orig_per_matrix}:
-#'    Cosine distance between the fit (product of signatures and exposures) and
-#'    input mutational catalogue computed after putting the matrix into vector
-#'    format (i.e. one scaler product for the whole matrix)
-#'  \item \code{cosDist_fit_orig_per_col}:
-#'    Cosine distance between the fit (product of signatures and exposures) and
-#'    input mutational catalogue computed per column (i.e. per sample, i.e. as
-#'    many scaler products as there are samples in the cohort)
-#'  \item \code{sum_ind}:
-#'    Decreasing order of mutational loads based on the input mutational
-#'    catalogue
-#'  \item \code{out_sig_ind}:
-#'    Data frame of the type \code{signature_indices_df}, i.e. indicating name,
-#'    function and meta-information of the signatures. Default is NULL, non-NULL
-#'    only if \code{in_sig_ind_df} is non-NULL.
-#'  \item \code{aggregate_exposures_list}:
-#'    List of exposure data frames aggregated over different categories. Default
-#'    is NULL, non-NULL only if \code{in_sig_ind_df} and \code{in_cat_list} are 
-#'    non-NULL and if the categories specified in \code{in_cat_list} are among 
-#'    the column names of \code{in_sig_ind_df}.
-#' }
-#' 
-#' @seealso \code{\link{LCD_complex_cutoff}}
-#' 
-#' @examples
-#'  NULL
-#' 
 #' @export
+#' @rdname LCD_complex_cutoff
 #' 
 LCD_complex_cutoff_perPID <- function(in_mutation_catalogue_df,
                                       in_signatures_df,
@@ -626,95 +435,7 @@ norm_res=function(x,b,in_matrix){
 }
 
 
-#' LCD of stratified mutational catalogues
-#'
-#'\code{LCD_SMC} performs a mutational signatures decomposition by 
-#'Linear Combination Decomposition (LCD) of a given collection of
-#'stratified mutational catalogues \code{Vi} with known signatures \code{W} by 
-#'simultaneously solving the minimization problems \eqn{min(||W*Hi - Vi||)}
-#' for all \code{i} and \eqn{min(||W*H - V||)} with the following additional 
-#' constraints
-#'\enumerate{
-#'  \item non-negativity of Hi 
-#'  \item \eqn{\Sigma Hi = H}
-#'}
-#'where W and Vi are known.
-#'
-#' @param in_mutation_sub_catalogue_list
-#'  A list of \code{s} numeric data frames \code{Vi}, the mutational catalogues 
-#'  per stratum, with \code{n} rows and \code{m} columns each, \code{n} being 
-#'  the number of features and \code{m} being the number of samples.
-#' @param in_signatures_df
-#'  A numeric data frame \code{W} with \code{n} rows and \code{l} columns,
-#'  \code{n} being the number of features and \code{l} being the number
-#'  of signatures
-#' @param in_F_df
-#'  Optional argument, if specified, \code{H}, i.e. the overall exposures
-#'  without stratification, is set to equal \code{in_F_df}. This is equivalent
-#'  to forcing the LCD_SMC procedure to use e.g. the exposures of a previously
-#'  performed NMF decomposition.
-#' @return A list with entries \code{exposures_all_df} and 
-#'          \code{sub_exposures_list}
-#' \itemize{
-#'  \item \code{exposures_all_df}:
-#'    The overall exposures \code{H} without stratification, numeric data frame
-#'    with \code{l} rows and \code{m} columns, \code{l} being the number of 
-#'    signatures and \code{m} being the number of samples, solving the 
-#'    minimization \eqn{min(||W*H - V||)}. If the optional parmeter 
-#'    \code{in_F_df} was specified, \code{exposures_all_df} equals 
-#'    \code{in_F_df}.
-#'  \item \code{sub_exposures_list}:
-#'    The list of \code{s} strata specific exposures Hi, all are numerical data 
-#'    frames with \code{l} rows and \code{m} columns, \code{l} being the number
-#'    of signatures and \code{m} being the number of samples
-#' }
-#' 
-#' @seealso \code{\link{LCD}}
-#' @seealso \code{\link[lsei]{lsei}}
-#' 
-#' @examples
-#' ## define raw data
-#' W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
-#' W_prim_df <- as.data.frame(W_prim)
-#' W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
-#' W <- as.matrix(W_df) 
-#' H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
-#' ## define indices where sign is going to be swapped for different strata 
-#' ## (perturbation)
-#' sign_ind_1 <- c(5,7)
-#' sign_ind_2 <- c(1)
-#' ## alter the matrix H to yield a new mutational catalogue for every stratum 
-#' ## (perturbation)
-#' H_1 <- H
-#' H_2 <- H
-#' H_1[sign_ind_1] <- (-1)*H[sign_ind_1]
-#' H_2[sign_ind_2] <- (-1)*H[sign_ind_2]
-#' H_1_df <- as.data.frame(H_1)
-#' H_2_df <- as.data.frame(H_2)
-#' V_1 <- W %*% H_1 # matrix multiplication
-#' V_2 <- W %*% H_2 # matrix multiplication
-#' V <- V_1 + V_2
-#' V_1_df <- as.data.frame(V_1) # mutational catalog of stratum 1
-#' V_2_df <- as.data.frame(V_2) # mutational catalog of stratum 2
-#' V_df <- as.data.frame(V) # mutational catalog of the whole cohort
-#' V_list <- list()  # make list of data frames
-#' V_list[[1]] <- V_1_df
-#' V_list[[2]] <- V_2_df
-#' ## apply function
-#' exposures_strata_list <- YAPSA:::LCD_SMC(V_list,W_df)
-#' ## print content of result
-#' exposures_strata_list$exposures_all_df
-#' exposures_strata_list$sub_exposures_list[[1]]
-#' exposures_strata_list$sub_exposures_list[[2]]
-#' ## compare
-#' simple_exposures_all_df <- YAPSA:::LCD(V_df,W_df)
-#' simple_exposures_1_df <- YAPSA:::LCD(V_1_df,W_df)
-#' simple_exposures_1 <- as.matrix(simple_exposures_1_df)
-#' simple_exposures_2_df <- YAPSA:::LCD(V_2_df,W_df)
-#' simple_exposures_2 <- as.matrix(simple_exposures_2_df)
-#' 
 #' @importFrom lsei lsei
-#' @export
 #' 
 LCD_SMC <- function(in_mutation_sub_catalogue_list,
                     in_signatures_df,in_F_df=NULL){
@@ -753,8 +474,8 @@ LCD_SMC <- function(in_mutation_sub_catalogue_list,
     # This condition is fulfilled when an exposures file has been supplied.
     F_df <- in_F_df
   } else {
-    # This is the standard case when no exposures file has been supplied and the
-    # exposures have to be computed by LCD.
+    # This is the standard case when no exposures file has been supplied and 
+    # the exposures have to be computed by LCD.
     sum_df <- data.frame(matrix(rep(0,number_of_PIDs*number_of_features),
                                 ncol=number_of_PIDs))
     for (i in seq_len(number_of_strata)) {

@@ -25,9 +25,9 @@ the asserted colour}
 
 \item{in_data_type}{Title in the figure}
 
-\item{in_method}{Method of the clustering to be supplied to \code{\link{dist}}. Can be either
-of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
-\code{binary} or \code{minkowski}}
+\item{in_method}{Method of the clustering to be supplied to \code{\link{dist}}. Can be 
+either of: \code{euclidean}, \code{maximum}, \code{manhattan}, 
+\code{canberra}, \code{binary} or \code{minkowski}}
 
 \item{in_palette}{Palette with colours or colour codes for the heatmap. Default is
 \code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white','yellow','orange','red'))}}
@@ -36,12 +36,14 @@ of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
 with an overall exposure less than \code{in_cutoff} will be
 discarded for the clustering.}
 
-\item{in_filename}{A path to save the heatmap. If none is specified, the figure will be plotted
-to the running environment.}
+\item{in_filename}{A path to save the heatmap. If none is specified, the figure will be 
+plotted to the running environment.}
 
-\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the annotation}
+\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the 
+annotation}
 
-\item{in_row_anno_borders}{Whether or not to draw separating lines between the fields in the annotation}
+\item{in_row_anno_borders}{Whether or not to draw separating lines between the fields in the 
+annotation}
 
 \item{in_show_PIDs}{Whether or not to show the PIDs on the x-axis}
 

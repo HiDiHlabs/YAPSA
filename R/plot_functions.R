@@ -4,8 +4,8 @@
 
 #' Plot the exposures of a cohort
 #'
-#' The exposures \code{H}, determined by NMF or by \code{\link{LCD}}, are
-#' displayed as a stacked barplot by calling
+#' \code{plot_exposures}: The exposures \code{H}, determined by NMF or by 
+#' \code{\link{LCD}}, are displayed as a stacked barplot by calling
 #' \itemize{
 #'  \item \code{\link[ggplot2]{geom_bar}} and optionally
 #'  \item \code{\link[ggplot2]{geom_text}}.
@@ -48,7 +48,6 @@
 #' @seealso \code{\link{LCD}}
 #' @seealso \code{\link[ggplot2]{geom_bar}}
 #' @seealso \code{\link[ggplot2]{geom_text}}
-#' @seealso \code{\link{plot_relative_exposures}}
 #' 
 #' @import ggplot2
 #' @import reshape2
@@ -215,32 +214,10 @@ plot_exposures_old <- function(in_exposures_df,
 
 #' Plot the relative exposures of a cohort
 #'
-#' Plot the relative or normalized exposures of a cohort. This function first
+#' \code{plot_relative_exposures}: Plot the relative or normalized exposures of
+#' a cohort. This function first
 #' normalizes its input and then sends the normalized data to
-#' \code{\link{plot_relative_exposures}}.
-#'
-#' @param in_exposures_df
-#'  Numerical data frame encoding the exposures \code{H}, i.e. which
-#'  signature contributes how much to which PID (patient identifier or sample).
-#' @param in_signatures_ind_df
-#'  A data frame containing meta information about the signatures
-#' @param in_subgroups_df
-#'  A data frame indicating which PID (patient or sample identifyier) belongs
-#'  to which subgroup
-#' @param in_sum_ind
-#'  Index vector influencing the order in which the PIDs are going to be
-#'  displayed
-#' @param in_subgroups.field
-#'  String indicating the column name in \code{in_subgroups_df} to take the
-#'  subgroup information from.
-#' @param in_title
-#'  Title for the plot to be created.
-#' @param in_labels
-#'  Flag, if \code{TRUE} the PIDs are displayed on the x-axis
-#' @param in_show_subgroups
-#'  Flag, if \code{TRUE} then PIDs are grouped by subgroups
-#'
-#' @return The generated barplot - a ggplot2 plot
+#' \code{\link{plot_exposures}}.
 #'
 #' @examples
 #'  data(lymphoma_cohort_LCD_results)
@@ -248,9 +225,8 @@ plot_exposures_old <- function(in_exposures_df,
 #'                          chosen_signatures_indices_df,
 #'                          COSMIC_subgroups_df)
 #'
-#' @seealso \code{\link{plot_exposures}}
-#' 
 #' @export
+#' @rdname plot_exposures
 #' 
 plot_relative_exposures <- function(in_exposures_df,in_signatures_ind_df,
                                     in_subgroups_df,in_sum_ind=NULL,
@@ -268,65 +244,7 @@ plot_relative_exposures <- function(in_exposures_df,in_signatures_ind_df,
 }
 
 
-#' Plot the exposures of a cohort as a ComplexHeatmap
-#'
-#' The exposures \code{H}, determined by NMF or by \code{\link{LCD}}, are
-#' displayed as a stacked barplot by calling 
-#' \code{\link[ComplexHeatmap]{Heatmap}}.
-#' The x-axis displays the PIDs (patient identifier or sample), the y-axis
-#' the counts attributed to the different signatures with their respective
-#' colours per PID. It is analogous to \code{\link{plot_exposures}}.
-#'
-#' @param mat
-#'  Numerical data frame encoding the exposures \code{H}, i.e. which
-#'  signature contributes how much to which PID (patient identifier or sample).
-#' @param col
-#'  A data frame containing meta information about the signatures
-#' @param anno
-#'  A data frame indicating which PID (patient or sample identifyier) belongs
-#'  to which subgroup
-#' @param anno_color
-#'  Index vector influencing the order in which the PIDs are going to be
-#'  displayed
-#' @param ylab
-#'  String indicating the column name in \code{in_subgroups_df} to take the
-#'  subgroup information from.
-#' @param title
-#'  Title for the plot to be created.
-#' @param in_labels
-#'  Whether or not to show the names of the samples.
-#' @param in_barplot_borders
-#'  Whether or not to show border lines in barplot
-#' @param in_column_anno_borders
-#'  Whether or not to draw separating lines between the fields in the annotation
-#'
-#' @details
-#'  It might be necessary to install the newest version of the development 
-#'  branch of the packages \pkg{circlize} and \pkg{ComplexHeatmap} by Zuguang
-#'  Gu: \code{devtools::install_github("jokergoo/circlize")} and 
-#'  \code{devtools::install_github("jokergoo/ComplexHeatmap")}
-#'
-#' @return The function doesn't return any value.
-#' 
-#' @examples
-#'  data(lymphoma_cohort_LCD_results)
-#'  temp_anno_color <- aggregate(col~subgroup,data=COSMIC_subgroups_df,
-#'                               function(l) return(l[1]))
-#'  my_anno_color <- temp_anno_color$col
-#'  names(my_anno_color) <- temp_anno_color$subgroup
-#'  enhanced_barplot(
-#'    lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,order(COSMIC_subgroups_df$index)],
-#'    chosen_signatures_indices_df$colour,
-#'    COSMIC_subgroups_df$subgroup[order(COSMIC_subgroups_df$index)],
-#'    my_anno_color)  
-#'  
-#' @seealso \code{\link[ComplexHeatmap]{HeatmapAnnotation}}
-#' @seealso \code{\link[ComplexHeatmap]{Heatmap}}
-#' @seealso \code{\link[ComplexHeatmap]{decorate_heatmap_body}}
-#' @seealso \code{\link{plot_exposures}}
-#' 
 #' @import ComplexHeatmap
-#' @export
 #' 
 enhanced_barplot = function(mat, col, anno, anno_color, ylab = NULL,
                             title = "",in_labels=TRUE,
@@ -418,8 +336,8 @@ enhanced_barplot = function(mat, col, anno, anno_color, ylab = NULL,
 #'  colour information for the signatures is taken from a rainbow palette.
 #' @param in_subgroups_df
 #'  A data frame indicating which PID (patient or sample identifyier) belongs
-#'  to which subgroup. If NULL, it is assumed that all PIDs belong to one common
-#'  subgroup. The colour coding for the default subgroup is red.
+#'  to which subgroup. If NULL, it is assumed that all PIDs belong to one 
+#'  common subgroup. The colour coding for the default subgroup is red.
 #' @param in_sum_ind
 #'  Index vector influencing the order in which the PIDs are going to be
 #'  displayed
@@ -437,7 +355,8 @@ enhanced_barplot = function(mat, col, anno, anno_color, ylab = NULL,
 #' @param in_barplot_borders
 #'  Whether or not to show border lines in barplot
 #' @param in_column_anno_borders
-#'  Whether or not to draw separating lines between the fields in the annotation
+#'  Whether or not to draw separating lines between the fields in the
+#'  annotation
 #'
 #' @return The generated barplot - a ggplot2 plot
 #'
@@ -447,8 +366,6 @@ enhanced_barplot = function(mat, col, anno, anno_color, ylab = NULL,
 #'                    chosen_signatures_indices_df,
 #'                    COSMIC_subgroups_df)  
 #'  
-#' @seealso \code{\link{enhanced_barplot}}
-#' 
 #' @importFrom grDevices rainbow
 #' @export
 #' 
@@ -492,18 +409,18 @@ exposures_barplot <- function(in_exposures_df,in_signatures_ind_df=NULL,
 #' Add information to an annotation data structure
 #' 
 #' Function to iteratively add information to an annotation data structure as
-#' needed for \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and especially for 
-#' \code{\link{annotation_exposures_barplot}}
+#' needed for \code{\link[ComplexHeatmap]{HeatmapAnnotation}} and especially
+#' for \code{\link{annotation_exposures_barplot}}
 #' 
 #' @param in_annotation_col
 #'  List, every element of which refers to one layer of annotation. List
 #'  elements are structures corresponding to named colour vectors
 #' @param in_annotation_df
 #'  Data frame, every column of which corresponds to a layer of annotation. It
-#'  has as many rows as there are samples, every entry in a row corresponding to
-#'  the attribute the samples has for the corresponding layer of annotation. The
-#'  factor levels of a column of \code{in_annotation_df} correspond to the names
-#'  of the corresponding element in \code{in_annotation_col}
+#'  has as many rows as there are samples, every entry in a row corresponding
+#'  to the attribute the samples has for the corresponding layer of annotation.
+#'  The factor levels of a column of \code{in_annotation_df} correspond to the
+#'  names of the corresponding element in \code{in_annotation_col}
 #' @param in_attribution_vector
 #'  A vector which is going to be cbinded to \code{in_annotatiin_df}, carrying
 #'  the annotation information of the new layer to be added
@@ -596,7 +513,8 @@ add_annotation <- function(in_annotation_col,
 #' @param in_barplot_borders
 #'  Whether or not to show border lines in barplot
 #' @param in_column_anno_borders
-#'  Whether or not to draw separating lines between the fields in the annotation
+#'  Whether or not to draw separating lines between the fields in the
+#'  annotation
 #' @param in_annotation_legend_side
 #'  Where to put the legends of the annotation df, default is right.
 #'
@@ -707,41 +625,6 @@ annotation_exposures_barplot <- function(in_exposures_df,
 }
 
 
-#' Make an annotation plot for subgroup information
-#' 
-#' For cohort-wide plots like those produced by \code{\link{plot_exposures}}
-#' or \code{\link{plot_relative_exposures}}, annotation plots for per-PID
-#' information can be put on top. This function produces an annotation plot
-#' for subgroup inforamtion.
-#' 
-#' @param in_subgroup_df
-#'  Data frame carrying the subgroup information
-#' @param mycol
-#'  Vector containing the colour information for the subgroups
-#' @param in_subgroup.field
-#'  Indicates the name of the column in which the subgroup information
-#'  is encoded
-#' @param in_index.field
-#'  Indicates the name of the column in which the index information
-#'  is encoded
-#' @param in_size
-#'  Numerical value indicating the size unit (important when uniting different
-#'  plots)
-#' 
-#' @return The plot as a ggplot2.
-#' 
-#' @examples
-#'  data(lymphoma_cohort_LCD_results)
-#'  temp_anno_color <- aggregate(col~subgroup,data=COSMIC_subgroups_df,
-#'                               function(l) return(l[1]))
-#'  plot_colour_legend_subgroups(COSMIC_subgroups_df,temp_anno_color$col)
-#'
-#' @seealso \code{\link{plot_exposures}}
-#' @seealso \code{\link{plot_relative_exposures}}
-#' 
-#' @import ggplot2
-#' @export
-#'
 plot_colour_legend_subgroups <- function(in_subgroup_df,mycol,
                                          in_subgroup.field="subgroup",
                                          in_index.field="index",
@@ -769,51 +652,9 @@ plot_colour_legend_subgroups <- function(in_subgroup_df,mycol,
 
 
 
-#' Plot results of the Stratification of a Mutational Catalogue
-#'
-#' Plot a big composite figure with 3 columns: in the left column the per-PID
-#' absolute exposures will be shown, in the middle column the per_PID
-#' relative or normalized exposures will be shown, in the right column the
-#' cohort-wide exposures are shown (averaged over PIDs).
-#'
-#' @param number_of_strata
-#'  Number of strata as deduced from \code{link{SMC}}
-#' @param output_path
-#'  Path to file where the results are going to be stored. If NULL, the results 
-#'  will be plotted to the running environment.
-#' @param decomposition_method
-#'  String for the filename of the generated barplot.
-#' @param number_of_sigs
-#'  Number of signatures
-#' @param name_list
-#'  Names of the contructed strata.
-#' @param exposures_strata_list
-#'  The list of \code{s} strata specific exposures Hi, all are numerical data 
-#'  frames with \code{l} rows and \code{m} columns, \code{l} being the number
-#'  of signatures and \code{m} being the number of samples
-#' @param this_signatures_ind_df
-#'  A data frame containing meta information about the signatures
-#' @param this_subgroups_df
-#'  A data frame indicating which PID (patient or sample identifyier) belongs
-#'  to which subgroup
-#' @param in_strata_order_ind
-#'  Index vector defining reordering of the strata
-#' @param exposures_both_rel_df_list
-#'  A list of \code{s} strata specific cohortwide (i.e. averaged over cohort)
-#'  normalized exposures
-#' @param cohort_method_flag
-#'  Either or several of \code{c("all_PIDs","cohort","norm_PIDs")}, representing
-#'  alternative ways to average over the cohort.
-#'  
-#' @examples
-#' NULL
-#'  
-#' @return The function doesn't return any value.
-#' 
 #' @import ggplot2
 #' @import grid
 #' @import gridExtra
-#' @export
 #' 
 plot_SMC_old <- function(number_of_strata,output_path,decomposition_method,
                          number_of_sigs,name_list,
@@ -838,8 +679,9 @@ plot_SMC_old <- function(number_of_strata,output_path,decomposition_method,
                           stat='identity',position="dodge",width=.7) + 
         scale_fill_manual(name="sig",labels=this_signatures_ind_df$sig,
                           values=this_signatures_ind_df$colour) +
-        geom_errorbar(data=temp_df,aes_string(x="sig_index",ymin="exposure_min",
-                                              ymax="exposure_max"),width=0.5) +
+        geom_errorbar(data=temp_df,
+                      aes_string(x="sig_index", ymin="exposure_min",
+                                 ymax="exposure_max"), width=0.5) +
         labs(x="",y="") +
         theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
               legend.position = "none")
@@ -854,14 +696,16 @@ plot_SMC_old <- function(number_of_strata,output_path,decomposition_method,
       temp_df$sig_index <- as.factor(temp_df$sig_index)
       plot_list_cohort[[i]] <- ggplot() + 
         ggplot2::geom_bar(data=temp_df,
-                          aes_string(x="sig_index",y="exposure",colour="method",
-                                     fill="sig_index",size=0.3),
+                          aes_string(x="sig_index", y="exposure",
+                                     colour="method", fill="sig_index",
+                                     size=0.3),
                           stat='identity',position="dodge",width=.7) + 
         scale_fill_manual(name="sig",labels=this_signatures_ind_df$sig,
                           values=this_signatures_ind_df$colour) +
         scale_colour_manual(values=method_colour_vector) +
-        geom_errorbar(data=temp_df,aes_string(x="sig_index",ymin="exposure_min",
-                                              ymax="exposure_max"),width=0.5) +
+        geom_errorbar(data=temp_df,
+                      aes_string(x="sig_index", ymin="exposure_min",
+                                 ymax="exposure_max"), width=0.5) +
         labs(x="",y="") +
         theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
               legend.position = "none")
@@ -945,7 +789,8 @@ plot_SMC_old <- function(number_of_strata,output_path,decomposition_method,
           vp = vplayout(vertical_temp_start:vertical_temp_stop, 
                         horizontal_temp_start:horizontal_temp_stop))
     p <- ggplot() + geom_text(data=name_df[i,],
-                              aes_string(label="new_names",x="x_pos",y="y_pos"),
+                              aes_string(label="new_names",
+                                         x="x_pos", y="y_pos"),
                               angle=90,size=3) +
       theme(axis.text = element_blank(), axis.ticks = element_blank(), 
             panel.background = element_blank()) +
@@ -967,7 +812,8 @@ plot_SMC_old <- function(number_of_strata,output_path,decomposition_method,
   }
   legend_vp <- 
     vplayout(1:number_of_vertical_units, 
-             (horizontal_temp_stop + 1):(horizontal_temp_stop + horizontal_legend_width))
+             (horizontal_temp_stop + 1):
+               (horizontal_temp_stop + horizontal_legend_width))
   pushViewport(legend_vp)
   grid.draw(common_legend)
   if(!is.null(output_path)){
@@ -977,19 +823,19 @@ plot_SMC_old <- function(number_of_strata,output_path,decomposition_method,
 }
 
 
-plot_SMC_PID_facet <- function(in_abs_df_list,in_rel_df_list,
-                               in_signatures_ind_df,in_subgroups_df,
-                               in_name_list,in_sum_ind=NULL,
-                               in_subgroups.field="subgroup",
-                               in_strata_order_ind=seq_len(length(in_name_list)),
-                               in_label_orientation="turn"){
+plot_SMC_PID_facet <- 
+  function(in_abs_df_list,in_rel_df_list, in_signatures_ind_df,in_subgroups_df,
+           in_name_list,in_sum_ind=NULL, in_subgroups.field="subgroup",
+           in_strata_order_ind=seq_len(length(in_name_list)),
+           in_label_orientation="turn"){
   .e <- environment()
   legend_height <- 10
   subgroups_ind <- which(names(in_subgroups_df)==in_subgroups.field)
   if(!is.null(in_sum_ind)) {
     my_sum_ind <- in_sum_ind
   } else {
-    my_sum_ind <- order(in_subgroups_df[,subgroups_ind],in_subgroups_df$compl_sum)
+    my_sum_ind <- order(in_subgroups_df[,subgroups_ind],
+                        in_subgroups_df$compl_sum)
   }
   order_sum_ind <- order(my_sum_ind)
   number_of_sigs <- dim(in_abs_df_list[[1]])[1]
@@ -1035,22 +881,6 @@ plot_SMC_PID_facet <- function(in_abs_df_list,in_rel_df_list,
   number_of_legend_cols <- 
     ifelse((dim(in_signatures_ind_df)[1] %% legend_height)==0,0,1) +
     (dim(in_signatures_ind_df)[1] %/% legend_height)
-#   p_abs <- ggplot(abs_melt_df,environment = .e) + 
-#     geom_bar(aes_string(x="PID_index",y="value",fill="sig_index"),stat='identity') +
-#     facet_grid(stratum ~ ., scales="free_y") +
-#     scale_fill_manual(labels=in_signatures_ind_df$sig,values=in_signatures_ind_df$colour) + 
-#     scale_x_discrete("PID",breaks=seq(1,dim(in_subgroups_df)[1]),labels=in_subgroups_df$PID[my_sum_ind]) +
-#     theme(axis.text.x=element_text(angle=90,size=7,vjust=0.5),
-#           panel.background = element_rect(fill=NA, colour="black")) +
-#     guides(fill=guide_legend(ncol=number_of_legend_cols))
-#   p_rel <- ggplot(rel_melt_df,environment = .e) + 
-#     geom_bar(aes_string(x="PID_index",y="value",fill="sig_index"),stat='identity') +
-#     facet_grid(stratum ~ ., scales="free_y") +
-#     scale_fill_manual(labels=in_signatures_ind_df$sig,values=in_signatures_ind_df$colour) + 
-#     scale_x_discrete("PID",breaks=seq(1,dim(in_subgroups_df)[1]),labels=in_subgroups_df$PID[my_sum_ind]) +
-#     theme(axis.text.x=element_text(angle=90,size=7,vjust=0.5),
-#           panel.background = element_rect(fill=NA, colour="black")) +
-#     guides(fill=guide_legend(ncol=number_of_legend_cols))
   abs_melt_df$method <- "abs"
   rel_melt_df$method <- "rel"
   all_melt_df <- rbind(abs_melt_df,rel_melt_df)
@@ -1075,9 +905,9 @@ plot_SMC_PID_facet <- function(in_abs_df_list,in_rel_df_list,
 }
 
 
-plot_group_facet <- function(in_df_list,in_name_list,
-                             in_signatures_ind_df,
-                             in_strata_order_ind=seq_len(length(in_name_list))){
+plot_group_facet <- 
+  function(in_df_list,in_name_list, in_signatures_ind_df,
+           in_strata_order_ind=seq_len(length(in_name_list))){
   for(i in seq_len(length(in_df_list))){
     in_df_list[[i]]$stratum <- paste0(in_name_list[[i]],", cohort")
   }
@@ -1113,7 +943,7 @@ plot_group_facet <- function(in_df_list,in_name_list,
 #' @param number_of_strata
 #'  Number of strata as deduced from \code{link{SMC}}
 #' @param output_path
-#'  Path to file where the results are going to be stored. If NULL, the results 
+#'  Path to file where the results are going to be stored. If NULL, the results
 #'  will be plotted to the running environment.
 #' @param decomposition_method
 #'  String for the filename of the generated barplot.
@@ -1136,8 +966,8 @@ plot_group_facet <- function(in_df_list,in_name_list,
 #'  A list of \code{s} strata specific cohortwide (i.e. averaged over cohort)
 #'  normalized exposures
 #' @param cohort_method_flag
-#'  Either or several of \code{c("all_PIDs","cohort","norm_PIDs")}, representing
-#'  alternative ways to average over the cohort.
+#'  Either or several of \code{c("all_PIDs","cohort","norm_PIDs")}, 
+#'  representing alternative ways to average over the cohort.
 #' @param fig_width
 #'  Width of the figure to be plotted
 #' @param fig_height
@@ -1216,36 +1046,6 @@ plot_SMC <- function(number_of_strata,output_path,decomposition_method,
 }
 
 
-
-
-#' Plot averaged signature exposures per subgroup
-#' 
-#' Plot one averaged signature exposure pattern per subgroup. Uses
-#' \code{\link{split_exposures_by_subgroups}}.
-#' 
-#' @param in_exposures_df
-#'  Numerical data frame of the exposures (i.e. contributions of the
-#'  different signatures to the number of point mutations per PID)
-#' @param in_signatures_ind_df
-#'  Data frame carrying additional information on the signatures
-#' @param in_subgroups_df
-#'  Data frame indicating which PID belongs to which subgroup
-#' @param in_subgroups.field
-#'  Name indicating which column in \code{in_subgroups_df} contains the
-#'  subgroup information
-#' @param in_PID.field
-#'  Name indicating which column in \code{in_subgroups_df} contains the
-#'  PID information 
-#'  
-#' @return The function doesn't return any value, it plots instead.
-#' 
-#' @seealso \code{\link{split_exposures_by_subgroups}}
-#' 
-#' @examples
-#'  NULL
-#'  
-#' @export
-#' 
 stat_plot_subgroups_old <- function(in_exposures_df,in_subgroups_df,
                                     in_signatures_ind_df,
                                     in_subgroups.field="subgroup",
@@ -1283,8 +1083,8 @@ stat_plot_subgroups_old <- function(in_exposures_df,in_subgroups_df,
   for(i in seq_len(length(plot_df_list))){
     temp_df <- plot_df_list[[i]]
     plot_list_subgroups[[i]] <- ggplot() + 
-      ggplot2::geom_bar(data=temp_df,aes_string(x="index",y="mean",fill="index",
-                                                size=0.3),
+      ggplot2::geom_bar(data=temp_df,aes_string(x="index",y="mean",
+                                                fill="index", size=0.3),
                         stat='identity',position="dodge",width=.7) + 
       scale_fill_manual(name="sig",labels=in_signatures_ind_df$sig,
                         values=in_signatures_ind_df$colour) +
@@ -1446,17 +1246,17 @@ stat_plot_subgroups <- function(in_exposures_df,in_subgroups_df,
 #'  A data frame indicating which PID (patient or sample identifyier) belongs
 #'  to which subgroup
 #' @param in_method
-#'  Method of the clustering to be supplied to \code{\link{dist}}. Can be either
-#'  of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
-#'  \code{binary} or \code{minkowski}
+#'  Method of the clustering to be supplied to \code{\link{dist}}. Can be
+#'  either of: \code{euclidean}, \code{maximum}, \code{manhattan}, 
+#'  \code{canberra}, \code{binary} or \code{minkowski}
 #' @param in_subgroup_column
 #'  Indicates the name of the column in which the subgroup information
 #'  is encoded in \code{in_subgroups_df}
 #' @param in_palette
-#'  Palette with colours or colour codes for the labels (the text) of the leaves
-#'  in the dendrogram. Typically one colour per subgroup. If none is specified, 
-#'  a rainbow palette of the length of the number of subgroups will be used as
-#'  default.
+#'  Palette with colours or colour codes for the labels (the text) of the 
+#'  leaves in the dendrogram. Typically one colour per subgroup. If none is
+#'  specified, a rainbow palette of the length of the number of subgroups will
+#'  be used as default.
 #' @param in_cutoff
 #'  A numeric value less than 1. Signatures from within \code{W}
 #'  with an overall exposure less than \code{in_cutoff} will be
@@ -1517,13 +1317,15 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
   ## 4. colour the labels of the leaves according to subgroups
   subgroup_column_index <- 
     which(tolower(names(in_subgroups_df))==tolower(in_subgroup_column))
-  number_of_subgroups <- length(unique(in_subgroups_df[,subgroup_column_index]))
+  number_of_subgroups <- 
+    length(unique(in_subgroups_df[,subgroup_column_index]))
   if(is.null(in_palette)){
     in_palette=rainbow(number_of_subgroups)
   }
   colorCodes <- in_palette[seq_len(number_of_subgroups)]
   labels_colors(my_exposures_hc) <- 
-    colorCodes[factor(in_subgroups_df[,subgroup_column_index])][order.dendrogram(my_exposures_hc)]
+    colorCodes[factor(in_subgroups_df[,subgroup_column_index])][
+      order.dendrogram(my_exposures_hc)]
   ## 5. prepare for plotting and plot
   max_height <- max(my_exposures_hierarchy$height)
   if (!is.null(in_filename)) {
@@ -1542,7 +1344,7 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
 
 #' Heatmap to cluster the PIDs on their signature exposures (ComplexHeatmap)
 #'
-#' The PIDs are clustered according to their signature exposures. unses package
+#' The PIDs are clustered according to their signature exposures. uses package
 #' \pkg{ComplexHeatmap} by Zuguang Gu. This function calls: 
 #' \itemize{
 #'  \item \code{\link[ComplexHeatmap]{rowAnnotation}},
@@ -1562,9 +1364,9 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
 #' @param in_data_type
 #'  Title in the figure
 #' @param in_method
-#'  Method of the clustering to be supplied to \code{\link{dist}}. Can be either
-#'  of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
-#'  \code{binary} or \code{minkowski}
+#'  Method of the clustering to be supplied to \code{\link{dist}}. Can be
+#'  either of: \code{euclidean}, \code{maximum}, \code{manhattan}, 
+#'  \code{canberra}, \code{binary} or \code{minkowski}
 #' @param in_subgroup_column
 #'  Indicates the name of the column in which the subgroup information
 #'  is encoded in \code{in_subgroups_df}
@@ -1580,12 +1382,14 @@ hclust_exposures <- function(in_exposures_df,in_subgroups_df,
 #'  with an overall exposure less than \code{in_cutoff} will be
 #'  discarded for the clustering.
 #' @param in_filename
-#'  A path to save the heatmap. If none is specified, the figure will be plotted
-#'  to the running environment.
+#'  A path to save the heatmap. If none is specified, the figure will be 
+#'  plotted to the running environment.
 #' @param in_column_anno_borders
-#'  Whether or not to draw separating lines between the fields in the annotation
+#'  Whether or not to draw separating lines between the fields in the 
+#'  annotation
 #' @param in_row_anno_borders
-#'  Whether or not to draw separating lines between the fields in the annotation
+#'  Whether or not to draw separating lines between the fields in the 
+#'  annotation
 #'
 #' @details
 #'  It might be necessary to install the newest version of the development 
@@ -1689,9 +1493,9 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,
 #' @param in_data_type
 #'  Title in the figure
 #' @param in_method
-#'  Method of the clustering to be supplied to \code{\link{dist}}. Can be either
-#'  of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
-#'  \code{binary} or \code{minkowski}
+#'  Method of the clustering to be supplied to \code{\link{dist}}. Can be 
+#'  either of: \code{euclidean}, \code{maximum}, \code{manhattan}, 
+#'  \code{canberra}, \code{binary} or \code{minkowski}
 #' @param in_palette
 #'  Palette with colours or colour codes for the heatmap. Default is
 #'  \code{colorRamp2(c(0, 0.2, 0.4, 0.6), c('white','yellow','orange','red'))}
@@ -1700,12 +1504,14 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,
 #'  with an overall exposure less than \code{in_cutoff} will be
 #'  discarded for the clustering.
 #' @param in_filename
-#'  A path to save the heatmap. If none is specified, the figure will be plotted
-#'  to the running environment.
+#'  A path to save the heatmap. If none is specified, the figure will be 
+#'  plotted to the running environment.
 #' @param in_column_anno_borders
-#'  Whether or not to draw separating lines between the fields in the annotation
+#'  Whether or not to draw separating lines between the fields in the 
+#'  annotation
 #' @param in_row_anno_borders
-#'  Whether or not to draw separating lines between the fields in the annotation
+#'  Whether or not to draw separating lines between the fields in the 
+#'  annotation
 #' @param in_show_PIDs
 #'  Whether or not to show the PIDs on the x-axis
 #' @param in_annotation_legend_side
@@ -1732,22 +1538,17 @@ complex_heatmap_exposures <- function(in_exposures_df,in_subgroups_df,
 #' @import circlize
 #' @export
 #' 
-annotation_heatmap_exposures <- function(in_exposures_df,
-                                         in_annotation_df,
-                                         in_annotation_col,
-                                         in_signatures_ind_df,
-                                         in_data_type="norm exposures",
-                                         in_method="manhattan",
-                                         in_palette=colorRamp2(c(0,0.2,0.4,0.6), 
-                                                               c('white','yellow',
-                                                                 'orange','red')),
-                                         in_cutoff=0,in_filename=NULL,
-                                         in_column_anno_borders=FALSE,
-                                         in_row_anno_borders=FALSE,
-                                         in_show_PIDs=TRUE,
-                                         in_annotation_legend_side="right"#,
-                                         #in_show_legend_bool_vector=rep(TRUE,length(in_annotation_col))
-                                         ){
+annotation_heatmap_exposures <- 
+  function(in_exposures_df, in_annotation_df, in_annotation_col,
+           in_signatures_ind_df, in_data_type="norm exposures",
+           in_method="manhattan",
+           in_palette=colorRamp2(c(0,0.2,0.4,0.6), 
+                                 c('white','yellow', 'orange','red')),
+           in_cutoff=0,in_filename=NULL, in_column_anno_borders=FALSE,
+           in_row_anno_borders=FALSE, in_show_PIDs=TRUE,
+           in_annotation_legend_side="right"#,
+           #in_show_legend_bool_vector=rep(TRUE,length(in_annotation_col))
+  ){
   if(!in_row_anno_borders){
     row_anno = rowAnnotation(
       df = data.frame(signature = in_signatures_ind_df$index),
@@ -1843,13 +1644,11 @@ annotation_heatmap_exposures <- function(in_exposures_df,
 #' @return The function doesn't return any value.
 #' 
 #' @examples
-#' NULL
-#' \dontrun{
 #'  data(lymphoma_test)
 #'  choice_PID <- "4121361"
 #'  PID_df <- subset(lymphoma_test_df,PID==choice_PID)
 #'  trellis_rainfall_plot(PID_df,in_point_size=unit(0.5,"mm"))
-#' }
+#'  
 #' @seealso \code{\link[gtrellis]{gtrellis_layout}}
 #' @seealso \code{\link[gtrellis]{add_track}}
 #' @seealso \code{\link[grid]{grid.points}}
@@ -1861,6 +1660,44 @@ trellis_rainfall_plot <- function(in_rainfall_dat,in_point_size=unit(1,"mm"),
                                   in_rect_list=NULL,in_title="",
                                   in_CHROM.field="CHROM",in_POS.field="POS",
                                   in_dist.field="dist",in_col.field="col") {
+  # account for input data type
+  if(inherits(in_rainfall_dat, "VRanges")) {
+    if(!(in_dist.field %in% names(mcols(in_rainfall_dat)))){
+      in_rainfall_dat <- annotate_intermut_dist_PID(in_rainfall_dat)
+    }
+    choice_column_vector <- c("seqnames", "start", "ref", "alt",
+                              "dist", in_col.field)
+    in_rainfall_dat <- as.data.frame(in_rainfall_dat)
+    colum_names <- intersect(names(in_rainfall_dat),choice_column_vector)
+    in_rainfall_dat <- in_rainfall_dat[,colum_names]
+    names(in_rainfall_dat) <- 
+      gsub("dist", in_dist.field, names(in_rainfall_dat))
+    names(in_rainfall_dat) <- 
+      gsub("seqnames", in_CHROM.field, names(in_rainfall_dat))
+    names(in_rainfall_dat) <- 
+      gsub("start", in_POS.field, names(in_rainfall_dat))
+    names(in_rainfall_dat) <- gsub("ref", "REF", names(in_rainfall_dat))
+    names(in_rainfall_dat) <- gsub("alt", "ALT", names(in_rainfall_dat))
+  } else if(inherits(in_rainfall_dat, "data.frame")){
+    if(!(in_dist.field %in% names(in_rainfall_dat))){
+      in_rainfall_dat <- 
+        annotate_intermut_dist_PID(in_rainfall_dat, 
+                                   in_CHROM.field = in_CHROM.field,
+                                   in_POS.field = in_POS.field)
+      names(in_rainfall_dat) <- 
+        gsub("dist", in_dist.field, names(in_rainfall_dat))
+    }
+  } else cat("YAPSA:::trellis_rainfall_plot::warning: Input is neither ",
+             "a VRanges object nor a data frame")
+  # attribute nucleotide exchanges
+  if(!(in_col.field %in% names(in_rainfall_dat))){
+    in_rainfall_dat$change <- attribute_nucleotide_exchanges(in_rainfall_dat)
+    exchange_colour_vector <- 
+      c("blue", "black", "red", "purple", "orange", "green")
+    names(exchange_colour_vector) <- c("CA", "CG", "CT", "TA", "TC", "TG")
+    in_rainfall_dat$col <- exchange_colour_vector[in_rainfall_dat$change]
+    names(in_rainfall_dat) <- gsub("col", in_col.field, names(in_rainfall_dat))
+  }
   my_alpha <- 0.1
   CHROM_ind <- which(names(in_rainfall_dat)==in_CHROM.field)
   POS_ind <- which(names(in_rainfall_dat)==in_POS.field)
@@ -1883,9 +1720,10 @@ trellis_rainfall_plot <- function(in_rainfall_dat,in_point_size=unit(1,"mm"),
       temp_df <- temp_list$df
       temp_alpha <- temp_list$alpha
       add_track(temp_df, track = 2, panel_fun = function(gr) {
-        grid.rect(gr[[2]], unit(0, "npc"), width=gr[[4]], height=unit(1, "npc"),
-                  default.units = "native", hjust=0, vjust=0, 
-                  gp = gpar(col=temp_color,fill =temp_color,alpha=temp_alpha))        
+        grid.rect(gr[[2]], unit(0, "npc"), width=gr[[4]], 
+                  height=unit(1, "npc"), default.units = "native", 
+                  hjust=0, vjust=0, 
+                  gp = gpar(col=temp_color,fill =temp_color,alpha=temp_alpha))
       })
     }
   }

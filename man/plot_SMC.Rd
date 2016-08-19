@@ -13,7 +13,7 @@ plot_SMC(number_of_strata, output_path, decomposition_method, number_of_sigs,
 \arguments{
 \item{number_of_strata}{Number of strata as deduced from \code{link{SMC}}}
 
-\item{output_path}{Path to file where the results are going to be stored. If NULL, the results 
+\item{output_path}{Path to file where the results are going to be stored. If NULL, the results
 will be plotted to the running environment.}
 
 \item{decomposition_method}{String for the filename of the generated barplot.}
@@ -36,8 +36,8 @@ to which subgroup}
 \item{exposures_both_rel_df_list}{A list of \code{s} strata specific cohortwide (i.e. averaged over cohort)
 normalized exposures}
 
-\item{cohort_method_flag}{Either or several of \code{c("all_PIDs","cohort","norm_PIDs")}, representing
-alternative ways to average over the cohort.}
+\item{cohort_method_flag}{Either or several of \code{c("all_PIDs","cohort","norm_PIDs")}, 
+representing alternative ways to average over the cohort.}
 
 \item{fig_width}{Width of the figure to be plotted}
 

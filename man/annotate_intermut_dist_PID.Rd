@@ -4,28 +4,31 @@
 \alias{annotate_intermut_dist_PID}
 \title{Annotate the intermutation distance of variants per PID}
 \usage{
-annotate_intermut_dist_PID(in_df, in_CHROM.field = "CHROM",
-  in_POS.field = "POS", in_mode = "min")
+annotate_intermut_dist_PID(in_dat, in_CHROM.field = "CHROM",
+  in_POS.field = "POS", in_mode = "min", in_verbose = FALSE)
 }
 \arguments{
-\item{in_df}{Data frame which carries (at least) one column for the chromosome and one 
-column for the position.}
+\item{in_dat}{VRanges object or data frame which carries (at least) one column for the 
+chromosome and one column for the position.}
 
-\item{in_CHROM.field}{String indicating which column of \code{in_df} carries the chromosome 
-information}
+\item{in_CHROM.field}{String indicating which column of \code{in_dat} carries the chromosome 
+information if dealing with data frames.}
 
-\item{in_POS.field}{String indicating which column of \code{in_df} carries the position 
-information}
+\item{in_POS.field}{String indicating which column of \code{in_dat} carries the position 
+information if dealing with data frames.}
 
 \item{in_mode}{String passed to \code{\link[circlize]{rainfallTransform}} indicating which
 method to choose for the computation of the intermutational distance.}
+
+\item{in_verbose}{Whether verbose or not.}
 }
 \value{
-A data frame identical to \code{in_df}, but with the intermutation 
- distance annotated as an additional column on the right named \code{dist}.
+VRanges object or data frame identical to \code{in_dat}, but with 
+ the intermutation distance annotated as an additional column on the right 
+ named \code{dist}.
 }
 \description{
-The function annotates the intermutational distance to a PID wide data frame 
+The function annotates the intermutational distance to a PID wide data frame
 by applying \code{\link[circlize]{rainfallTransform}} to every 
 chromosome-specific subfraction of the PID wide data.
 }

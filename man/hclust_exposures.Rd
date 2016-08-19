@@ -16,17 +16,17 @@ signature contributes how much to which PID (patient identifier or sample).}
 \item{in_subgroups_df}{A data frame indicating which PID (patient or sample identifyier) belongs
 to which subgroup}
 
-\item{in_method}{Method of the clustering to be supplied to \code{\link{dist}}. Can be either
-of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
-\code{binary} or \code{minkowski}}
+\item{in_method}{Method of the clustering to be supplied to \code{\link{dist}}. Can be
+either of: \code{euclidean}, \code{maximum}, \code{manhattan}, 
+\code{canberra}, \code{binary} or \code{minkowski}}
 
 \item{in_subgroup_column}{Indicates the name of the column in which the subgroup information
 is encoded in \code{in_subgroups_df}}
 
-\item{in_palette}{Palette with colours or colour codes for the labels (the text) of the leaves
-in the dendrogram. Typically one colour per subgroup. If none is specified, 
-a rainbow palette of the length of the number of subgroups will be used as
-default.}
+\item{in_palette}{Palette with colours or colour codes for the labels (the text) of the 
+leaves in the dendrogram. Typically one colour per subgroup. If none is
+specified, a rainbow palette of the length of the number of subgroups will
+be used as default.}
 
 \item{in_cutoff}{A numeric value less than 1. Signatures from within \code{W}
 with an overall exposure less than \code{in_cutoff} will be

@@ -2,11 +2,16 @@
 % Please edit documentation in R/plot_functions.R
 \name{plot_exposures}
 \alias{plot_exposures}
+\alias{plot_relative_exposures}
 \title{Plot the exposures of a cohort}
 \usage{
 plot_exposures(in_exposures_df, in_signatures_ind_df, in_subgroups_df = NULL,
   in_sum_ind = NULL, in_subgroups.field = "subgroup", in_title = "",
   in_labels = TRUE, in_show_subgroups = TRUE, legend_height = 10)
+
+plot_relative_exposures(in_exposures_df, in_signatures_ind_df, in_subgroups_df,
+  in_sum_ind = NULL, in_subgroups.field = "subgroup", in_title = "",
+  in_labels = TRUE, in_show_subgroups = TRUE)
 }
 \arguments{
 \item{in_exposures_df}{Numerical data frame encoding the exposures \code{H}, i.e. which
@@ -35,8 +40,8 @@ subgroup information from.}
 The generated barplot - a ggplot2 plot
 }
 \description{
-The exposures \code{H}, determined by NMF or by \code{\link{LCD}}, are
-displayed as a stacked barplot by calling
+\code{plot_exposures}: The exposures \code{H}, determined by NMF or by 
+\code{\link{LCD}}, are displayed as a stacked barplot by calling
 \itemize{
  \item \code{\link[ggplot2]{geom_bar}} and optionally
  \item \code{\link[ggplot2]{geom_text}}.
@@ -44,12 +49,22 @@ displayed as a stacked barplot by calling
 The x-axis displays the PIDs (patient identifier or sample), the y-axis
 the counts attributed to the different signatures with their respective
 colours per PID. Is called by \code{\link{plot_relative_exposures}}.
+
+\code{plot_relative_exposures}: Plot the relative or normalized exposures of
+a cohort. This function first
+normalizes its input and then sends the normalized data to
+\code{\link{plot_exposures}}.
 }
 \examples{
  data(lymphoma_cohort_LCD_results)
  plot_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
                 chosen_signatures_indices_df,
                 COSMIC_subgroups_df)
+
+ data(lymphoma_cohort_LCD_results)
+ plot_relative_exposures(lymphoma_Nature2013_COSMIC_cutoff_exposures_df,
+                         chosen_signatures_indices_df,
+                         COSMIC_subgroups_df)
 
 }
 \seealso{
@@ -58,7 +73,5 @@ colours per PID. Is called by \code{\link{plot_relative_exposures}}.
 \code{\link[ggplot2]{geom_bar}}
 
 \code{\link[ggplot2]{geom_text}}
-
-\code{\link{plot_relative_exposures}}
 }
 

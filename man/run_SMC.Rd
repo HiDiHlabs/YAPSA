@@ -34,8 +34,8 @@ stratification}
 \item{refGenome}{FaFile of the reference genome to extract the motif context of the
 variants in \code{my_table}}
 
-\item{cohort_method_flag}{Either or several of \code{c("all_PIDs","cohort","norm_PIDs")}, representing
-alternative ways to average over the cohort.}
+\item{cohort_method_flag}{Either or several of \code{c("all_PIDs","cohort","norm_PIDs")}, 
+representing alternative ways to average over the cohort.}
 
 \item{in_strata_order_ind}{Index vector defining reordering of the strata}
 
@@ -76,7 +76,7 @@ A list with entries
  \code{name_list}.
 \itemize{
  \item \code{exposures_list}:
-   The list of \code{s} strata specific exposures Hi, all are numerical data 
+   The list of \code{s} strata specific exposures Hi, all are numerical data
    frames with \code{l} rows and \code{m} columns, \code{l} being the number
    of signatures and \code{m} being the number of samples
  \item \code{catalogues_list}:
@@ -95,56 +95,48 @@ construct a mutational catalogue and stratify it according to categories
 indicated by a special column in the input dataframe:
 \itemize{
  \item \code{\link{create_mutation_catalogue_from_df}}
- \item \code{\link{stratify_and_create_mutational_catalogue}}
- \item \code{\link{adjust_number_of_columns_in_list_of_catalogues}}
+ \item \code{adjust_number_of_columns_in_list_of_catalogues}
 }
 This stratification
 yields a collection of stratified mutational catalogues, these are
-reformatted and sent to the custom function \code{\link{SMC}} and thus
-indirectly to \code{\link{LCD_SMC}} to perform a signature analysis
+reformatted and sent to the custom function \code{SMC} and thus
+indirectly to \code{LCD_SMC} to perform a signature analysis
 of the stratified mutational catalogues. The result is then handed over
 to \code{\link{plot_SMC}} for visualization.
 }
 \examples{
-NULL
-\dontrun{
+ library(BSgenome.Hsapiens.UCSC.hg19)
  data(sigs)
  data(lymphoma_test)
  data(lymphoma_cohort_LCD_results)
- strata_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-                                        in_outlier_cutoffs=c(-4,4),
-                                        in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-                                        in_labels=c("small","intermediate","big"))
+ strata_list <- 
+   cut_breaks_as_intervals(lymphoma_test_df$random_norm,
+                           in_outlier_cutoffs=c(-4,4),
+                           in_cutoff_ranges_list=list(c(-2.5,-1.5),
+                                                      c(0.5,1.5)),
+                           in_labels=c("small","intermediate","big"))
  lymphoma_test_df$random_cat <- strata_list$category_vector
  choice_ind <- (names(lymphoma_Nature2013_COSMIC_cutoff_exposures_df) 
                 \%in\% unique(lymphoma_test_df$PID))
- lymphoma_test_exposures_df <- lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
- temp_subgroups_df <- make_subgroups_df(lymphoma_test_exposures_df,lymphoma_test_df)
- lymphoma_test_signatures_df <- AlexCosmicValid_sig_df[,AlexCosmicValid_sigInd_df$index]
+ lymphoma_test_exposures_df <- 
+   lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
+ temp_subgroups_df <- make_subgroups_df(lymphoma_test_exposures_df,
+                                        lymphoma_test_df)
  mut_density_list <- run_SMC(lymphoma_test_df,
-                             lymphoma_test_signatures_df,
+                             AlexCosmicValid_sig_df,
                              AlexCosmicValid_sigInd_df,
                              temp_subgroups_df,
                              column_name="random_cat",
                              refGenome=BSgenome.Hsapiens.UCSC.hg19,
                              cohort_method_flag="norm_PIDs",
                              in_rownames = rownames(AlexCosmicValid_sig_df))
-}
 
 }
 \seealso{
 \code{\link{create_mutation_catalogue_from_df}}
 
-\code{\link{stratify_and_create_mutational_catalogue}}
-
-\code{\link{adjust_number_of_columns_in_list_of_catalogues}}
-
 \code{\link{normalizeMotifs_otherRownames}}
 
-\code{\link{SMC}}
-
 \code{\link{plot_SMC}}
-
-\code{\link{LCD_SMC}}
 }
 

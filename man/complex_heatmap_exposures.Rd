@@ -24,9 +24,9 @@ the asserted colour}
 
 \item{in_data_type}{Title in the figure}
 
-\item{in_method}{Method of the clustering to be supplied to \code{\link{dist}}. Can be either
-of: \code{euclidean}, \code{maximum}, \code{manhattan}, \code{canberra},
-\code{binary} or \code{minkowski}}
+\item{in_method}{Method of the clustering to be supplied to \code{\link{dist}}. Can be
+either of: \code{euclidean}, \code{maximum}, \code{manhattan}, 
+\code{canberra}, \code{binary} or \code{minkowski}}
 
 \item{in_subgroup_column}{Indicates the name of the column in which the subgroup information
 is encoded in \code{in_subgroups_df}}
@@ -42,18 +42,20 @@ is used instead.}
 with an overall exposure less than \code{in_cutoff} will be
 discarded for the clustering.}
 
-\item{in_filename}{A path to save the heatmap. If none is specified, the figure will be plotted
-to the running environment.}
+\item{in_filename}{A path to save the heatmap. If none is specified, the figure will be 
+plotted to the running environment.}
 
-\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the annotation}
+\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the 
+annotation}
 
-\item{in_row_anno_borders}{Whether or not to draw separating lines between the fields in the annotation}
+\item{in_row_anno_borders}{Whether or not to draw separating lines between the fields in the 
+annotation}
 }
 \value{
 The function doesn't return any value.
 }
 \description{
-The PIDs are clustered according to their signature exposures. unses package
+The PIDs are clustered according to their signature exposures. uses package
 \pkg{ComplexHeatmap} by Zuguang Gu. This function calls: 
 \itemize{
  \item \code{\link[ComplexHeatmap]{rowAnnotation}},

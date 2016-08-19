@@ -2,12 +2,17 @@
 % Please edit documentation in R/LCD.R
 \name{LCD_complex_cutoff}
 \alias{LCD_complex_cutoff}
+\alias{LCD_complex_cutoff_perPID}
 \title{LCD with a signature-specific cutoff on exposures}
 \usage{
 LCD_complex_cutoff(in_mutation_catalogue_df, in_signatures_df,
   in_cutoff_vector = NULL, in_filename = NULL, in_method = "abs",
   in_per_sample_cutoff = 0, in_rescale = TRUE, in_sig_ind_df = NULL,
   in_cat_list = NULL)
+
+LCD_complex_cutoff_perPID(in_mutation_catalogue_df, in_signatures_df,
+  in_cutoff_vector = NULL, in_filename = NULL, in_method = "abs",
+  in_rescale = TRUE, in_sig_ind_df = NULL, in_cat_list = NULL)
 }
 \arguments{
 \item{in_mutation_catalogue_df}{A numeric data frame \code{V} with \code{n} rows and \code{m} columns, 
@@ -31,8 +36,8 @@ relative exposures}
 with an exposure per sample less than \code{in_cutoff} will be
 discarded.}
 
-\item{in_rescale}{Boolean, if TRUE (default) the exposures are rescaled such that colSums over
-exposures match colSums over mutational catalogue}
+\item{in_rescale}{Boolean, if TRUE (default) the exposures are rescaled such that colSums 
+over exposures match colSums over mutational catalogue}
 
 \item{in_sig_ind_df}{Data frame of type signature_indices_df, i.e. indicating name,
 function and meta-information of the signatures. Default is NULL.}
@@ -78,13 +83,13 @@ A list with entries:
    catalogue
  \item \code{out_sig_ind}:
    Data frame of the type \code{signature_indices_df}, i.e. indicating name,
-   function and meta-information of the signatures. Default is NULL, non-NULL
-   only if \code{in_sig_ind_df} is non-NULL.
+   function and meta-information of the signatures. Default is NULL, 
+   non-NULL only if \code{in_sig_ind_df} is non-NULL.
  \item \code{aggregate_exposures_list}:
-   List of exposure data frames aggregated over different categories. Default
-   is NULL, non-NULL only if \code{in_sig_ind_df} and \code{in_cat_list} are 
-   non-NULL and if the categories specified in \code{in_cat_list} are among 
-   the column names of \code{in_sig_ind_df}.
+   List of exposure data frames aggregated over different categories. 
+   Default is NULL, non-NULL only if \code{in_sig_ind_df} and 
+   \code{in_cat_list} are non-NULL and if the categories specified in 
+   \code{in_cat_list} are among the column names of \code{in_sig_ind_df}.
 }
 }
 \description{
@@ -96,6 +101,9 @@ with additional constraints of non-negativity on H where W and V
 are known, but excludes signatures with an overall contribution less than
 a given signature-specific cutoff (and thereby accounting for a background
 model) over the whole cohort.
+
+\code{LCD_complex_cutoff_perPID} is a wrapper for
+\code{\link{LCD_complex_cutoff}} and runs individually for every PID.
 }
 \examples{
  NULL
@@ -103,8 +111,6 @@ model) over the whole cohort.
 }
 \seealso{
 \code{\link{LCD}}
-
-\code{\link{LCD_cutoff}}
 
 \code{\link{aggregate_exposures_by_category}}
 

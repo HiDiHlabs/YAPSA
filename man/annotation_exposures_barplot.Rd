@@ -32,7 +32,8 @@ subgroup information from.}
 
 \item{in_barplot_borders}{Whether or not to show border lines in barplot}
 
-\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the annotation}
+\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the
+annotation}
 
 \item{in_annotation_legend_side}{Where to put the legends of the annotation df, default is right.}
 }

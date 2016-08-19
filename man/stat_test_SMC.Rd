@@ -8,15 +8,16 @@ stat_test_SMC(in_strat_list, in_flag = "norm")
 }
 \arguments{
 \item{in_strat_list}{A list with entries \code{exposures_list}, \code{catalogues_list},
-\code{cohort} and \code{name_list} as in the output of \code{\link{run_SMC}}.
+\code{cohort} and \code{name_list} as in the output of 
+\code{\link{run_SMC}}.
 \itemize{
   \item \code{exposures_list}:
-    The list of \code{s} strata specific exposures Hi, all are numerical data 
-    frames with \code{l} rows and \code{m} columns, \code{l} being the number
-    of signatures and \code{m} being the number of samples
+    The list of \code{s} strata specific exposures Hi, all are numerical 
+    data frames with \code{l} rows and \code{m} columns, \code{l} being the
+    number of signatures and \code{m} being the number of samples
   \item \code{catalogues_list}:
-    A list of \code{s} strata specific cohortwide (i.e. averaged over cohort)
-    normalized exposures
+    A list of \code{s} strata specific cohortwide (i.e. averaged over 
+    cohort) normalized exposures
   \item \code{cohort}:
     \code{subgroups_df} adjusted for plotting
   \item \code{name_list}:
@@ -33,27 +34,28 @@ A list with entries
  \code{kruskal_posthoc_list},
 \itemize{
  \item \code{kruskal_df}:
-   A data frame containing results (statistic and p values) of the Kruskal Wallis
-   tests (tests for enrichment or depletion in the different strata for every
-   signature independently).
+   A data frame containing results (statistic and p values) of the Kruskal 
+   Wallis tests (tests for enrichment or depletion in the different strata 
+   for every signature independently).
  \item \code{shapiro_df}:
    A data frame containing results (p values) of the Shapiro Wilk tests
    (tests for normal distribution in the different strata for every
    signature independently).
  \item \code{kruskal_posthoc_list}:
-   A list of results of pairwise posthoc tests carried out for those signatures
-   where the Kruskal Wallis test yielded a significant p-value (carried out by
-   \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}).
+   A list of results of pairwise posthoc tests carried out for those 
+   signatures where the Kruskal Wallis test yielded a significant p-value 
+   (carried out by \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}).
 }
 }
 \description{
-\code{stat_test_SMC} tests for enrichment or depletion in the different strata
-of a stratification of the mutational catalogue for every signature
-independently by applying Kruskal Wallis tests. For those signatures where the
-Kruskal Wallis test gives a significant p-value, pairwise posthoc tests are 
-carried out by calling \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}.
-Additionally all data is tested for normality by Shapiro Wilk tests, so that
-the user may apply ANOVA and pairwise posthoc t-test where allowed.
+\code{stat_test_SMC} tests for enrichment or depletion in the different 
+strata of a stratification of the mutational catalogue for every signature
+independently by applying Kruskal Wallis tests. For those signatures where 
+the Kruskal Wallis test gives a significant p-value, pairwise posthoc tests 
+are carried out by calling 
+\code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}. Additionally all data is
+tested for normality by Shapiro Wilk tests, so that the user may apply 
+ANOVA and pairwise posthoc t-test where allowed.
 }
 \examples{
  NULL
@@ -61,8 +63,6 @@ the user may apply ANOVA and pairwise posthoc t-test where allowed.
 }
 \seealso{
 \code{\link{run_SMC}}
-
-\code{\link{SMC}}
 
 \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}
 

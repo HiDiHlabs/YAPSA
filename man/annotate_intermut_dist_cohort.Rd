@@ -4,45 +4,62 @@
 \alias{annotate_intermut_dist_cohort}
 \title{Annotate the intermutation distance of variants cohort-wide}
 \usage{
-annotate_intermut_dist_cohort(in_df, in_CHROM.field = "CHROM",
-  in_POS.field = "POS", in_PID.field = NULL, in_mode = "min")
+annotate_intermut_dist_cohort(in_dat, in_CHROM.field = "CHROM",
+  in_POS.field = "POS", in_PID.field = NULL, in_mode = "min",
+  in_verbose = FALSE)
 }
 \arguments{
-\item{in_df}{Data frame which carries (at least) one column for the chromosome and one column
-for the position. Optionally, a column to specify the PID can be provided.}
+\item{in_dat}{VRanges object, VRangesList, data frame or list of data frames which 
+carries (at least) one column for the chromosome and one 
+column for the position. Optionally, a column to specify the PID can be 
+provided.}
 
-\item{in_CHROM.field}{String indicating which column of \code{in_df} carries the chromosome information}
+\item{in_CHROM.field}{String indicating which column of \code{in_df} carries the chromosome 
+information}
 
-\item{in_POS.field}{String indicating which column of \code{in_df} carries the position information}
+\item{in_POS.field}{String indicating which column of \code{in_df} carries the position 
+information}
 
 \item{in_PID.field}{String indicating which column of \code{in_df} carries the PID information}
 
 \item{in_mode}{String passed through \code{\link{annotate_intermut_dist_PID}} to
-\code{\link[circlize]{rainfallTransform}} indicating which method to choose for
-the computation of the intermutational distance.}
+\code{\link[circlize]{rainfallTransform}} indicating which method to choose
+for the computation of the intermutational distance.}
+
+\item{in_verbose}{Whether verbose or not.}
 }
 \value{
-A data frame identical to \code{in_df}, but with the intermutation distance
-annotated as an additional column on the right named \code{dist}.
+VRanges object, VRangesList, data frame or list of data frames 
+identical to \code{in_df} (reordered by \code{in_PID.field}), but with the 
+intermutation distance annotated as an additional column on the right named 
+\code{dist}.
 }
 \description{
-The function annotates the intermutational distance to a cohort wide data frame by
-applying \code{\link{annotate_intermut_dist_PID}} to every PID-specific subfraction
-of the cohort wide data. Note that \code{\link{annotate_intermut_dist_PID}} calls
-\code{\link[circlize]{rainfallTransform}}. If the PID information is missing,
-\code{\link{annotate_intermut_dist_PID}} is called directly for the whole input.
+The function annotates the intermutational distance to a cohort wide data 
+frame by applying \code{\link{annotate_intermut_dist_PID}} to every 
+PID-specific subfraction of the cohort wide data. Note that 
+\code{\link{annotate_intermut_dist_PID}} calls
+\code{\link[circlize]{rainfallTransform}}. If the PID information is 
+missing, \code{\link{annotate_intermut_dist_PID}} is called directly for the
+whole input.
 }
 \examples{
 test_df <- data.frame(CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
-                       POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
-                       REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
-                       ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"),
-                       PID=c(1,1,1,2,2,2,1,1,2,2,2,1,1,2))
+                      POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
+                      REF=c("C","C","C","T","T","T","A",
+                            "A","A","G","G","G","N","A"),
+                      ALT=c("A","G","T","A","C","G","C",
+                            "G","T","A","C","T","A","N"),
+                      PID=c(1,1,1,2,2,2,1,1,2,2,2,1,1,2))
 test_df <- test_df[order(test_df$PID,test_df$CHROM,test_df$POS),]
-min_dist_df <- annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-                                             in_PID.field="PID",in_mode="min")
-max_dist_df <- annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-                                             in_PID.field="PID",in_mode="max")
+min_dist_df <- 
+  annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",
+                                in_POS.field="POS", in_PID.field="PID",
+                                in_mode="min")
+max_dist_df <- 
+  annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",
+                                in_POS.field="POS", in_PID.field="PID",
+                                in_mode="max")
 min_dist_df
 max_dist_df
 

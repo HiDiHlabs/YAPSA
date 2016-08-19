@@ -1,8 +1,9 @@
-test_that("Test LCD (linear combination decomposition) with small hand made data frames", {
+test_that(paste0("Test LCD (linear combination decomposition) ",
+                 "with small hand made data frames"), {
   ## define raw data
   W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
   W_prim_df <- as.data.frame(W_prim)
-  W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+  W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
   W <- as.matrix(W_df) 
 
   ## 1. Simple case: non-negativity already in raw data
@@ -28,7 +29,7 @@ test_that("Test LCD (linear combination decomposition) with small hand made data
   H_compl[sign_ind] <- (-1)*H[sign_ind]
   H_compl_df <- as.data.frame(H_compl) # corresponds to the exposures
   V_compl <- W %*% H_compl # matrix multiplication
-  V_compl_df <- as.data.frame(V_compl) # corresponds to the mutational catalogue
+  V_compl_df <- as.data.frame(V_compl) # corresponds to the mutational catalog
   ## apply function to be tested
   exposures_df <- YAPSA:::LCD(V_compl_df,W_df)
   exposures <- as.matrix(exposures_df)
@@ -40,38 +41,44 @@ test_that("Test LCD_cutoff with small hand made data frames", {
   ## define raw data
   W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
   W_prim_df <- as.data.frame(W_prim)
-  W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+  W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
   W <- as.matrix(W_df) 
   H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
   H_df <- as.data.frame(H) # corresponds to the exposures
   V <- W %*% H # matrix multiplication
-  V_df <- as.data.frame(V) # corresponds to the mutational catalogue
+  V_df <- as.data.frame(V) # corresponds to the mutational catalog
   ## apply function to be tested
   exposures_small_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.05)
   exposures_big_cutoff_list <- YAPSA:::LCD_cutoff(V_df,W_df,in_cutoff = 0.4)
   ## compare
   expect_lt(max(abs(exposures_small_cutoff_list$exposures - H_df)),1e-05)
-  expect_that(dim(exposures_big_cutoff_list$exposures)[1], equals(dim(H_df)[1] - 1))
+  expect_that(dim(exposures_big_cutoff_list$exposures)[1], 
+              equals(dim(H_df)[1] - 1))
 })
 
 test_that("Test LCD_SMC with small hand made data frames", {
   ## define raw data
   W_prim <- matrix(c(1,2,3,4,5,6),ncol=2) 
   W_prim_df <- as.data.frame(W_prim)
-  W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the signatures
+  W_df <- YAPSA:::normalize_df_per_dim(W_prim_df,2) # corresponds to the sigs
   W <- as.matrix(W_df) 
   H <- matrix(c(2,5,3,6,1,9,1,2),ncol=4)
-  ## define indices where sign is going to be swapped for different strata (perturbation)
+  ## define indices where sign is going to be swapped for 
+  ## different strata (perturbation)
   sign_ind_1 <- c(5,7)
   sign_ind_2 <- c(1)
-  ## compute the column-wise index complements for the different strata for later use
+  ## compute the column-wise index complements for the different strata 
+  ## for later use
   col_ind_1 <- sign_ind_1 %/% dim(H)[1]
   other_col_ind_1 <- setdiff(c(0:(dim(H)[2]-1)),col_ind_1)
-  other_ind_1 <- rep(other_col_ind_1*dim(H)[1],each=dim(H)[1]) + rep(seq_len(dim(H)[1]),length(other_col_ind_1))
+  other_ind_1 <- rep(other_col_ind_1*dim(H)[1],each=dim(H)[1]) + 
+    rep(seq_len(dim(H)[1]),length(other_col_ind_1))
   col_ind_2 <- sign_ind_2 %/% dim(H)[1]
   other_col_ind_2 <- setdiff(c(0:(dim(H)[2]-1)),col_ind_2)
-  other_ind_2 <- rep(other_col_ind_2*dim(H)[1],each=dim(H)[1]) + rep(seq_len(dim(H)[1]),length(other_col_ind_2))
-  ## alter the matrix H to yield a new mutational catalogue for every stratum (perturbation)
+  other_ind_2 <- rep(other_col_ind_2*dim(H)[1],each=dim(H)[1]) + 
+    rep(seq_len(dim(H)[1]),length(other_col_ind_2))
+  ## alter the matrix H to yield a new mutational catalogue for 
+  ## every stratum (perturbation)
   H_1 <- H
   H_2 <- H
   H_1[sign_ind_1] <- (-1)*H[sign_ind_1]
@@ -81,9 +88,9 @@ test_that("Test LCD_SMC with small hand made data frames", {
   V_1 <- W %*% H_1 # matrix multiplication
   V_2 <- W %*% H_2 # matrix multiplication
   V <- V_1 + V_2
-  V_1_df <- as.data.frame(V_1) # corresponds to the mutational catalogue of stratum 1
-  V_2_df <- as.data.frame(V_2) # corresponds to the mutational catalogue of stratum 2
-  V_df <- as.data.frame(V) # corresponds to the mutational catalogue of the whole cohort
+  V_1_df <- as.data.frame(V_1) # mutational catalog of stratum 1
+  V_2_df <- as.data.frame(V_2) # mutational catalog of stratum 2
+  V_df <- as.data.frame(V) # mutational catalog of the whole cohort
   V_list <- list()  # make list of data frames
   V_list[[1]] <- V_1_df
   V_list[[2]] <- V_2_df
@@ -95,18 +102,24 @@ test_that("Test LCD_SMC with small hand made data frames", {
   simple_exposures_1 <- as.matrix(simple_exposures_1_df)
   simple_exposures_2_df <- YAPSA:::LCD(V_2_df,W_df)
   simple_exposures_2 <- as.matrix(simple_exposures_2_df)
-  ## check if the overall decomposition is equal to the result of the normal LCD
-  expect_that(exposures_strata_list$exposures_all_df, equals(simple_exposures_all_df))
-  ## check if the sum of the exposures of the strata equals the result of the normal LCD
-  expect_that(exposures_strata_list$sub_exposures_list[[1]] + exposures_strata_list$sub_exposures_list[[2]],
+  ## check if the overall decomposition is equal to the result of 
+  ## the normal LCD
+  expect_that(exposures_strata_list$exposures_all_df, 
+              equals(simple_exposures_all_df))
+  ## check if the sum of the exposures of the strata equals 
+  ## the result of the normal LCD
+  expect_that(exposures_strata_list$sub_exposures_list[[1]] +
+                exposures_strata_list$sub_exposures_list[[2]],
               equals(simple_exposures_all_df))
   ## check if the positions not affected by the perturbation remain the same
   # comp_exposures_1_df <- exposures_strata_list$sub_exposures_list[[1]]
   # comp_exposures_1_sub_df <- comp_exposures_1_df[,other_col_ind_2+1]
   # simple_exposures_1_sub_df <- simple_exposures_1_df[,other_col_ind_2+1]
-  # expect_lt(max(abs(comp_exposures_1_sub_df - simple_exposures_1_sub_df)),1e-05)
+  # expect_lt(max(abs(comp_exposures_1_sub_df - 
+  #   simple_exposures_1_sub_df)),1e-05)
   # comp_exposures_2_df <- exposures_strata_list$sub_exposures_list[[2]]
   # comp_exposures_2_sub_df <- comp_exposures_2_df[,other_col_ind_1+1]
   # simple_exposures_2_sub_df <- simple_exposures_2_df[,other_col_ind_1+1]
-  # expect_lt(max(abs(comp_exposures_2_sub_df - simple_exposures_2_sub_df)),1e-05)
+  # expect_lt(max(abs(comp_exposures_2_sub_df - 
+  #   simple_exposures_2_sub_df)),1e-05)
 })

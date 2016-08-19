@@ -55,9 +55,7 @@ the breakpoint by chosing a local minimum of the distribution.
    in_outlier_cutoffs=c(-4,4),
    in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
    in_labels=c("small","intermediate","big"))
- \dontrun{
   temp_list$density_plot
- }
 
 }
 \seealso{

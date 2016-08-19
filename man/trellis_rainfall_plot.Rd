@@ -48,13 +48,11 @@ functions. Therefore reformatting is performed in this function before
 calling gtrellis functions.
 }
 \examples{
-NULL
-\dontrun{
  data(lymphoma_test)
  choice_PID <- "4121361"
  PID_df <- subset(lymphoma_test_df,PID==choice_PID)
  trellis_rainfall_plot(PID_df,in_point_size=unit(0.5,"mm"))
-}
+ 
 }
 \seealso{
 \code{\link[gtrellis]{gtrellis_layout}}

@@ -45,9 +45,9 @@ function takes as arguments paths to the used reference genome and target
 capture file. It the extracts the sequence of the target capture by calling 
 \code{bedtools getfasta} on the system command prompt. 
 \code{run_kmer_frequency_normalization} then calls a custom made perl
-script \code{kmer_frequencies.pl} also included in this package to count the 
+script \code{kmer_frequencies.pl} also included in this package to count the
 occurences of the tripletts in both the whole reference genome and the 
-created target capture sequence. These counts are used for normalization as 
+created target capture sequence. These counts are used for normalization as
 in \code{\link[SomaticSignatures]{normalizeMotifs}}. Note that
 \code{\link[SomaticSignatures]{kmerFrequency}} provides a solution to 
 approximate kmer frequencies by random sampling. As opposed to that 

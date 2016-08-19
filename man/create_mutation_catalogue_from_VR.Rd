@@ -52,8 +52,6 @@ the motif context of the variants in the input VRanges and then calling
 mutational catalogue \code{V}.
 }
 \examples{
-NULL
-\dontrun{
  library(BSgenome.Hsapiens.UCSC.hg19)
  data(lymphoma_test)
  data(sigs)
@@ -82,7 +80,6 @@ NULL
    in_verbose=1,in_rownames=rownames(AlexCosmicValid_sig_df)) 
  dim(other_list$matrix)
  head(other_list$matrix)
-}
 
 }
 \seealso{

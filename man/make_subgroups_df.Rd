@@ -14,25 +14,28 @@ make_subgroups_df(in_exposures_df, in_vcf_like_df, in_palette = NULL,
 
 \item{in_palette}{Palette for colour attribution to the subgroups if nun-NULL}
 
-\item{in_subgroup.field}{String indicating which column of \code{in_vcf_like_df} carries the subgroup information}
+\item{in_subgroup.field}{String indicating which column of \code{in_vcf_like_df} carries the 
+subgroup information}
 
-\item{in_PID.field}{String indicating which column of \code{in_vcf_like_df} and of \code{in_exposures_df}
-carries the PID information}
+\item{in_PID.field}{String indicating which column of \code{in_vcf_like_df} and of 
+\code{in_exposures_df} carries the PID information}
 }
 \value{
 subgroups_df:
  A data frame carrying the subgroup and rank information.
 }
 \description{
-Creates a data frame carrying the subgroup information and the order in which the PIDs
-have to be displayed. Calls \code{\link{aggregate}} on \code{in_vcf_like_df}.
+Creates a data frame carrying the subgroup information and the order in 
+which the PIDs have to be displayed. Calls \code{\link{aggregate}} on 
+\code{in_vcf_like_df}.
 }
 \examples{
  data(lymphoma_test)
  data(lymphoma_cohort_LCD_results)
  choice_ind <- (names(lymphoma_Nature2013_COSMIC_cutoff_exposures_df) 
                 \%in\% unique(lymphoma_test_df$PID))
- lymphoma_test_exposures_df <- lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
+ lymphoma_test_exposures_df <- 
+   lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
  make_subgroups_df(lymphoma_test_exposures_df,lymphoma_test_df)
 
 }

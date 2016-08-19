@@ -38,45 +38,53 @@ test_that("Test repeat_df", {
 
 test_that("Test normalize_df_per_dim", {
   ## define a test data set
-  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+                               ncol=4))
   ## 1. test row-wise
   choice_rows <- which(rowSums(test_df)>0)
   ## 1.a run function
   row_norm_df <- YAPSA:::normalize_df_per_dim(test_df,1)
   ## 1.b compare
-  expect_that(rowSums(row_norm_df[choice_rows,]), is_equivalent_to(rep(1,length(choice_rows))))
-  expect_that(rowSums(row_norm_df[-choice_rows,]), is_equivalent_to(rep(0,dim(test_df)[1]-length(choice_rows))))
+  expect_that(rowSums(row_norm_df[choice_rows,]), 
+              is_equivalent_to(rep(1,length(choice_rows))))
+  expect_that(rowSums(row_norm_df[-choice_rows,]), 
+              is_equivalent_to(rep(0,dim(test_df)[1]-length(choice_rows))))
   ## 2. test column-wise
   choice_cols <- which(colSums(test_df)>0)
   ## 2.a run function
   col_norm_df <- YAPSA:::normalize_df_per_dim(test_df,2)
   ## 2.b compare
-  expect_that(colSums(col_norm_df[,choice_cols]), is_equivalent_to(rep(1,length(choice_cols))))
+  expect_that(colSums(col_norm_df[,choice_cols]), 
+              is_equivalent_to(rep(1,length(choice_cols))))
   expect_that(sum(col_norm_df[,-choice_cols]), is_equivalent_to(0))
 })
 
 
 test_that("Test average_over_present", {
   ## define a test data set
-  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+                               ncol=4))
   ## 1. test row-wise
   choice_cols <- which(colSums(test_df)>0)
   ## 1.a run function
   row_mean_vec <- YAPSA:::average_over_present(test_df,1)
   ## 1.b compare
-  expect_that(apply(test_df[,choice_cols],1,mean), is_equivalent_to(row_mean_vec))
+  expect_that(apply(test_df[,choice_cols],1,mean), 
+              is_equivalent_to(row_mean_vec))
   ## 2. test column-wise
   choice_rows <- which(rowSums(test_df)>0)
   ## 2.a run function
   col_mean_vec <- YAPSA:::average_over_present(test_df,2)
   ## 2.b compare
-  expect_that(apply(test_df[choice_rows,],2,mean), is_equivalent_to(col_mean_vec))
+  expect_that(apply(test_df[choice_rows,],2,mean), 
+              is_equivalent_to(col_mean_vec))
 })
 
 
 test_that("Test sd_over_present", {
   ## define a test data set
-  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+                               ncol=4))
   ## 1. test row-wise
   choice_cols <- which(colSums(test_df)>0)
   ## 1.a run function
@@ -122,25 +130,30 @@ test_that("Test the stderrmean function with small dummy vector",{
 
 test_that("Test stderrmean_over_present", {
   ## define a test data set
-  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),ncol=4))
+  test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
+                               ncol=4))
   ## 1. test row-wise
   choice_cols <- which(colSums(test_df)>0)
   ## 1.a run function
   row_stderrmean_vec <- YAPSA:::stderrmean_over_present(test_df,1)
   ## 1.b compare
-  expect_that(apply(test_df[,choice_cols],1,stderrmean), is_equivalent_to(row_stderrmean_vec))
+  expect_that(apply(test_df[,choice_cols],1,stderrmean), 
+              is_equivalent_to(row_stderrmean_vec))
   ## 2. test column-wise
   choice_rows <- which(rowSums(test_df)>0)
   ## 2.a run function
   col_stderrmean_vec <- YAPSA:::stderrmean_over_present(test_df,2)
   ## 2.b compare
-  expect_that(apply(test_df[choice_rows,],2,stderrmean), is_equivalent_to(col_stderrmean_vec))
+  expect_that(apply(test_df[choice_rows,],2,stderrmean), 
+              is_equivalent_to(col_stderrmean_vec))
 })
 
 
 test_that("Test translate_to_hg19 on very simple synthetic data", {
   ## define a test data set
-  test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),dummy=c("a","b","c","d"))
+  test_df <- data.frame(CHROM=c(1, 2, 23, 24), 
+                        POS=c(100, 120000000, 300000, 25000),
+                        dummy=c("a", "b", "c", "d"))
   ## run function
   hg19_df <- translate_to_hg19(test_df, in_CHROM.field = "CHROM")
   ## compare
@@ -151,7 +164,9 @@ test_that("Test translate_to_hg19 on very simple synthetic data", {
 
 test_that("Test translate_to_1kG on very simple synthetic data", {
   ## define a test data set
-  test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),dummy=c("a","b","c","d"))
+  test_df <- data.frame(CHROM=c(1, 2, 23, 24),
+                        POS=c(100, 120000000, 300000, 25000),
+                        dummy=c("a", "b", "c", "d"))
   hg19_df <- translate_to_hg19(test_df, in_CHROM.field = "CHROM")
   ## run function
   onekG_df <- translate_to_1kG(hg19_df, in_CHROM.field = "CHROM")
@@ -161,17 +176,23 @@ test_that("Test translate_to_1kG on very simple synthetic data", {
 })
 
 
-test_that("Test attribute_nucleotide_exchanges on very simple synthetic data", {
+test_that(paste0("Test attribute_nucleotide_exchanges on ",
+                 "very simple synthetic data"), {
   ## define a test data set
   test_df <- data.frame(CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
                         POS=c(1,2,3,4,5,6,1,2,3,4,5,6,7,8),
-                        REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
-                        ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"))
+                        REF=c("C","C","C","T","T","T","A",
+                              "A","A","G","G","G","N","A"),
+                        ALT=c("A","G","T","A","C","G","C",
+                              "G","T","A","C","T","A","N"))
   ## run function
-  test_df$change <- attribute_nucleotide_exchanges(test_df,in_REF.field = "REF",in_ALT.field = "ALT")
+  test_df$change <- attribute_nucleotide_exchanges(test_df, 
+                                                   in_REF.field = "REF",
+                                                   in_ALT.field = "ALT")
   ## compare
   expect_that(test_df$change,
-              equals(factor(c("CA","CG","CT","TA","TC","TG","TG","TC","TA","CT","CG","CA",NA,NA),
+              equals(factor(c("CA","CG","CT","TA","TC","TG","TG",
+                              "TC","TA","CT","CG","CA",NA,NA),
                             levels=c("CA", "CG", "CT", "TA", "TC", "TG"))))
 })
 
@@ -180,13 +201,15 @@ test_that("Test annotate_intermut_dist_PID on very simple synthetic data", {
   ## define a test data set
   test_df <- data.frame(CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
                         POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
-                        REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
-                        ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"))
+                        REF=c("C","C","C","T","T","T","A",
+                              "A","A","G","G","G","N","A"),
+                        ALT=c("A","G","T","A","C","G","C",
+                              "G","T","A","C","T","A","N"))
   ## run function
-  min_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-                                        in_mode="min")
-  max_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-                                            in_mode="max")
+  min_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",
+                                            in_POS.field="POS", in_mode="min")
+  max_dist_df <- annotate_intermut_dist_PID(test_df,in_CHROM.field="CHROM",
+                                            in_POS.field="POS", in_mode="max")
   ## compare
   expect_that(min_dist_df$dist,equals(c(1,1,2,2,2,3,3,3,4,10,10,20,100,100)))
   expect_that(max_dist_df$dist,equals(c(1,2,2,2,3,3,3,4,4,10,20,20,100,100)))
@@ -197,27 +220,39 @@ test_that("Test annotate_intermut_dist_cohort on very simple synthetic data", {
   ## define a test data set
   test_df <- data.frame(CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
                         POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
-                        REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
-                        ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"),
+                        REF=c("C","C","C","T","T","T","A",
+                              "A","A","G","G","G","N","A"),
+                        ALT=c("A","G","T","A","C","G","C",
+                              "G","T","A","C","T","A","N"),
                         PID=c(1,1,1,2,2,2,1,1,2,2,2,1,1,2))
   test_df <- test_df[order(test_df$PID,test_df$CHROM,test_df$POS),]
   ## run function
-  min_dist_df <- annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-                                               in_PID.field="PID",in_mode="min")
-  max_dist_df <- annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-                                               in_PID.field="PID",in_mode="max")
+  min_dist_df <- annotate_intermut_dist_cohort(test_df,
+                                               in_CHROM.field = "CHROM",
+                                               in_POS.field = "POS",
+                                               in_PID.field = "PID",
+                                               in_mode = "min")
+  max_dist_df <- annotate_intermut_dist_cohort(test_df,
+                                               in_CHROM.field = "CHROM",
+                                               in_POS.field = "POS",
+                                               in_PID.field = "PID",
+                                               in_mode = "max")
   ## compare
-  expect_that(min_dist_df$dist,equals(c(1,1,2,3,3,1e+08,1e+08,2,2,3,1e+08,10,10,1e+08)))
-  expect_that(max_dist_df$dist,equals(c(1,2,2,3,3,1e+08,1e+08,2,3,3,1e+08,10,10,1e+08)))
+  expect_that(min_dist_df$dist,
+              equals(c(1,1,2,3,3,1e+08,1e+08,2,2,3,1e+08,10,10,1e+08)))
+  expect_that(max_dist_df$dist,
+              equals(c(1,2,2,3,3,1e+08,1e+08,2,3,3,1e+08,10,10,1e+08)))
 })
 
 
 test_that("Test shapiro_if_possible on very simple synthetic data", {
   significance_threshold <- 0.05
   set.seed(1)
-  expect_lt(shapiro_if_possible(runif(100,min=2,max=4)),significance_threshold)
+  expect_lt(shapiro_if_possible(runif(100,min=2,max=4)), 
+            significance_threshold)
   set.seed(1)
-  expect_more_than(shapiro_if_possible(rnorm(100,mean=5,sd=3)),significance_threshold)
+  expect_more_than(shapiro_if_possible(rnorm(100,mean=5,sd=3)),
+                   significance_threshold)
   expect_that(shapiro_if_possible(rep(4.3,100)),equals(0))
   expect_null(shapiro_if_possible(c("Hello","World")))
 })
@@ -228,9 +263,11 @@ test_that("Test make_subgroups_df with real data",{
   data(lymphoma_cohort_LCD_results)
   choice_ind <- (names(lymphoma_Nature2013_COSMIC_cutoff_exposures_df) 
                  %in% unique(lymphoma_test_df$PID))
-  lymphoma_test_exposures_df <- lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
-  test_subgroups_df <- make_subgroups_df(lymphoma_test_exposures_df,lymphoma_test_df)
-  real_subgroups_df <- aggregate(SUBGROUP~PID,data=lymphoma_test_df,
+  lymphoma_test_exposures_df <- 
+    lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
+  test_subgroups_df <- 
+    make_subgroups_df(lymphoma_test_exposures_df, lymphoma_test_df)
+  real_subgroups_df <- aggregate(SUBGROUP~PID, data = lymphoma_test_df,
                                  function(l) return(l[1]))
   real_subgroups_df[,2] <- as.character(real_subgroups_df[,2])
   expect_that(test_subgroups_df[,c(1,2)],is_equivalent_to(real_subgroups_df))

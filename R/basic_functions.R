@@ -23,19 +23,7 @@ cosineDist <- function(a,b){
 }
 
 
-#' Wrapper function for \code{\link[grid]{viewport}}
-#'
-#' @param x,y
-#'  Passed to \code{\link[grid]{viewport}} as \code{layout.pos.row} and
-#'  \code{layout.pos.col}
-#'  
-#' @return The result of the \code{\link[grid]{viewport}} function.
-#'
-#' @examples
-#'  NULL
-#'
 #' @import grid
-#' @export
 #' 
 vplayout <- function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)
 
@@ -135,8 +123,9 @@ repeat_df <- function(in_value,in_rows,in_cols) {
 }
 
 
-#' Normalize a numerical data frame over a specified dimension
+#' Useful functions on data frames
 #'
+#' \code{normalize_df_per_dim}: 
 #' Normalization is carried out by dividing by \code{rowSums} or \code{colSums};
 #' for rows with \code{rowSums=0} or columns with \code{colSums=0}, the
 #' normalization is left out.
@@ -144,8 +133,8 @@ repeat_df <- function(in_value,in_rows,in_cols) {
 #' @param in_df
 #'  Data frame to be normalized
 #' @param in_dimension
-#'  Dimension along which the normalization will be carried out
-#' @return The normalized numerical data frame
+#'  Dimension along which the operation will be carried out
+#' @return The normalized numerical data frame (\code{normalize_df_per_dim})
 #' 
 #' @examples
 #' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
@@ -181,15 +170,12 @@ normalize_df_per_dim <- function(in_df,in_dimension) {
 
 #' Average a data frame over a specified dimension
 #'
+#' \code{average_over_present}: 
 #' If averaging over columns, zero rows (i.e. those with \code{rowSums=0})
 #' are left out, if averaging over rows, zero columns (i.e. those with
 #' \code{colSums=0}) are left out.
 #'
-#' @param in_df
-#'  Data frame to be normalized
-#' @param in_dimension
-#'  Dimension along which the averaging will be carried out
-#' @return A vector of the means
+#' @return A vector of the means (\code{average_over_present})
 #' 
 #' @examples
 #' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
@@ -200,6 +186,7 @@ normalize_df_per_dim <- function(in_df,in_dimension) {
 #' average_over_present(test_df,2)
 #' 
 #' @export
+#' @rdname normalize_df_per_dim
 #' 
 average_over_present <- function(in_df,in_dimension) {
   out_vector <- c()
@@ -232,16 +219,13 @@ average_over_present <- function(in_df,in_dimension) {
 
 #' Standard deviation of a data frame over a specified dimension
 #'
+#' \code{sd_over_present}: 
 #' If computing the standard deviation over columns, zero rows
 #' (i.e. those with \code{rowSums=0}) are left out, if computing
 #' the standard deviation over rows, zero columns (i.e. those with
 #' \code{colSums=0}) are left out.
 #'
-#' @param in_df
-#'  Data frame the standard deviation is computed of
-#' @param in_dimension
-#'  Dimension along which the computation will be carried out
-#' @return A vector of the standard deviations
+#' @return A vector of the standard deviations (\code{sd_over_present})
 #' 
 #' @examples
 #' test_df <- data.frame(matrix(c(1,2,3,0,5,2,3,4,0,6,0,0,0,0,0,4,5,6,0,7),
@@ -252,6 +236,7 @@ average_over_present <- function(in_df,in_dimension) {
 #' sd_over_present(test_df,2)
 #' 
 #' @export
+#' @rdname normalize_df_per_dim
 #' 
 sd_over_present <- function(in_df,in_dimension) {
   out_vector <- c()
@@ -332,16 +317,14 @@ stderrmean <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
 
 #' Standard error of the mean of a data frame over a specified dimension
 #'
+#' \code{stderrmean_over_present}: 
 #' If computing the standard error of the mean over columns, zero rows
 #' (i.e. those with \code{rowSums=0}) are left out, if computing the
 #' standard error of the mean over rows, zero columns (i.e. those with
 #' \code{colSums=0}) are left out. Uses the function \code{\link{stderrmean}}
 #'
-#' @param in_df
-#'  Data frame the standard error of the mean is computed of
-#' @param in_dimension
-#'  Dimension along which the computation will be carried out
-#' @return A vector of the standard errors of the mean
+#' @return A vector of the standard errors of the mean 
+#'  (\code{stderrmean_over_present})
 #' 
 #' @seealso \code{\link{stderrmean}}
 #' 
@@ -354,6 +337,7 @@ stderrmean <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(x)))
 #' stderrmean_over_present(test_df,2)
 #' 
 #' @export
+#' @rdname normalize_df_per_dim
 #' 
 stderrmean_over_present <- function(in_df,in_dimension) {
   out_vector <- c()
@@ -386,24 +370,26 @@ stderrmean_over_present <- function(in_df,in_dimension) {
 
 #' Translate chromosome names to the hg19 naming convention
 #'
-#' In hg19 naming convention, chromosome names start with the prefix \emph{chr} 
-#' and the gonosomes are called \emph{X} and \emph{Y}. If data analysis is 
-#' performed e.g. with 
+#' \code{translate_to_hg19}: In hg19 naming convention, chromosome names start 
+#' with the prefix \emph{chr} and the gonosomes are called \emph{X} and 
+#' \emph{Y}. If data analysis is performed e.g. with 
 #' \code{\link[BSgenome.Hsapiens.UCSC.hg19]{BSgenome.Hsapiens.UCSC.hg19}}, this
 #' naming convention is needed. The inverse transform is done with
 #' \code{\link{translate_to_1kG}}.
 #'
-#' @param in_df
-#'  Data frame which carries one column with chromosome information to be 
-#'  reformatted
+#' @param in_dat
+#'  GRanges object, VRanges object or data frame which carries one column with 
+#'  chromosome information to be reformatted.
 #' @param in_CHROM.field
-#'  String indicating which column of \code{in_df} carries the chromosome 
+#'  String indicating which column of \code{in_dat} carries the chromosome 
 #'  information
+#' @param in_verbose
+#'  Whether verbose or not.
 #'  
-#' @return A data frame identical to \code{in_df}, but with the names in the
-#'  chromosome column replaced
-#' 
-#' @seealso \code{\link{translate_to_1kG}}
+#' @return GRanges object, VRanges object or data frame identical to 
+#'  \code{in_dat}, but with the names in the chromosome column replaced (if 
+#'  dealing with data frames) or alternatively the seqlevels replaced (if 
+#'  dealing with GRanges or VRanges objects).
 #' 
 #' @examples
 #' test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),
@@ -411,44 +397,46 @@ stderrmean_over_present <- function(in_df,in_dimension) {
 #' hg19_df <- translate_to_hg19(test_df, in_CHROM.field = "CHROM")
 #' hg19_df
 #' 
+#' @importFrom GenomeInfoDb seqlevels seqlevels<-
 #' @export
 #' 
-translate_to_hg19 <- function(in_df,in_CHROM.field="CHROM") {
-  out_df <- in_df
-  chrom_ind <- which(names(out_df)==in_CHROM.field)
-  #names(out_df)[chrom_ind] <- "chr"
-  out_df[,chrom_ind] <- as.character(out_df[,chrom_ind])
-  out_df[,chrom_ind] <- gsub("23","X",out_df[,chrom_ind])
-  out_df[,chrom_ind] <- gsub("24","Y",out_df[,chrom_ind])
-  logical_chr_vector <- grepl("^chr.*",out_df[,chrom_ind])
-  if(!(all(logical_chr_vector))) {
-    replace_ind <- which(!logical_chr_vector)
-    out_df[replace_ind,chrom_ind] <- paste0("chr",out_df[replace_ind,chrom_ind])
+translate_to_hg19 <- function(in_dat,
+                              in_CHROM.field="CHROM",
+                              in_verbose = FALSE) {
+  out_dat <- in_dat
+  if(inherits(in_dat, "GRanges")) {
+    seqlevels(out_dat) <- gsub("23", "X", seqlevels(out_dat))
+    seqlevels(out_dat) <- gsub("24", "Y", seqlevels(out_dat))
+    seqlevels(out_dat) <- paste0("chr", seqlevels(out_dat))
+  } else if(inherits(in_dat, "data.frame") & 
+            in_CHROM.field %in% names(in_dat)){
+    chrom_ind <- which(names(out_dat)==in_CHROM.field)
+    #names(out_dat)[chrom_ind] <- "chr"
+    out_dat[,chrom_ind] <- as.character(out_dat[,chrom_ind])
+    out_dat[,chrom_ind] <- gsub("23","X",out_dat[,chrom_ind])
+    out_dat[,chrom_ind] <- gsub("24","Y",out_dat[,chrom_ind])
+    logical_chr_vector <- grepl("^chr.*",out_dat[,chrom_ind])
+    if(!(all(logical_chr_vector))) {
+      replace_ind <- which(!logical_chr_vector)
+      out_dat[replace_ind,chrom_ind] <- 
+        paste0("chr",out_dat[replace_ind,chrom_ind])
+    }
+  } else {
+    if(in_verbose) cat("YAPSA:::translate_to_hg19::error: input not of",
+                       " suitable type. Return original object.\n")
   }
-  return(out_df)
+  return(out_dat)
 }
 
 
 #' Translate chromosome names to the 1kG naming convention
 #'
-#' In 1kG, i.e. 1000 genomes naming convention, chromosome names have no prefix
-#' \emph{chr} and the gonosomes are called \emph{23} for \emph{X} and \emph{24}
-#' for \emph{Y}. If data analysis is performed e.g. with \code{hs37d5.fa}, this
-#' naming convention is needed. The inverse transform is done with
-#' \code{\link{translate_to_hg19}}.
+#' \code{translate_to_1kG}: In 1kG, i.e. 1000 genomes naming convention, 
+#' chromosome names have no prefix \emph{chr} and the gonosomes are called 
+#' \emph{23} for \emph{X} and \emph{24} for \emph{Y}. If data analysis is 
+#' performed e.g. with \code{hs37d5.fa}, this naming convention is needed. The
+#' inverse transform is done with \code{\link{translate_to_hg19}}.
 #'
-#' @param in_df
-#'  Data frame which carries one column with chromosome information to be 
-#'  reformatted
-#' @param in_CHROM.field
-#'  String indicating which column of \code{in_df} carries the chromosome 
-#'  information
-#'  
-#' @return A data frame identical to \code{in_df}, but with the names in the
-#'  chromosome column replaced
-#' 
-#' @seealso \code{\link{translate_to_1kG}}
-#' 
 #' @examples
 #' test_df <- data.frame(CHROM=c(1,2,23,24),POS=c(100,120000000,300000,25000),
 #'                       dummy=c("a","b","c","d"))
@@ -456,37 +444,56 @@ translate_to_hg19 <- function(in_df,in_CHROM.field="CHROM") {
 #' onekG_df <- translate_to_1kG(hg19_df, in_CHROM.field = "CHROM")
 #' onekG_df
 #' 
+#' @importFrom GenomeInfoDb seqlevels seqlevels<-
 #' @export
+#' @rdname translate_to_hg19
 #' 
-translate_to_1kG <- function(in_df,in_CHROM.field="chr") {
-  out_df <- in_df
-  chrom_ind <- which(names(out_df)==in_CHROM.field)
-  #names(out_df)[chrom_ind] <- "CHROM"
-  out_df[,chrom_ind] <- as.character(out_df[,chrom_ind])
-  out_df[,chrom_ind] <- gsub("X","23",out_df[,chrom_ind])
-  out_df[,chrom_ind] <- gsub("Y","24",out_df[,chrom_ind])
-  logical_chr_vector <- grepl("^[0-9]+$",out_df[,chrom_ind])
-  if(!(all(logical_chr_vector))) {
-    replace_ind <- which(!logical_chr_vector)
-    out_df[replace_ind,chrom_ind] <- gsub("chr","",
-                                          out_df[replace_ind,chrom_ind])
+translate_to_1kG <- function(in_dat,
+                             in_CHROM.field = "chr",
+                             in_verbose = FALSE) {
+  out_dat <- in_dat
+  # account for input data type
+  if(inherits(in_dat, "GRanges")) {
+    seqlevels(out_dat) <- gsub("chr", "", seqlevels(out_dat))
+    seqlevels(out_dat) <- gsub("X", "23", seqlevels(out_dat))
+    seqlevels(out_dat) <- gsub("Y", "24", seqlevels(out_dat))
+  } else if(inherits(in_dat, "data.frame") & 
+            in_CHROM.field %in% names(in_dat)){
+    chrom_ind <- which(names(out_dat)==in_CHROM.field)
+    #names(out_dat)[chrom_ind] <- "CHROM"
+    out_dat[,chrom_ind] <- as.character(out_dat[,chrom_ind])
+    out_dat[,chrom_ind] <- gsub("X","23",out_dat[,chrom_ind])
+    out_dat[,chrom_ind] <- gsub("Y","24",out_dat[,chrom_ind])
+    logical_chr_vector <- grepl("^[0-9]+$",out_dat[,chrom_ind])
+    if(!(all(logical_chr_vector))) {
+      replace_ind <- which(!logical_chr_vector)
+      out_dat[replace_ind,chrom_ind] <- gsub("chr","",
+                                             out_dat[replace_ind,chrom_ind])
+    }
+  } else {
+    if(in_verbose) cat("YAPSA:::translate_to_1kG::error: input not of",
+                       " suitable type. Return original object.\n")
   }
-  return(out_df)
+  return(out_dat)
 }
 
 
 #' Attribute the nucleotide exchange for an SNV
 #'
-#' SNVs are grouped into 6 different categories (12/2 as reverse complements are 
-#' summed over). This function defines the attribution.
+#' SNVs are grouped into 6 different categories (12/2 as reverse complements 
+#' are summed over). This function defines the attribution.
 #'
 #' @param in_dat
-#'  Data frame which carries one column for the reference base and one column 
-#'  for the variant base
+#'  VRanges object or data frame which carries one column for the reference 
+#'  base and one column for the variant base
 #' @param in_REF.field
 #'  String indicating which column of \code{in_dat} carries the reference base
+#'  if dealing with data frames
 #' @param in_ALT.field
 #'  String indicating which column of \code{in_dat} carries the variant base
+#'  if dealing with data frames
+#' @param in_verbose
+#'  Whether verbose or not.
 #'  
 #' @return A character vector with as many rows as there are in \code{in_dat} 
 #'  which can be annotated (i.e. appended) to the input data frame.
@@ -503,26 +510,41 @@ translate_to_1kG <- function(in_df,in_CHROM.field="chr") {
 #' 
 #' @export
 #' 
-attribute_nucleotide_exchanges <- function(in_dat,in_REF.field="REF",
-                                           in_ALT.field="ALT") {
+attribute_nucleotide_exchanges <- function(in_dat, in_REF.field = "REF",
+                                           in_ALT.field = "ALT",
+                                           in_verbose = FALSE) {
+  # account for input data type
+  if(inherits(in_dat, "VRanges")) {
+    choice_column_vector <- c("seqnames", "start", "ref", "alt")
+    in_dat <- as.data.frame(in_dat)
+    colum_names <- intersect(names(in_dat),choice_column_vector)
+    in_dat <- in_dat[,colum_names]
+    names(in_dat) <- gsub("ref", in_REF.field, names(in_dat))
+    names(in_dat) <- gsub("alt", in_ALT.field, names(in_dat))
+  }
+  if(!(inherits(in_dat, "data.frame"))){
+    if(in_verbose) cat("YAPSA:::attribute_nucleotide_exchanges::error: input",
+                       " data is of wrong type.\n")
+    return(NULL)
+  }
   name_list <- names(in_dat)
   ## exception handling for input fields
   if(tolower(in_REF.field) %in% tolower(name_list)) {
-    cat("attribute_nucleotide_exchanges::in_REF.field found. ",
-        "Retrieving REF information.\n")
+    if(in_verbose) cat("YAPSA:::attribute_nucleotide_exchanges::in_REF.field",
+                       " found. Retrieving REF information.\n")
     REF_ind <- min(which(tolower(name_list)==tolower(in_REF.field)))
   } else {
-    cat("attribute_nucleotide_exchanges::error: in_REF.field not found. ",
-        "Return NULL.\n")
+    if(in_verbose) cat("YAPSA:::attribute_nucleotide_exchanges::error: ",
+                       "in_REF.field not found. Return NULL.\n")
     return(NULL)
   }
   if(tolower(in_ALT.field) %in% tolower(name_list)) {
-    cat("attribute_nucleotide_exchanges::in_ALT.field found. ",
-        "Retrieving ALT information.\n")
+    if(in_verbose) cat("YAPSA:::attribute_nucleotide_exchanges::in_ALT.field",
+                       " found. Retrieving ALT information.\n")
     ALT_ind <- min(which(tolower(name_list)==tolower(in_ALT.field)))
   } else {
-    cat("attribute_nucleotide_exchanges::error: in_ALT.field not found. ",
-        "Return NULL.\n")
+    if(in_verbose) cat("YAPSA:::attribute_nucleotide_exchanges::error: ",
+                       "in_ALT.field not found. Return NULL.\n")
     return(NULL)
   }
   ## adapt nomenclature for nucleotide exchanges
@@ -543,25 +565,28 @@ attribute_nucleotide_exchanges <- function(in_dat,in_REF.field="REF",
 
 #' Annotate the intermutation distance of variants per PID
 #'
-#' The function annotates the intermutational distance to a PID wide data frame 
+#' The function annotates the intermutational distance to a PID wide data frame
 #' by applying \code{\link[circlize]{rainfallTransform}} to every 
 #' chromosome-specific subfraction of the PID wide data.
 #'
-#' @param in_df
-#'  Data frame which carries (at least) one column for the chromosome and one 
-#'  column for the position.
+#' @param in_dat
+#'  VRanges object or data frame which carries (at least) one column for the 
+#'  chromosome and one column for the position.
 #' @param in_CHROM.field
-#'  String indicating which column of \code{in_df} carries the chromosome 
-#'  information
+#'  String indicating which column of \code{in_dat} carries the chromosome 
+#'  information if dealing with data frames.
 #' @param in_POS.field
-#'  String indicating which column of \code{in_df} carries the position 
-#'  information
+#'  String indicating which column of \code{in_dat} carries the position 
+#'  information if dealing with data frames.
 #' @param in_mode
 #'  String passed to \code{\link[circlize]{rainfallTransform}} indicating which
 #'  method to choose for the computation of the intermutational distance.
+#' @param in_verbose
+#'  Whether verbose or not.
 #'  
-#' @return A data frame identical to \code{in_df}, but with the intermutation 
-#'  distance annotated as an additional column on the right named \code{dist}.
+#' @return VRanges object or data frame identical to \code{in_dat}, but with 
+#'  the intermutation distance annotated as an additional column on the right 
+#'  named \code{dist}.
 #'  
 #' @seealso \code{\link{annotate_intermut_dist_cohort}}
 #' @seealso \code{\link[circlize]{rainfallTransform}}
@@ -584,120 +609,215 @@ attribute_nucleotide_exchanges <- function(in_dat,in_REF.field="REF",
 #' @importFrom circlize rainfallTransform
 #' @export
 #' 
-annotate_intermut_dist_PID <- function(in_df,in_CHROM.field="CHROM",
-                                       in_POS.field="POS",in_mode="min") {
-  CHROM_ind <- which(names(in_df)==in_CHROM.field)
-  POS_ind <- which(names(in_df)==in_POS.field)
-  inflate_df <- data.frame()
-  for(my_chrom in unique(in_df[,CHROM_ind])) {
-    my_df <- in_df[which(in_df[,CHROM_ind]==my_chrom),]
-    region_df <- data.frame(start=my_df[,POS_ind],end=my_df[,POS_ind])
-    if(dim(my_df)[1]<2) {
-      temp_df <- region_df
-      temp_df$dist <- c(100000000)
-    } else {
-      temp_df <- rainfallTransform(region_df, mode = in_mode)      
+annotate_intermut_dist_PID <- function(in_dat, in_CHROM.field = "CHROM",
+                                       in_POS.field = "POS", in_mode = "min",
+                                       in_verbose = FALSE){
+  out_dat <- in_dat
+  # account for input data type
+  if(inherits(in_dat, "VRanges")) {
+    in_dat$dist1 <- c(1e10, as.numeric(width(gaps(in_dat)))[-1])
+    in_dat$dist2 <- c(as.numeric(width(gaps(in_dat)))[-1], 1e10)
+    out_dat$dist <- apply(mcols(in_dat)[,c("dist1","dist2")], 1, min)
+  } else if(inherits(in_dat, "data.frame")){
+    CHROM_ind <- which(names(in_dat)==in_CHROM.field)
+    POS_ind <- which(names(in_dat)==in_POS.field)
+    inflate_df <- data.frame()
+    for(my_chrom in unique(in_dat[,CHROM_ind])) {
+      my_df <- in_dat[which(in_dat[,CHROM_ind]==my_chrom),]
+      region_df <- data.frame(start=my_df[,POS_ind],end=my_df[,POS_ind])
+      if(dim(my_df)[1]<2) {
+        temp_df <- region_df
+        temp_df$dist <- c(100000000)
+      } else {
+        temp_df <- rainfallTransform(region_df, mode = in_mode)      
+      }
+      temp_df$CHROM <- my_chrom
+      inflate_df <- rbind(inflate_df,temp_df)
     }
-    temp_df$CHROM <- my_chrom
-    inflate_df <- rbind(inflate_df,temp_df)
+    out_dat$dist <- inflate_df[,dim(inflate_df)[2]-1]
+  } else {
+    if(in_verbose) cat("YAPSA:::annotate_intermut_dist_PID::error: input",
+                       " data is neither of type VRanges nor data.frame")
+    return(NULL)
   }
-#   df_list <- lapply(unique(in_df[,CHROM_ind]),function(l) {
-#     my_df <- in_df[which(in_df[,CHROM_ind]==l),]
-#     region_df <- data.frame(start=my_df[,POS_ind],end=my_df[,POS_ind])
-#     if(dim(my_df)[1]<2) {
-#       temp_df <- region_df
-#       temp_df$dist <- c(100000000)
-#     } else {
-#       temp_df <- rainfallTransform(region_df, mode = in_mode)      
-#     }
-#     temp_df$CHROM <- l
-#     return(temp_df)
-#   })
-#   inflate_df <- do.call("rbind",df_list)
-  out_df <- in_df
-  out_df$dist <- inflate_df[,dim(inflate_df)[2]-1]
-  return(out_df)
+  return(out_dat)
 }
+
+
+# rainfallTransformVR <- function(in_vr){
+#   in_vr$dist1 <- c(1e10, as.numeric(width(gaps(in_vr)))[-1])
+#   in_vr$dist2 <- c(as.numeric(width(gaps(in_vr)))[-1], 1e10)
+#   return(apply(mcols(in_vr)[,c("dist1","dist2")], 1, min))
+# }
 
 
 #' Annotate the intermutation distance of variants cohort-wide
 #'
-#' The function annotates the intermutational distance to a cohort wide data frame by
-#' applying \code{\link{annotate_intermut_dist_PID}} to every PID-specific subfraction
-#' of the cohort wide data. Note that \code{\link{annotate_intermut_dist_PID}} calls
-#' \code{\link[circlize]{rainfallTransform}}. If the PID information is missing,
-#' \code{\link{annotate_intermut_dist_PID}} is called directly for the whole input.
+#' The function annotates the intermutational distance to a cohort wide data 
+#' frame by applying \code{\link{annotate_intermut_dist_PID}} to every 
+#' PID-specific subfraction of the cohort wide data. Note that 
+#' \code{\link{annotate_intermut_dist_PID}} calls
+#' \code{\link[circlize]{rainfallTransform}}. If the PID information is 
+#' missing, \code{\link{annotate_intermut_dist_PID}} is called directly for the
+#' whole input.
 #'
-#' @param in_df
-#'  Data frame which carries (at least) one column for the chromosome and one column
-#'  for the position. Optionally, a column to specify the PID can be provided.
+#' @param in_dat
+#'  VRanges object, VRangesList, data frame or list of data frames which 
+#'  carries (at least) one column for the chromosome and one 
+#'  column for the position. Optionally, a column to specify the PID can be 
+#'  provided.
 #' @param in_CHROM.field
-#'  String indicating which column of \code{in_df} carries the chromosome information
+#'  String indicating which column of \code{in_df} carries the chromosome 
+#'  information
 #' @param in_POS.field
-#'  String indicating which column of \code{in_df} carries the position information
+#'  String indicating which column of \code{in_df} carries the position 
+#'  information
 #' @param in_PID.field
 #'  String indicating which column of \code{in_df} carries the PID information
 #' @param in_mode
 #'  String passed through \code{\link{annotate_intermut_dist_PID}} to
-#'  \code{\link[circlize]{rainfallTransform}} indicating which method to choose for
-#'  the computation of the intermutational distance.
+#'  \code{\link[circlize]{rainfallTransform}} indicating which method to choose
+#'  for the computation of the intermutational distance.
+#' @param in_verbose
+#'  Whether verbose or not.
 #'  
-#' @return A data frame identical to \code{in_df}, but with the intermutation distance
-#' annotated as an additional column on the right named \code{dist}.
+#' @return VRanges object, VRangesList, data frame or list of data frames 
+#' identical to \code{in_df} (reordered by \code{in_PID.field}), but with the 
+#' intermutation distance annotated as an additional column on the right named 
+#' \code{dist}.
 #'  
 #' @seealso \code{\link{annotate_intermut_dist_PID}}
 #' @seealso \code{\link[circlize]{rainfallTransform}}
 #' 
 #' @examples
 #' test_df <- data.frame(CHROM=c(1,1,1,2,2,2,3,3,3,4,4,4,5,5),
-#'                        POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
-#'                        REF=c("C","C","C","T","T","T","A","A","A","G","G","G","N","A"),
-#'                        ALT=c("A","G","T","A","C","G","C","G","T","A","C","T","A","N"),
-#'                        PID=c(1,1,1,2,2,2,1,1,2,2,2,1,1,2))
+#'                       POS=c(1,2,4,4,6,9,1,4,8,10,20,40,100,200),
+#'                       REF=c("C","C","C","T","T","T","A",
+#'                             "A","A","G","G","G","N","A"),
+#'                       ALT=c("A","G","T","A","C","G","C",
+#'                             "G","T","A","C","T","A","N"),
+#'                       PID=c(1,1,1,2,2,2,1,1,2,2,2,1,1,2))
 #' test_df <- test_df[order(test_df$PID,test_df$CHROM,test_df$POS),]
-#' min_dist_df <- annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-#'                                              in_PID.field="PID",in_mode="min")
-#' max_dist_df <- annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",in_POS.field="POS",
-#'                                              in_PID.field="PID",in_mode="max")
+#' min_dist_df <- 
+#'   annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",
+#'                                 in_POS.field="POS", in_PID.field="PID",
+#'                                 in_mode="min")
+#' max_dist_df <- 
+#'   annotate_intermut_dist_cohort(test_df,in_CHROM.field="CHROM",
+#'                                 in_POS.field="POS", in_PID.field="PID",
+#'                                 in_mode="max")
 #' min_dist_df
 #' max_dist_df
 #' 
 #' @export
 #' 
-annotate_intermut_dist_cohort <- function(in_df,in_CHROM.field="CHROM",in_POS.field="POS",
-                                          in_PID.field=NULL,in_mode="min") {
-  if(!is.null(in_PID.field)) {
-    PID_ind <- which(names(in_df)==in_PID.field)
-#     inflate_df <- data.frame()
-#     for(my_PID in unique(in_df[,PID_ind])) {
-#       temp_df <- annotate_intermut_dist_PID(in_df[which(in_df[,PID_ind]==my_PID),],
-#                                             in_CHROM.field=in_CHROM.field,
-#                                             in_POS.field=in_POS.field,in_mode=in_mode)
-#       temp_df$PID <- my_PID
-#       inflate_df <- rbind(inflate_df,temp_df)
-#     }
-    df_list <- lapply(unique(in_df[,PID_ind]),function(l) {
-      temp_df <- annotate_intermut_dist_PID(in_df[which(in_df[,PID_ind]==l),],
-                                            in_CHROM.field=in_CHROM.field,
-                                            in_POS.field=in_POS.field,in_mode=in_mode)
-      temp_df$PID <- l
-      return(temp_df)
+annotate_intermut_dist_cohort <- function(in_dat, in_CHROM.field = "CHROM",
+                                          in_POS.field = "POS", 
+                                          in_PID.field = NULL, 
+                                          in_mode = "min", in_verbose = FALSE){
+  # account for input data type
+  if(inherits(in_dat, "data.frame")) {
+    if(!is.null(in_PID.field)) {
+      #PID_ind <- which(names(in_dat)==in_PID.field)
+      in_dat[,in_PID.field] <- as.character(in_dat[,in_PID.field])
+      dat_list <- split(in_dat, f = in_dat[,in_PID.field])
+      out_list <- lapply(seq_along(dat_list),function(current_ind) {
+        temp_out <- annotate_intermut_dist_PID(dat_list[[current_ind]],
+                                              in_CHROM.field = in_CHROM.field,
+                                              in_POS.field = in_POS.field,
+                                              in_mode = in_mode, 
+                                              in_verbose = in_verbose)
+        current_name <- names(dat_list)[current_ind]
+        if(is.null(current_name)) current_name <- current_ind
+        temp_out[,in_PID.field] <- current_name
+        return(temp_out)
+      })
+      out_dat <- do.call("rbind", out_list)
+    } else {
+      if(in_verbose) cat("YAPSA:::annotate_intermut_dist_cohort::warning:",
+                         "no PID variable, thus no split. Simply calling ",
+                         "annotate_intermut_dist_PID.\n")
+      out_dat <- annotate_intermut_dist_PID(in_dat,
+                                            in_CHROM.field = in_CHROM.field,
+                                            in_POS.field = in_POS.field,
+                                            in_mode = in_mode, 
+                                            in_verbose = in_verbose)
+    }
+  } else if(inherits(in_dat, "list")){
+    if(all(unlist(lapply(in_dat, function(current_item){
+      inherits(current_item, "data.frame")})))){
+      if(is.null(in_PID.field)) in_PID.field <- "PID"
+      out_list <- lapply(seq_along(in_dat),function(current_ind) {
+        temp_out <- annotate_intermut_dist_PID(in_dat[[current_ind]],
+                                               in_CHROM.field = in_CHROM.field,
+                                               in_POS.field = in_POS.field,
+                                               in_mode = in_mode, 
+                                               in_verbose = in_verbose)
+        current_name <- names(in_dat)[current_ind]
+        if(is.null(current_name)) current_name <- current_ind
+        temp_out[,in_PID.field] <- current_name
+        return(temp_out)
+      })
+      names(out_list) <- names(in_dat)
+      out_dat <- out_list
+    }
+  } else if(inherits(in_dat, "VRanges")){
+    if(!is.null(in_PID.field)) {
+      if(in_verbose) cat("YAPSA:::annotate_intermut_dist_cohort: input ",
+                         "VRanges, PID variable found.\n")
+      mcols(in_dat)[,in_PID.field] <- 
+        as.character(mcols(in_dat)[,in_PID.field])
+      dat_list <- split(in_dat, mcols(in_dat)[,in_PID.field])
+      out_list <- lapply(seq_along(dat_list),function(current_ind) {
+        temp_out <- annotate_intermut_dist_PID(dat_list[[current_ind]],
+                                               in_CHROM.field = in_CHROM.field,
+                                               in_POS.field = in_POS.field,
+                                               in_mode = in_mode, 
+                                               in_verbose = in_verbose)
+        current_name <- names(dat_list)[current_ind]
+        if(is.null(current_name)) current_name <- current_ind
+        mcols(temp_out)[,in_PID.field] <- current_name
+        return(temp_out)
+      })
+      out_dat <- unlist(VRangesList(out_list))
+    } else {
+      if(in_verbose) cat("YAPSA:::annotate_intermut_dist_cohort::warning:",
+                         "no PID variable, thus no split. Simply calling ",
+                         "annotate_intermut_dist_PID.\n")
+      out_dat <- annotate_intermut_dist_PID(in_dat,
+                                            in_CHROM.field = in_CHROM.field,
+                                            in_POS.field = in_POS.field,
+                                            in_mode = in_mode, 
+                                            in_verbose = in_verbose)
+    }
+  } else if(inherits(in_dat, "VRangesList")){
+    out_list <- lapply(seq_along(in_dat),function(current_ind) {
+      temp_out <- annotate_intermut_dist_PID(in_dat[[current_ind]],
+                                            in_CHROM.field = in_CHROM.field,
+                                            in_POS.field = in_POS.field,
+                                            in_mode = in_mode, 
+                                            in_verbose = in_verbose)
+      current_name <- names(in_dat)[current_ind]
+      if(is.null(current_name)) current_name <- current_ind
+      mcols(temp_out)[,in_PID.field] <- current_name
+      return(temp_out)
     })
-    inflate_df <- do.call("rbind",df_list)
-    out_df <- in_df
-    out_df$dist <- inflate_df$dist
+    names(out_list) <- names(in_dat)
+    out_dat <- VRangesList(out_list)
   } else {
-    out_df <- annotate_intermut_dist_PID(in_df,in_CHROM.field=in_CHROM.field,
-                                         in_POS.field=in_POS.field,in_mode=in_mode)
+    if(in_verbose) cat("YAPSA:::annotate_intermut_dist_cohort::error:",
+                       "input of wrong type, return NULL.\n")
+    return(NULL)
   }
-  return(out_df)
+  return(out_dat)
 }
 
 
 #' Make a custom data structure for subgroups
 #'
-#' Creates a data frame carrying the subgroup information and the order in which the PIDs
-#' have to be displayed. Calls \code{\link{aggregate}} on \code{in_vcf_like_df}.
+#' Creates a data frame carrying the subgroup information and the order in 
+#' which the PIDs have to be displayed. Calls \code{\link{aggregate}} on 
+#' \code{in_vcf_like_df}.
 #'
 #' @param in_exposures_df
 #'  Data frame with the signature exposures
@@ -706,10 +826,11 @@ annotate_intermut_dist_cohort <- function(in_df,in_CHROM.field="CHROM",in_POS.fi
 #' @param in_palette
 #'  Palette for colour attribution to the subgroups if nun-NULL
 #' @param in_subgroup.field
-#'  String indicating which column of \code{in_vcf_like_df} carries the subgroup information
+#'  String indicating which column of \code{in_vcf_like_df} carries the 
+#'  subgroup information
 #' @param in_PID.field
-#'  String indicating which column of \code{in_vcf_like_df} and of \code{in_exposures_df}
-#'  carries the PID information
+#'  String indicating which column of \code{in_vcf_like_df} and of 
+#'  \code{in_exposures_df} carries the PID information
 #'  
 #' @return subgroups_df:
 #'  A data frame carrying the subgroup and rank information.
@@ -719,7 +840,8 @@ annotate_intermut_dist_cohort <- function(in_df,in_CHROM.field="CHROM",in_POS.fi
 #'  data(lymphoma_cohort_LCD_results)
 #'  choice_ind <- (names(lymphoma_Nature2013_COSMIC_cutoff_exposures_df) 
 #'                 %in% unique(lymphoma_test_df$PID))
-#'  lymphoma_test_exposures_df <- lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
+#'  lymphoma_test_exposures_df <- 
+#'    lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
 #'  make_subgroups_df(lymphoma_test_exposures_df,lymphoma_test_df)
 #' 
 #' @seealso \code{\link{aggregate}}
@@ -731,8 +853,8 @@ make_subgroups_df <- function(in_exposures_df,
                               in_palette=NULL,
                               in_subgroup.field="SUBGROUP",
                               in_PID.field="PID"){
-  ## 1. rename the colnames in in_vcf_like_df if necessary to be able to run the
-  ## aggregate command later
+  ## 1. rename the colnames in in_vcf_like_df if necessary to be able to run
+  ## the aggregate command later
   subgroup_ind <- which(names(in_vcf_like_df)==in_subgroup.field)
   names(in_vcf_like_df)[subgroup_ind] <- "SUBGROUP"
   PID_ind <- which(names(in_vcf_like_df)==in_PID.field)
@@ -741,7 +863,8 @@ make_subgroups_df <- function(in_exposures_df,
   this_sum_df <- data.frame(sum=apply(in_exposures_df,2,sum))
   out_subgroups_df <- aggregate(SUBGROUP~PID,data=in_vcf_like_df,
                                    function(l) return(l[1]))
-  out_subgroups_df <- merge(out_subgroups_df,this_sum_df,by.x=in_PID.field,by.y=0)
+  out_subgroups_df <- merge(out_subgroups_df, this_sum_df,
+                            by.x=in_PID.field,by.y=0)
   max_total_count <- max(out_subgroups_df$sum)
   out_subgroups_df$compl_sum <- max_total_count - out_subgroups_df$sum
   temp_ind <- order(out_subgroups_df$SUBGROUP,out_subgroups_df$compl_sum)
@@ -890,7 +1013,8 @@ merge_exposures <- function(in_exposures_list,
     current_df$sig <- rownames(current_df)
     return(current_df)
   })
-  exposures_df <- Reduce(function(...) merge(..., by="sig",all=TRUE,sort=FALSE),
+  exposures_df <- Reduce(function(...) merge(..., by="sig",
+                                             all=TRUE, sort=FALSE),
                          exposures_list)
   row_order <- order(match(exposures_df$sig,names(in_signatures_df)))
   exposures_df <- exposures_df[row_order,]
@@ -925,7 +1049,8 @@ melt_exposures <- function(in_df){
 
 #' Compares alternative exposures
 #' 
-#' Compares exposures computed by two alternative approaches for the same cohort
+#' Compares exposures computed by two alternative approaches for the same
+#' cohort
 #' 
 #' @param in_exposures1_df
 #'  Numeric data frame with exposures, ideally the smaller exposure data is
@@ -1095,8 +1220,8 @@ test_exposureAffected <- function(in_exposure_vector,
   factor_vector <- rep("wt",length(in_exposure_vector)) 
   names(factor_vector) <- names(in_exposure_vector)
   factor_vector[in_affected_PIDs] <- "mut"
-  if(!is.null(in_mutation_label)) factor_vector <- paste0(in_mutation_label,"-",
-                                                          factor_vector)
+  if(!is.null(in_mutation_label)) factor_vector <- 
+    paste0(in_mutation_label,"-", factor_vector)
   factor_vector <- factor(factor_vector)
   test_df <- data.frame(  
     exposure=as.numeric(in_exposure_vector),  
@@ -1111,622 +1236,3 @@ test_exposureAffected <- function(in_exposure_vector,
   return(list(kruskal=current_kruskal,
               boxplot=current_boxplot))
 }
-
-
-#' Data for initial sigs, including artifacts
-#' 
-#' Data frame of the signatures published initially by Alexandrov et al. (Nature 
-#' 2013). There are 27 signatures which constitute the columns, 22 of which were
-#' validated by an orhtogonal sequencing technology. These 22 are in the first 22
-#' columns of the data frame. The column names are \emph{A} pasted to the number
-#' of the signature, e.g. \emph{A5}. The nonvalidated signatures have an
-#' additional letter in their naming convention: either \emph{AR1} - \emph{AR3}
-#' or \emph{AU1} - \emph{AU2}. The rownames are the features, i.e. an encoding of
-#' the nucleotide exchanges in their trinucleotide context, e.g. \emph{C>A ACA}.
-#' In total there are 96 different features and therefore 96 rows when dealing
-#' with a trinucleotide context. This data was downloaded from
-#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/signatures.txt} and
-#' reformatted.
-#' 
-#' @seealso \code{\link{AlexInitialArtif_sigInd_df}}
-#' @seealso \code{\link{AlexCosmicValid_sig_df}}
-#' @seealso \code{\link{AlexInitialValid_sig_df}}
-#' 
-#' @docType data
-#' @name AlexInitialArtif_sig_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @references Alexandrov et al. (Nature 2013)
-#' @return A data frame
-#' 
-NULL
-
-
-#' Meta-info for initial sigs, including artifacts
-#' 
-#' A data frame with as many rows as there are signatures in
-#' \code{AlexInitialValid_sig_df} and several columns: 
-#' \itemize{
-#'  \item \code{sig}: signature name
-#'  \item \code{index}: corresponding to the row index of the signature
-#'  \item \code{colour}: colour for visualization in stacked barplots
-#'  \item \code{process}: asserted biological process
-#'  \item \code{cat.coarse}: categorization of the signatures according
-#'   to the asserted biological processes at low level of detail
-#'  \item \code{cat.medium}: categorization of the signatures according
-#'   to the asserted biological processes at intermediate level of detail
-#'  \item \code{cat.high}: categorization of the signatures according
-#'   to the asserted biological processes at high level of detail
-#'  \item \code{cat.putative}: categorization of the signatures according
-#'   to the asserted biological processes based on clustering and inference
-#'  }
-#' 
-#' @seealso \code{\link{AlexInitialArtif_sig_df}}
-#' @seealso \code{\link{AlexInitialValid_sig_df}}
-#' 
-#' @docType data
-#' @name AlexInitialArtif_sigInd_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Data for initial sigs, only validated
-#' 
-#' Data frame of only the validated signatures published initially by Alexandrov
-#' et al. (Nature 2013), corresponding to the first 22 columns of
-#' \code{AlexInitialArtif_sig_df}
-#' 
-#' @seealso \code{\link{AlexInitialArtif_sig_df}}
-#' 
-#' @docType data
-#' @name AlexInitialValid_sig_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @references Alexandrov et al. (Nature 2013)
-#' @return A data frame
-#' 
-NULL
-
-
-#' Meta-info for initial sigs, only validated
-#' 
-#' A data frame with as many rows as there are signatures in
-#' \code{AlexInitialValid_sig_df} and several columns: 
-#' \itemize{
-#'  \item \code{sig}: signature name
-#'  \item \code{index}: corresponding to the row index of the signature
-#'  \item \code{colour}: colour for visualization in stacked barplots
-#'  \item \code{process}: asserted biological process
-#'  \item \code{cat.coarse}: categorization of the signatures according
-#'   to the asserted biological processes at low level of detail
-#'  \item \code{cat.medium}: categorization of the signatures according
-#'   to the asserted biological processes at intermediate level of detail
-#'  \item \code{cat.high}: categorization of the signatures according
-#'   to the asserted biological processes at high level of detail
-#'  \item \code{cat.putative}: categorization of the signatures according
-#'   to the asserted biological processes based on clustering and inference
-#'  }
-#' 
-#' @seealso \code{\link{AlexInitialArtif_sig_df}}
-#' @seealso \code{\link{AlexInitialValid_sig_df}}
-#' 
-#' @docType data
-#' @name AlexInitialValid_sigInd_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Data for Cosmic sigs, only validated
-#' 
-#' Data frame of the updated signatures list maintained by Ludmil Alexandrov at
-#' \url{http://cancer.sanger.ac.uk/cosmic/signatures}. The data was downloaded from
-#' \url{http://cancer.sanger.ac.uk/cancergenome/assets/signatures_probabilities.txt}
-#' and reformatted. The column names are \emph{AC} pasted to the number of the
-#' signature, e.g. \emph{AC5}. The naming convention for the rows is as described
-#' for \code{\link{AlexInitialArtif_sig_df}}.
-#' 
-#' @seealso \code{\link{AlexInitialArtif_sig_df}}
-#' 
-#' @docType data
-#' @name AlexCosmicValid_sig_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @references Alexandrov et al. (Nature 2013)
-#' @return A data frame
-#' 
-NULL
-
-
-#' Meta-info for Cosmic sigs, only validated
-#' 
-#' A data frame with as many rows as there are signatures in
-#' \code{AlexCosmicValid_sig_df} and several columns: 
-#' \itemize{
-#'  \item \code{sig}: signature name
-#'  \item \code{index}: corresponding to the row index of the signature
-#'  \item \code{colour}: colour for visualization in stacked barplots
-#'  \item \code{process}: asserted biological process
-#'  \item \code{cat.coarse}: categorization of the signatures according
-#'   to the asserted biological processes at low level of detail
-#'  \item \code{cat.medium}: categorization of the signatures according
-#'   to the asserted biological processes at intermediate level of detail
-#'  \item \code{cat.fine}: categorization of the signatures according
-#'   to the asserted biological processes at high level of detail
-#'  \item \code{cat.putative}: categorization of the signatures according
-#'   to the asserted biological processes based on clustering and inference
-#'  }
-#' 
-#' @seealso \code{\link{AlexCosmicValid_sig_df}}
-#' 
-#' @docType data
-#' @name AlexCosmicValid_sigInd_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Data for Cosmic sigs, including artifacts
-#' 
-#' Data frame of the updated signatures list maintained by Ludmil Alexandrov at
-#' \url{http://cancer.sanger.ac.uk/cosmic/signatures}. The data was downloaded from
-#' \url{http://cancer.sanger.ac.uk/cancergenome/assets/signatures_probabilities.txt}
-#' and reformatted. The column names are \emph{AC} pasted to the number of the
-#' signature, e.g. \emph{AC5}. The naming convention for the rows is as described
-#' for \code{\link{AlexInitialArtif_sig_df}}.
-#' 
-#' @seealso \code{\link{AlexInitialArtif_sig_df}}
-#' 
-#' @docType data
-#' @name AlexCosmicArtif_sig_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @references Alexandrov et al. (Nature 2013)
-#' @return A data frame
-#' 
-NULL
-
-
-#' Meta-info for Cosmic sigs, including artifacts
-#' 
-#' A data frame with as many rows as there are signatures in
-#' \code{AlexCosmicValid_sig_df} and several columns: 
-#' \itemize{
-#'  \item \code{sig}: signature name
-#'  \item \code{index}: corresponding to the row index of the signature
-#'  \item \code{colour}: colour for visualization in stacked barplots
-#'  \item \code{process}: asserted biological process
-#'  \item \code{cat.coarse}: categorization of the signatures according
-#'   to the asserted biological processes at low level of detail
-#'  \item \code{cat.medium}: categorization of the signatures according
-#'   to the asserted biological processes at intermediate level of detail
-#'  \item \code{cat.fine}: categorization of the signatures according
-#'   to the asserted biological processes at high level of detail
-#'  \item \code{cat.putative}: categorization of the signatures according
-#'   to the asserted biological processes based on clustering and inference
-#'  }
-#' 
-#' @seealso \code{\link{AlexCosmicValid_sig_df}}
-#' 
-#' @docType data
-#' @name AlexCosmicArtif_sigInd_df
-#' @usage data(sigs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Subgroup information for some samples in the vignette
-#' 
-#' A data frame carrying subgroup information for a subcohort of samples used in the vignette.
-#' Data in the vignette is downloaded from 
-#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
-#' In the file available under that link somatic point mutation calls from several samples are 
-#' listed in a vcf-like format. One column encodes the sample the variant was found in. In the
-#' vignette we want to restrict the analysis to only a fraction of these involved samples. The
-#' data frame \code{lymphoma_PID_df} carries the sample identifiers (PID) as rownames and the
-#' attributed subgroup in a column called \code{subgroup}.
-#' 
-#' @docType data
-#' @name lymphoma_PID_df
-#' @usage data(lymphoma_PID)
-#' @references \url{http://www.ncbi.nlm.nih.gov/pubmed/23945592}
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Test data for complex functions
-#' 
-#' A data frame carrying point mutation calls. It represents a subset of the 
-#' data stored in
-#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
-#' In the file available under that link somatic point mutation calls from 
-#' several samples are listed in a vcf-like format. One column encodes the 
-#' sample the variant was found in. The data frame \code{lymphoma_test_df} has 
-#' only the variants occuring in the sample identifiers (PIDs) 4112512, 4194218 
-#' and 4121361.
-#' 
-#' @docType data
-#' @name lymphoma_test_df
-#' @usage data(lymphoma_test)
-#' @references \url{http://www.ncbi.nlm.nih.gov/pubmed/23945592}
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-#' @examples
-#' data(lymphoma_test)
-#' head(lymphoma_test_df)
-#' dim(lymphoma_test_df)
-#' table(lymphoma_test_df$PID)
-#' @return A data frame
-#' 
-NULL
-
-
-#' Example data for the vignette
-#' 
-#' A data frame carrying point mutation calls. It represents a subset of the 
-#' data stored in
-#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
-#' In the file available under that link somatic point mutation calls from 
-#' several samples are listed in a vcf-like format. One column encodes the 
-#' sample the variant was found in.
-#' 
-#' @docType data
-#' @name lymphoma_Nature2013_raw_df
-#' @usage data(lymphoma_Nature2013_raw)
-#' @references \url{http://www.ncbi.nlm.nih.gov/pubmed/23945592}
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-#' @examples
-#' data(lymphoma_Nature2013_raw)
-#' head(lymphoma_Nature2013_raw_df)
-#' dim(lymphoma_Nature2013_raw_df)
-#' @return A data frame
-#' 
-NULL
-
-
-#' Test exposures for plot functions
-#' 
-#' Data frame with exposures for testing the plot functions. Data taken from
-#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
-#' 
-#' @docType data
-#' @name lymphoma_Nature2013_COSMIC_cutoff_exposures_df
-#' @usage data(lymphoma_cohort_LCD_results)
-#' @references \url{http://www.ncbi.nlm.nih.gov/pubmed/23945592}
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-#' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @seealso \code{\link{COSMIC_subgroups_df}}
-#' @seealso \code{\link{chosen_AlexInitialArtif_sigInd_df}}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Test normalized exposures for plot functions
-#' 
-#' Data frame with normalized or relative exposures for testing the plot functions.
-#' Data taken from
-#' \url{ftp://ftp.sanger.ac.uk/pub/cancer/AlexandrovEtAl/somatic_mutation_data/Lymphoma B-cell/Lymphoma B-cell_clean_somatic_mutations_for_signature_analysis.txt}.
-#' 
-#' @docType data
-#' @name rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df
-#' @usage data(lymphoma_cohort_LCD_results)
-#' @references \url{http://www.ncbi.nlm.nih.gov/pubmed/23945592}
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-#' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @seealso \code{\link{COSMIC_subgroups_df}}
-#' @seealso \code{\link{chosen_AlexInitialArtif_sigInd_df}}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Subgroup information for test data for plot functions
-#' 
-#' Subgroup information for the data stored in
-#' \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}} and 
-#' \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}.
-#' 
-#' @docType data
-#' @name COSMIC_subgroups_df
-#' @usage data(lymphoma_cohort_LCD_results)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-#' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Sigs info (initial, including artifacts) for test data for plot functions
-#' 
-#' Signature information for the data stored in
-#' \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}} and 
-#' \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}.
-#' 
-#' @docType data
-#' @name chosen_AlexInitialArtif_sigInd_df
-#' @usage data(lymphoma_cohort_LCD_results)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-#' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Sigs info (Cosmic, only validated) for test data for plot functions
-#' 
-#' Signature information for the data stored in
-#' \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}} and 
-#' \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}.
-#' 
-#' @docType data
-#' @name chosen_signatures_indices_df
-#' @usage data(lymphoma_cohort_LCD_results)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' 
-#' @seealso \code{\link{lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @seealso \code{\link{rel_lymphoma_Nature2013_COSMIC_cutoff_exposures_df}}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, rel exposures for the COSMIC sigs, only validated
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' relative exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
-#' at http://cancer.sanger.ac.uk/cosmic/signatures .
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
-#' @seealso \code{\link{cutoffInitialValid_rel_df}}
-#' 
-#' @docType data
-#' @name cutoffCosmicValid_rel_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, rel exposures for the COSMIC sigs, only validated
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' relative exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
-#' at http://cancer.sanger.ac.uk/cosmic/signatures .
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
-#' @seealso \code{\link{cutoffInitialValid_rel_df}}
-#' 
-#' @docType data
-#' @name cutoffCosmicValid_rel_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, rel exposures for the COSMIC sigs, including artifacts
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' relative exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
-#' at http://cancer.sanger.ac.uk/cosmic/signatures .
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
-#' @seealso \code{\link{cutoffInitialValid_rel_df}}
-#' 
-#' @docType data
-#' @name cutoffCosmicArtif_rel_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, abs exposures for the COSMIC sigs, only validated
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' absolute exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
-#' at http://cancer.sanger.ac.uk/cosmic/signatures .
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
-#' @seealso \code{\link{cutoffInitialValid_abs_df}}
-#' 
-#' @docType data
-#' @name cutoffCosmicValid_abs_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, abs exposures for the COSMIC sigs, including artifacts
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' absolute exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures available
-#' at http://cancer.sanger.ac.uk/cosmic/signatures .
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
-#' @seealso \code{\link{cutoffInitialValid_abs_df}}
-#' 
-#' @docType data
-#' @name cutoffCosmicArtif_abs_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, rel exposures for the initial sigs, only validated
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' relative exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures published
-#' in Alexandrov et al. (Nature 2013).
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
-#' @seealso \code{\link{cutoffInitialValid_abs_df}}
-#' 
-#' @docType data
-#' @name cutoffInitialValid_rel_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, rel exposures for the initial sigs, including artifacts
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' relative exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures published
-#' in Alexandrov et al. (Nature 2013).
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_rel_df}}
-#' @seealso \code{\link{cutoffInitialValid_abs_df}}
-#' 
-#' @docType data
-#' @name cutoffInitialArtif_rel_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, abs exposures for the initial sigs, only validated
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' absolute exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures published
-#' in Alexandrov et al. (Nature 2013).
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
-#' @seealso \code{\link{cutoffInitialValid_rel_df}}
-#' 
-#' @docType data
-#' @name cutoffInitialValid_abs_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Opt. cutoffs, abs exposures for the initial sigs, including artifacts
-#' 
-#' Data frame of signature specific cutoff values for the LCD analysis with
-#' absolute exposures. All values represent optimal cutoffs. The optimal
-#' cutoffs were determined for different choices of parameters in the cost
-#' function of the optimization. The row index is equivalent to the ratio
-#' between costs for false negative attribution and false positive
-#' attribution. The columns correspond to the different signatures. To be
-#' used with \code{\link{LCD_complex_cutoff}}. Based on the signatures published
-#' in Alexandrov et al. (Nature 2013).
-#' 
-#' @seealso \code{\link{cutoffCosmicValid_abs_df}}
-#' @seealso \code{\link{cutoffInitialValid_rel_df}}
-#' 
-#' @docType data
-#' @name cutoffInitialArtif_abs_df
-#' @usage data(cutoffs)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A data frame
-#' 
-NULL
-
-
-#' Correction factors for different target capture kits
-#' 
-#' List of lists with correction factors for different target capture kits.
-#' The elements of the overall list are lists, every one carrying information
-#' for one target capture kit (and namend after it). The elements of these
-#' sublists are 64 dimensional vectors with correction factors for all
-#' triplets. They were computed using counts of occurence of the respective
-#' triplets in the target capture and in the reference genome and making
-#' ratios (either for the counts themselves as in \code{abs_cor} or for the
-#' relative occurences in \code{rel_cor}). The information in this data
-#' structure may be used as input to
-#' \code{\link{normalizeMotifs_otherRownames}}.
-#' 
-#' @docType data
-#' @name targetCapture_cor_factors
-#' @usage data(targetCapture_cor_factors)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A list of lists of data frames
-#' 
-NULL
-
-
-#' Colours codes for displaying SNVs
-#' 
-#' Vector attributing colours to nucleotide exchanges used when displaying SNV
-#' information, e.g. in a rainfall plot.
-#' 
-#' @docType data
-#' @name exchange_colour_vector
-#' @usage data(exchange_colour_vector)
-#' @author Daniel Huebschmann \email{huebschmann.daniel@@googlemail.com}
-#' @return A named character vector
-#' 
-NULL

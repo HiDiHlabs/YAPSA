@@ -237,7 +237,7 @@ plot_strata <- function(in_strata_list,
       ggplot2::geom_bar(data=temp_df,
                         aes_string(x="sig",y="exposure",fill="sig",size=0.3),
                         stat='identity',position="dodge",width=.7) + 
-      scale_fill_manual(values=in_signatures_ind_df$colour) + ## colour_vector needs to be supplied!!
+      scale_fill_manual(values=in_signatures_ind_df$colour) +
       labs(x="",y="",title=stratum) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
             legend.position = "none")

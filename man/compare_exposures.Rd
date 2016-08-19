@@ -43,7 +43,8 @@ A list with entries \code{merge_df}, \code{all_cor.coeff},
 }
 }
 \description{
-Compares exposures computed by two alternative approaches for the same cohort
+Compares exposures computed by two alternative approaches for the same
+cohort
 }
 \examples{
  NULL

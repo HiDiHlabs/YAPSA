@@ -15,8 +15,10 @@ test_that("Test makeVRangesFromDataFrame with real data", {
                                       in_seqnames.field="CHROM",
                                       in_subgroup.field="SUBGROUP")
   expect_that(length(temp_vr),equals(dim(lymphoma_test_df)[1]))
-  expect_that(as.character(seqnames(temp_vr)),is_equivalent_to(lymphoma_test_df$CHROM))
-  expect_that(as.data.frame(ranges(temp_vr))[,1],is_equivalent_to(lymphoma_test_df$POS))
+  expect_that(as.character(seqnames(temp_vr)),
+              is_equivalent_to(lymphoma_test_df$CHROM))
+  expect_that(as.data.frame(ranges(temp_vr))[,1],
+              is_equivalent_to(lymphoma_test_df$POS))
 })
 
 
@@ -26,13 +28,15 @@ test_that("Test cut_breaks_as_intervals with partially real data",{
   my_outlier_cutoffs <- c(-4,4)
   my_cutoff_ranges_list <- list(c(-2.5,-1.5),c(0.5,1.5))
   lymphoma_test_df$random_norm <- rnorm(dim(lymphoma_test_df)[1])
-  temp_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-                                       in_outlier_cutoffs=my_outlier_cutoffs,
-                                       in_cutoff_ranges_list=my_cutoff_ranges_list,
-                                       in_labels=c("small","intermediate","big"))
+  temp_list <- 
+    cut_breaks_as_intervals(lymphoma_test_df$random_norm,
+                            in_outlier_cutoffs=my_outlier_cutoffs,
+                            in_cutoff_ranges_list=my_cutoff_ranges_list,
+                            in_labels=c("small","intermediate","big"))
   expect_that(temp_list$cutoffs[c(1,4)],equals(my_outlier_cutoffs))
   expect_lt(max(abs(temp_list$cutoffs[c(2,3)]-
-                        c(min(my_cutoff_ranges_list[[1]]),max(my_cutoff_ranges_list[[2]])))),
+                        c(min(my_cutoff_ranges_list[[1]]),
+                          max(my_cutoff_ranges_list[[2]])))),
                    my_precision)
 })
 
@@ -40,12 +44,15 @@ test_that("Test cut_breaks_as_intervals with partially real data",{
 test_that("Test stratify_vcf_like_df with real data",{
   data(lymphoma_test)
   my_labels <- c("small","intermediate","big")
-  strata_list <- cut_breaks_as_intervals(lymphoma_test_df$random_norm,
-                                         in_outlier_cutoffs=c(-4,4),
-                                         in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-                                         in_labels=my_labels)
+  strata_list <- 
+    cut_breaks_as_intervals(lymphoma_test_df$random_norm,
+                            in_outlier_cutoffs=c(-4,4),
+                            in_cutoff_ranges_list=list(c(-2.5,-1.5),
+                                                       c(0.5,1.5)),
+                            in_labels=my_labels)
   lymphoma_test_df$random_cat <- strata_list$category_vector
-  stratification_list <- stratify_vcf_like_df(lymphoma_test_df,"random_cat",in_verbose=0)
+  stratification_list <- 
+    stratify_vcf_like_df(lymphoma_test_df,"random_cat",in_verbose=0)
   expect_that(length(stratification_list$name_list),
               equals(length(unique(lymphoma_test_df$random_cat))))
   expect_that(sort(unlist(stratification_list$name_list)),

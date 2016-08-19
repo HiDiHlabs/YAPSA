@@ -18,8 +18,8 @@ signature contributes how much to which PID (patient identifier or sample).}
 colour information for the signatures is taken from a rainbow palette.}
 
 \item{in_subgroups_df}{A data frame indicating which PID (patient or sample identifyier) belongs
-to which subgroup. If NULL, it is assumed that all PIDs belong to one common
-subgroup. The colour coding for the default subgroup is red.}
+to which subgroup. If NULL, it is assumed that all PIDs belong to one 
+common subgroup. The colour coding for the default subgroup is red.}
 
 \item{in_sum_ind}{Index vector influencing the order in which the PIDs are going to be
 displayed}
@@ -37,7 +37,8 @@ subgroup information from.}
 
 \item{in_barplot_borders}{Whether or not to show border lines in barplot}
 
-\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the annotation}
+\item{in_column_anno_borders}{Whether or not to draw separating lines between the fields in the
+annotation}
 }
 \value{
 The generated barplot - a ggplot2 plot
@@ -51,8 +52,5 @@ Wrapper for enhanced_barplot
                    chosen_signatures_indices_df,
                    COSMIC_subgroups_df)  
  
-}
-\seealso{
-\code{\link{enhanced_barplot}}
 }
 

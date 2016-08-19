@@ -75,7 +75,7 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
                                       start.field=in_start.field,
                                       end.field=in_end.field,
                                       strand.field=in_strand.field)
-    if(!("+" %in% unique(strand(my_gr))) & !("-" %in% unique(strand(my_gr)))) {
+    if(!("+" %in% unique(strand(my_gr))) & !("-" %in% unique(strand(my_gr)))){
       strand(my_gr) <- "+"
       if(verbose_flag==1){
         cat("YAPSA:::makeVRangesFromDataFrame::warning:strand ",
@@ -116,8 +116,8 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
     } else if("subgroup" %in% name_list) {
       if(verbose_flag==1){
         cat(paste0("YAPSA:::makeVRangesFromDataFrame::warning:",
-                   "in_subgroup.field not a valid column name,",
-                   " but default is valid. Retrieving subgroup information.\n"))
+                   "in_subgroup.field not a valid column name, ",
+                   "but default is valid. Retrieving subgroup information.\n"))
       }
       out_vr$Type <- my_gr$subgroup
     } else {
@@ -181,8 +181,6 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
 #' }
 #' 
 #' @examples
-#' NULL
-#' \dontrun{
 #'  library(BSgenome.Hsapiens.UCSC.hg19)
 #'  data(lymphoma_test)
 #'  data(sigs)
@@ -211,7 +209,6 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
 #'    in_verbose=1,in_rownames=rownames(AlexCosmicValid_sig_df)) 
 #'  dim(other_list$matrix)
 #'  head(other_list$matrix)
-#' }
 #' 
 #' @seealso \code{\link[SomaticSignatures]{mutationContext}}
 #' @seealso \code{\link[SomaticSignatures]{motifMatrix}}
@@ -233,7 +230,8 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
     cat("YAPSA:::create_mutation_catalogue_from_VR::Extracting mutation ",
         "context for the SNVs from the reference genome...\n");
   }
-  my_motifs <- mutationContext(in_vr, in_refGenome, k=in_wordLength, unify=TRUE)
+  my_motifs <- mutationContext(in_vr, in_refGenome, 
+                               k=in_wordLength, unify=TRUE)
   if ( in_verbose==1 ) {
     cat("YAPSA:::create_mutation_catalogue_from_VR::Building mutational ",
         "catalogue...\n");
@@ -265,10 +263,10 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
       my_rownames <- transform_rownames_MATLAB_to_R(in_rownames,in_wordLength)
       temp_matrix <- matrix(0,nrow=length(my_rownames),ncol=dim(my_matrix)[2])
       match_ind <- match(rownames(my_matrix),my_rownames)
-      if( (length(match_ind) < dim(my_matrix)[1]) | (any(is.na(match_ind))) ) {
+      if( (length(match_ind) < dim(my_matrix)[1]) | (any(is.na(match_ind)))){
         if(in_verbose==1) {
-          cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: my_matrix ",
-              "contains rownames which are not in supplied rownames.\n");
+          cat("YAPSA:::create_mutation_catalogue_from_VR::Warning: my_matrix",
+              " contains rownames which are not in supplied rownames.\n");
         }
       } else {
         temp_colnames <- colnames(my_matrix)
@@ -366,8 +364,6 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
 #' }
 #' 
 #' @examples
-#' NULL
-#' \dontrun{
 #'  library(BSgenome.Hsapiens.UCSC.hg19)
 #'  data(lymphoma_test)
 #'  word_length <- 3
@@ -379,7 +375,6 @@ create_mutation_catalogue_from_VR <- function(in_vr,in_refGenome,in_wordLength,
 #'    this_wordLength = word_length)
 #'    dim(temp_list$matrix)
 #'    head(temp_list$matrix)
-#' }
 #' 
 #' @seealso \code{\link{makeVRangesFromDataFrame}}
 #' @seealso \code{\link{create_mutation_catalogue_from_VR}}
@@ -437,9 +432,6 @@ create_mutation_catalogue_from_df <- function(this_df,
 #' @examples
 #' NULL
 #' 
-#' @seealso \code{\link{transform_rownames_MATLAB_to_R}}
-#' @seealso \code{\link{transform_rownames_nature_to_R}}
-#' 
 #' @export
 #'
 transform_rownames_R_to_MATLAB <- function(in_rownames,wordLength=3) {
@@ -463,26 +455,12 @@ transform_rownames_R_to_MATLAB <- function(in_rownames,wordLength=3) {
 
 #' Change rownames from one naming convention to another
 #'
-#' Rownames or names of the features used differ between the different contexts
-#' a signature analysis is carried out in. The function
-#' \code{transform_rownames_MATLAB_to_R} changes from the convention used in
-#' Alexandrov et al. in the MATLAB framework to the one used by the YAPSA
-#' pacakge.
-#'
-#' @param in_rownames 
-#'  Character vector of input rownames
-#' @param wordLength 
-#'  Size of the considered motif context
-#'
-#' @return A character vector of the translated rownames.
-#' 
-#' @examples
-#' NULL
-#' 
-#' @seealso \code{\link{transform_rownames_R_to_MATLAB}}
-#' @seealso \code{\link{transform_rownames_nature_to_R}}
+#' The function \code{transform_rownames_MATLAB_to_R} changes from the 
+#' convention used in Alexandrov et al. in the MATLAB framework to the one used
+#' by the YAPSA pacakge.
 #' 
 #' @export
+#' @rdname transform_rownames_R_to_MATLAB
 #'
 transform_rownames_MATLAB_to_R <- function(in_rownames,wordLength=3) {
   out_rownames <- in_rownames
@@ -504,26 +482,12 @@ transform_rownames_MATLAB_to_R <- function(in_rownames,wordLength=3) {
 
 #' Change rownames from one naming convention to another
 #'
-#' Rownames or names of the features used differ between the different contexts
-#' a signature analysis is carried out in. The function
-#' \code{transform_rownames_MATLAB_to_R} changes from the convention used in
-#' stored mutational catalogues by Alexandrov et al. to the one used by the 
-#' YAPSA pacakge.
+#' The function \code{transform_rownames_MATLAB_to_R} changes from the 
+#' convention used in stored mutational catalogues by Alexandrov et al. to the 
+#' one used by the YAPSA pacakge.
 #'
-#' @param in_rownames 
-#'  Character vector of input rownames
-#' @param wordLength 
-#'  Size of the considered motif context
-#'
-#' @return A character vector of the translated rownames.
-#' 
-#' @examples
-#' NULL
-#' 
-#' @seealso \code{\link{transform_rownames_R_to_MATLAB}}
-#' @seealso \code{\link{transform_rownames_MATLAB_to_R}}
-#' 
 #' @export
+#' @rdname transform_rownames_R_to_MATLAB
 #'
 transform_rownames_nature_to_R <- function(in_rownames,wordLength=3) {
   out_rownames <- in_rownames
@@ -545,26 +509,12 @@ transform_rownames_nature_to_R <- function(in_rownames,wordLength=3) {
 
 #' Change rownames from one naming convention to another
 #'
-#' Rownames or names of the features used differ between the different contexts
-#' a signature analysis is carried out in. The function
-#' \code{transform_rownames_YAPSA_to_deconstructSigs} changes from the 
-#' convention used in the YAPSA package to the one used by the deconstructSigs
-#' pacakge.
+#' The function \code{transform_rownames_YAPSA_to_deconstructSigs} changes from
+#' the convention used in the YAPSA package to the one used by the 
+#' deconstructSigs package.
 #'
-#' @param in_rownames 
-#'  Character vector of input rownames
-#' @param wordLength 
-#'  Size of the considered motif context
-#'
-#' @return A character vector of the translated rownames.
-#' 
-#' @examples
-#' NULL
-#' 
-#' @seealso \code{\link{transform_rownames_R_to_MATLAB}}
-#' @seealso \code{\link{transform_rownames_MATLAB_to_R}}
-#' 
 #' @export
+#' @rdname transform_rownames_R_to_MATLAB
 #'
 transform_rownames_YAPSA_to_deconstructSigs <- function(in_rownames,
                                                         wordLength=3) {
@@ -587,26 +537,12 @@ transform_rownames_YAPSA_to_deconstructSigs <- function(in_rownames,
 
 #' Change rownames from one naming convention to another
 #'
-#' Rownames or names of the features used differ between the different contexts
-#' a signature analysis is carried out in. The function
-#' \code{transform_rownames_YAPSA_to_deconstructSigs} changes from the 
-#' convention used in the deconstructSigs package to the one used by the YAPSA
-#' pacakge.
+#' The function \code{transform_rownames_YAPSA_to_deconstructSigs} changes from
+#' the convention used in the deconstructSigs package to the one used by the 
+#' YAPSA pacakge.
 #'
-#' @param in_rownames 
-#'  Character vector of input rownames
-#' @param wordLength 
-#'  Size of the considered motif context
-#'
-#' @return A character vector of the translated rownames.
-#' 
-#' @examples
-#' NULL
-#' 
-#' @seealso \code{\link{transform_rownames_R_to_MATLAB}}
-#' @seealso \code{\link{transform_rownames_MATLAB_to_R}}
-#' 
 #' @export
+#' @rdname transform_rownames_R_to_MATLAB
 #'
 transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,
                                                         wordLength=3) {
@@ -641,8 +577,8 @@ transform_rownames_deconstructSigs_to_YAPSA <- function(in_rownames,
 #'  Whether to rescale the counts after adaption or not. Default is true.
 #'
 #' @return
-#'  The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, but
-#'  with rownames transformed back to the convention of the input
+#'  The matrix returned by \code{\link[SomaticSignatures]{normalizeMotifs}}, 
+#'  but with rownames transformed back to the convention of the input
 #'  
 #' @examples
 #'  NULL
@@ -667,28 +603,8 @@ normalizeMotifs_otherRownames <- function(in_matrix,
 }
 
 
-#' Extend a list of mutational catalogues to consistent dimensions
-#' 
-#' In the stratification procedure, after having run
-#' \code{\link{stratify_and_create_mutational_catalogue}}, the dimensions,
-#' especially the number of columns (corresponding to the number of PIDs
-#' or samples) of the catalogues for the different strata need not agree.
-#' This function accounts for that and adds zero columns where necessary.
-#' 
-#' @param in_all_list
-#'  A list of \code{s} lists, where \code{s is the number of strata}.
-#'  Every entry corresponds to one result of
-#'  \code{\link{create_mutation_catalogue_from_df}}
-#' @param in_merged_results_list
-#'  Data structure from an analysis without stratification, used here only
-#'  to get the correct dimensions, especially the correct number of columns.
-#' @return A list of numerical data frames with the adjusted stratified
-#' mutational catalogues
-#' 
-#' @seealso \code{\link{stratify_and_create_mutational_catalogue}}
-#' 
-adjust_number_of_columns_in_list_of_catalogues <- function(in_all_list,
-                                                           in_merged_results_list) {
+adjust_number_of_columns_in_list_of_catalogues <- 
+  function(in_all_list, in_merged_results_list) {
   out_list <- list()
   number_of_strata <- length(in_all_list$results_lists_list)
   reference_matrix <- in_merged_results_list$matrix
@@ -710,8 +626,8 @@ save_mutation_catalogue <- function(in_table,in_matrix,in_frame,
                                     in_verbose) {
   type_df <- aggregate(data=in_table,subgroup~PID, function(l) return(l[1]))
   if (dim(type_df)[1] != length(colnames(in_matrix))) {
-    cat("YAPSA:::save_mutation_catalogue::Warning: mismatch between subgroup ",
-        "information and colnames(in_matrix).\n");
+    cat("YAPSA:::save_mutation_catalogue::Warning: mismatch between subgroup",
+        " information and colnames(in_matrix).\n");
   }
   subgroup_vector <- rep("dummy",dim(in_matrix)[2])
   if (in_subgroup_flag==1) {
@@ -739,60 +655,6 @@ save_mutation_catalogue <- function(in_table,in_matrix,in_frame,
 }
 
 
-#' Stratify a vcf-like data frame
-#'
-#' Function to cut a big vcf-like data frame \code{T} into a collection of
-#' different strata, i.e. smaller vcf-like data frames \code{Ti}, according
-#' to some attribution in a specified field or column.
-#'
-#' @param in_table 
-#'  A big dataframe \code{T} constructed from a vcf-like file of a whole 
-#'  cohort. The first columns are those of a standard vcf file, followed by
-#'  an arbitrary number of custom or user defined columns. One of these
-#'  can carry a PID (patient or sample identifyier) and one must be the
-#'  category used for stratification.
-#' @param in_column_name
-#'  Name of the column in \code{in_table} which is going to be used for
-#'  stratification
-#' @param in_verbose
-#'  Verbose if \code{in_verbose=1}
-#'
-#' @return A list with entries
-#'  \code{table_list} and
-#'  \code{name_list}.
-#' \itemize{
-#'  \item \code{table_list}:
-#'    This is a list of \code{s} dataframes \code{Ti}, where \code{s} is
-#'    the number of strata. The concatenation of all elements of
-#'    \code{table_list} would yield a reordered version of \code{in_table}
-#'  \item \code{name_list}:
-#'    A list of the names of the different strata equivalent
-#'    to \code{unique(in_table[,in_column_name])}
-#' }
-#' 
-#' @examples
-#' NULL
-#' \dontrun{
-#'  data(lymphoma_test)
-#'  strata_list <- cut_breaks_as_intervals(
-#'    lymphoma_test_df$random_norm,
-#'    in_outlier_cutoffs=c(-4,4),
-#'    in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-#'    in_labels=c("small","intermediate","big"))
-#'  lymphoma_test_df$random_cat <- strata_list$category_vector
-#'  stratification_list <- stratify_vcf_like_df(lymphoma_test_df,"random_cat",
-#'                                              in_verbose=0)
-#'  stratification_list$name_list
-#'  for (i in seq_len(3)){
-#'    cat("\nStratum ",i,"\n")
-#'    cat(dim(stratification_list$table_list[[i]]),"\n")
-#'  }
-#' }
-#' 
-#' @seealso \code{\link{stratify_and_create_mutational_catalogue}}
-#' 
-#' @export
-#' 
 stratify_vcf_like_df <- function(in_table,in_column_name,in_verbose=0) {
   out_table_list <- list()
   out_name_list <- list()
@@ -819,6 +681,7 @@ stratify_vcf_like_df <- function(in_table,in_column_name,in_verbose=0) {
   return(list(table_list=out_table_list,name_list=out_name_list))
 }
 
+
 save_stratified_vcf_like_df <- function(in_table_list,in_name_list,
                                         in_target_dir,in_verbose) {
   number_of_strata <- length(in_table_list)
@@ -840,7 +703,8 @@ save_stratified_vcf_like_df <- function(in_table_list,in_name_list,
     }
     file_name <- paste0(subDir,"/somatic_SNVs_",temp_name,".tsv")
     names(temp_table) <- sub("X.CHROM","\\#CHROM",names(temp_table))
-    write.table(temp_table,file=file_name,sep="\t",quote =FALSE,row.names=FALSE)
+    write.table(temp_table, file=file_name,sep="\t",
+                quote =FALSE, row.names=FALSE)
     temp_dir <- file.path(in_target_dir, "strata", temp_name)
     dir.create(temp_dir)
   }    
@@ -848,126 +712,12 @@ save_stratified_vcf_like_df <- function(in_table_list,in_name_list,
 }
 
 
-#' Stratify a mutational catalogue and create the data structure
-#'
-#' Wrapper function. It first calls
-#' \itemize{
-#'  \item \code{\link{stratify_vcf_like_df}}, then
-#'  \item \code{save_stratified_vcf_like_df}, then
-#'  \item \code{\link{create_mutation_catalogue_from_df}}
-#'    iteratively and finally
-#'  \item \code{save_mutation_catalogue}
-#' }
-#'
-#' @param our_table 
-#'  A big dataframe \code{T} constructed from a vcf-like file of a whole 
-#'  cohort. The first columns are those of a standard vcf file, followed by
-#'  an arbitrary number of custom or user defined columns. One of these
-#'  can carry a PID (patient or sample identifyier) and one must be the
-#'  category used for stratification.
-#' @param our_column_name
-#'  Name of the column in \code{in_table} which is going to be used for
-#'  stratification
-#' @param vcf_target_dir
-#'  Path to the directory where the stratified vcf-like data frames should
-#'  be saved if non-NULL
-#' @param strata_target_dir
-#'  Path to the directory where the stratified mutational catalogues should
-#'  be saved if non-NULL
-#' @param our_refGenome_Seqinfo
-#'  A seqInfo object, referring to the reference genome used.
-#'  Argument passed on to \code{\link{makeVRangesFromDataFrame}} and thus 
-#'  indirectly to \code{\link{makeGRangesFromDataFrame}}.
-#' @param our_seqnames.field
-#'  Indicates the name of the column in which the chromosome is encoded
-#' @param our_start.field
-#'  Indicates the name of the column in which the start coordinate is
-#'  encoded
-#' @param our_end.field
-#'  Indicates the name of the column in which the end coordinate is
-#'  encoded
-#' @param our_PID.field
-#'  Indicates the name of the column in which the PID (patient or sample
-#'  identifier) is encoded
-#' @param our_subgroup.field
-#'  Indicates the name of the column in which the subgroup information
-#'  is encoded
-#' @param our_refGenome
-#'  FaFile of the reference genome used.
-#' @param our_wordLength
-#'  Integer number defining the length of the features or motifs, e.g. 3 for
-#'  tripletts or 5 for pentamers
-#' @param in_verbose
-#'  Verbose if \code{in_verbose=1}
-#' @param our_rownames
-#'  Optional parameter to specify rownames of the mutational catalogue \code{V}
-#'  i.e. the names of the features.
-#'
-#' @return A list with entries
-#'  \code{table_list},
-#'  \code{name_list} and
-#'  \code{results_lists_list}.
-#' \itemize{
-#'  \item \code{table_list}:
-#'    This is a list of \code{s} dataframes \code{Ti}, where \code{s} is
-#'    the number of strata. The concatenation of all elements of
-#'    \code{table_list} would yield a reordered version of \code{our_table}.
-#'    \code{table_list} is directly taken from the result of
-#'    \code{\link{stratify_vcf_like_df}}
-#'  \item \code{name_list}:
-#'    A list of the names of the different strata equivalent
-#'    to \code{unique(in_table[,in_column_name])}
-#'  \item \code{results_lists_list}
-#'    A list of \code{s} lists, where \code{s is the number of strata}.
-#'    Every entry corresponds to one result of
-#'    \code{\link{create_mutation_catalogue_from_df}}
-#' }
-#' 
-#' @examples
-#' NULL
-#' \dontrun{
-#'  library(BSgenome.Hsapiens.UCSC.hg19)
-#'  data(lymphoma_test)
-#'  word_length <- 3
-#'  strata_list <- cut_breaks_as_intervals(
-#'    lymphoma_test_df$random_norm,
-#'    in_outlier_cutoffs=c(-4,4),
-#'    in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
-#'    in_labels=c("small","intermediate","big"))
-#'  lymphoma_test_df$random_cat <- strata_list$category_vector
-#'  temp_list <- stratify_and_create_mutational_catalogue(
-#'    lymphoma_test_df,"random_cat",
-#'    vcf_target_dir=NULL,strata_target_dir=NULL,
-#'    our_refGenome_Seqinfo=NULL,
-#'    our_seqnames.field="CHROM",our_start.field="POS",
-#'    our_end.field="POS",our_PID.field="PID",
-#'    our_subgroup.field="SUBGROUP",
-#'    our_refGenome=BSgenome.Hsapiens.UCSC.hg19,
-#'    our_wordLength=word_length,in_verbose=1,our_rownames=c())
-#'  temp_list$name_list
-#'  names(temp_list$results_lists_list[[1]])
-#' }
-#' 
-#' @seealso \code{\link{stratify_vcf_like_df}}
-#' @seealso \code{save_stratified_vcf_like_df}
-#' @seealso \code{\link{create_mutation_catalogue_from_df}}
-#' @seealso \code{save_mutation_catalogue}
-#' 
-#' @export
-#' 
-stratify_and_create_mutational_catalogue <- function(our_table,our_column_name,
-                                                     vcf_target_dir,
-                                                     strata_target_dir,
-                                                     our_refGenome_Seqinfo,
-                                                     our_seqnames.field="X.CHROM",
-                                                     our_start.field="POS",
-                                                     our_end.field="POS",
-                                                     our_PID.field="PID",
-                                                     our_subgroup.field="subgroup",
-                                                     our_refGenome,
-                                                     our_wordLength,
-                                                     in_verbose=1,
-                                                     our_rownames=c()) {
+stratify_and_create_mutational_catalogue <- 
+  function(our_table, our_column_name, vcf_target_dir, strata_target_dir,
+           our_refGenome_Seqinfo, our_seqnames.field="X.CHROM",
+           our_start.field="POS", our_end.field="POS", our_PID.field="PID",
+           our_subgroup.field="subgroup", our_refGenome, our_wordLength,
+           in_verbose=1, our_rownames=c()) {
   results_lists_list <- list()
   results_list <- stratify_vcf_like_df(our_table,our_column_name,in_verbose)
   table_list <- results_list$table_list
@@ -1059,9 +809,7 @@ stratify_and_create_mutational_catalogue <- function(our_table,our_column_name,
 #'    in_outlier_cutoffs=c(-4,4),
 #'    in_cutoff_ranges_list=list(c(-2.5,-1.5),c(0.5,1.5)),
 #'    in_labels=c("small","intermediate","big"))
-#'  \dontrun{
 #'   temp_list$density_plot
-#'  }
 #' 
 #' @seealso \code{\link{cut}}
 #' @seealso \code{\link[stats]{density}}
@@ -1355,7 +1103,8 @@ aggregate_exposures_by_category <- function(
     rownames(temp_aggregate_exposures) <- temp_aggregate_exposures$cat
     temp_aggregate_exposures$cat <- NULL
     ## normalize exposures
-    norm_aggregate_exposures <- normalize_df_per_dim(temp_aggregate_exposures,2)
+    norm_aggregate_exposures <- 
+      normalize_df_per_dim(temp_aggregate_exposures, 2)
     ## process sig_ind_df
     names(in_sig_ind_df) <- gsub(in_category,"cat",names(in_sig_ind_df))
     out_sig_ind_df <- aggregate(.~cat,data=in_sig_ind_df,FUN=head,1)

@@ -25,18 +25,19 @@ A list with entries
  \code{kruskal_posthoc_list},
 \itemize{
  \item \code{kruskal_df}:
-   A data frame containing results (statistic and p values) of the Kruskal Wallis
-   tests (tests for enrichment or depletion in the different strata for every
-   signature independently).
+   A data frame containing results (statistic and p values) of the Kruskal 
+   Wallis tests (tests for enrichment or depletion in the different strata 
+   for every signature independently).
  \item \code{kruskal_posthoc_list}:
-   A list of results of pairwise posthoc tests carried out for those signatures
-   where the Kruskal Wallis test yielded a significant p-value (carried out by
-   \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}).
+   A list of results of pairwise posthoc tests carried out for those 
+   signatures where the Kruskal Wallis test yielded a significant p-value 
+   (carried out by \code{\link[PMCMR]{posthoc.kruskal.nemenyi.test}}).
 }
 }
 \description{
 Apply Kruskal-Wallis tests to detect differences in the signature exposures
-between different subgroups. Uses \code{\link{split_exposures_by_subgroups}}.
+between different subgroups. Uses 
+\code{\link{split_exposures_by_subgroups}}.
 Algorithm analogous to \code{\link{stat_test_SMC}}.
 }
 \examples{

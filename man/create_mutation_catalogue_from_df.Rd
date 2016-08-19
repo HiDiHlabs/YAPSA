@@ -71,8 +71,6 @@ it first creates a VRanges object from the data frame by
 above mentioned custom function.
 }
 \examples{
-NULL
-\dontrun{
  library(BSgenome.Hsapiens.UCSC.hg19)
  data(lymphoma_test)
  word_length <- 3
@@ -84,7 +82,6 @@ NULL
    this_wordLength = word_length)
    dim(temp_list$matrix)
    head(temp_list$matrix)
-}
 
 }
 \seealso{
