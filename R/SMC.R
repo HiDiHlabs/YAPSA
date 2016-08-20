@@ -110,8 +110,8 @@
 #'                 %in% unique(lymphoma_test_df$PID))
 #'  lymphoma_test_exposures_df <- 
 #'    lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
-#'  temp_subgroups_df <- make_subgroups_df(lymphoma_test_exposures_df,
-#'                                         lymphoma_test_df)
+#'  temp_subgroups_df <- make_subgroups_df(lymphoma_test_df,
+#'                                         lymphoma_test_exposures_df)
 #'  mut_density_list <- run_SMC(lymphoma_test_df,
 #'                              AlexCosmicValid_sig_df,
 #'                              AlexCosmicValid_sigInd_df,

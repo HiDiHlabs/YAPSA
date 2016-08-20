@@ -807,8 +807,8 @@ belongs to which subgroup):
 
 ```{r make_subgroups_df_LCD}
 COSMIC_subgroups_df <- 
-  make_subgroups_df(lymphomaNature2013_COSMICExposures_df,
-                    lymphoma_Nature2013_df)
+  make_subgroups_df(lymphoma_Nature2013_df,
+                    lymphomaNature2013_COSMICExposures_df)
 ```
 
 The resulting signature exposures can be plotted using custom plotting 
@@ -859,8 +859,8 @@ already determined one):
 
 ```{r apply_make_subgroups_df_cutoffZero}
 COSMIC_subgroups_df <- 
-  make_subgroups_df(CosmicValid_cutoffZero_LCDlist$exposures,
-                    lymphoma_Nature2013_df)
+  make_subgroups_df(lymphoma_Nature2013_df,
+                    CosmicValid_cutoffZero_LCDlist$exposures)
 ```
 
 And if we plot this, we obtain:

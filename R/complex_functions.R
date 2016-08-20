@@ -92,18 +92,21 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
       column_ind <- 
         min(which(tolower(names(mcols(my_gr)))==tolower(in_PID.field)))
       out_vr$PID <- mcols(my_gr)[,column_ind]
+      sampleNames(out_vr) <- mcols(my_gr)[,column_ind]
     } else if("pid" %in% name_list) {
       if(verbose_flag==1){
         cat(paste0("YAPSA:::makeVRangesFromDataFrame::warning:in_PID.field ",
                    "not a valid column name,",
                    " but default is valid. Retrieving PID information.\n"))
       }
-      out_vr$PID <- my_gr$PID
+      out_vr$PID <- mcols(my_gr)[,"PID"]
+      sampleNames(out_vr) <- mcols(my_gr)[,column_ind]
     } else {
       if(verbose_flag==1){
         cat("YAPSA:::makeVRangesFromDataFrame::warning:PID information ",
             "missing. Filling up with dummy entries.\n");}
       out_vr$PID <- "dummy_PID"
+      sampleNames(out_vr) <- "dummyPID"
     }
     if(tolower(in_subgroup.field) %in% name_list) {
       if(verbose_flag==1){
@@ -112,19 +115,22 @@ makeVRangesFromDataFrame <- function(in_df,in_keep.extra.columns=TRUE,
       }
       column_ind <- 
         min(which(tolower(names(mcols(my_gr)))==tolower(in_subgroup.field)))
-      out_vr$Type <- mcols(my_gr)[,column_ind]
+      #out_vr$Type <- mcols(my_gr)[,column_ind]
+      mcols(out_vr)[,in_subgroup.field] <- mcols(my_gr)[,column_ind]
     } else if("subgroup" %in% name_list) {
       if(verbose_flag==1){
         cat(paste0("YAPSA:::makeVRangesFromDataFrame::warning:",
                    "in_subgroup.field not a valid column name, ",
                    "but default is valid. Retrieving subgroup information.\n"))
       }
-      out_vr$Type <- my_gr$subgroup
+      #out_vr$Type <- my_gr$subgroup
+      mcols(out_vr)[,in_subgroup.field] <- my_gr$subgroup
     } else {
       if(verbose_flag==1){cat("YAPSA:::makeVRangesFromDataFrame::warning:",
                               "subgroup information missing. ",
                               "Filling up with dummy entries.\n");}
-      out_vr$Type <- "dummy_subgroup"
+      #out_vr$Type <- "dummy_subgroup"
+      mcols(out_vr)[,in_subgroup.field] <- "dummy_subgroup"
     }
     seqlengths(out_vr) <- seqlengths(my_gr)    
   } else {

@@ -4,13 +4,14 @@
 \alias{make_subgroups_df}
 \title{Make a custom data structure for subgroups}
 \usage{
-make_subgroups_df(in_exposures_df, in_vcf_like_df, in_palette = NULL,
-  in_subgroup.field = "SUBGROUP", in_PID.field = "PID")
+make_subgroups_df(in_vcf_like_df, in_exposures_df = NULL, in_palette = NULL,
+  in_subgroup.field = "SUBGROUP", in_PID.field = "PID",
+  in_verbose = FALSE)
 }
 \arguments{
-\item{in_exposures_df}{Data frame with the signature exposures}
-
 \item{in_vcf_like_df}{vcf-like data frame with point mutation calls}
+
+\item{in_exposures_df}{Data frame with the signature exposures}
 
 \item{in_palette}{Palette for colour attribution to the subgroups if nun-NULL}
 
@@ -19,6 +20,8 @@ subgroup information}
 
 \item{in_PID.field}{String indicating which column of \code{in_vcf_like_df} and of 
 \code{in_exposures_df} carries the PID information}
+
+\item{in_verbose}{Whether verbose or not.}
 }
 \value{
 subgroups_df:
@@ -36,7 +39,7 @@ which the PIDs have to be displayed. Calls \code{\link{aggregate}} on
                 \%in\% unique(lymphoma_test_df$PID))
  lymphoma_test_exposures_df <- 
    lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
- make_subgroups_df(lymphoma_test_exposures_df,lymphoma_test_df)
+ make_subgroups_df(lymphoma_test_df,lymphoma_test_exposures_df)
 
 }
 \seealso{

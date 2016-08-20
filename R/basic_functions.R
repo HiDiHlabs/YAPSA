@@ -819,10 +819,10 @@ annotate_intermut_dist_cohort <- function(in_dat, in_CHROM.field = "CHROM",
 #' which the PIDs have to be displayed. Calls \code{\link{aggregate}} on 
 #' \code{in_vcf_like_df}.
 #'
-#' @param in_exposures_df
-#'  Data frame with the signature exposures
 #' @param in_vcf_like_df
 #'  vcf-like data frame with point mutation calls
+#' @param in_exposures_df
+#'  Data frame with the signature exposures
 #' @param in_palette
 #'  Palette for colour attribution to the subgroups if nun-NULL
 #' @param in_subgroup.field
@@ -831,6 +831,8 @@ annotate_intermut_dist_cohort <- function(in_dat, in_CHROM.field = "CHROM",
 #' @param in_PID.field
 #'  String indicating which column of \code{in_vcf_like_df} and of 
 #'  \code{in_exposures_df} carries the PID information
+#' @param in_verbose
+#'  Whether verbose or not. 
 #'  
 #' @return subgroups_df:
 #'  A data frame carrying the subgroup and rank information.
@@ -842,17 +844,37 @@ annotate_intermut_dist_cohort <- function(in_dat, in_CHROM.field = "CHROM",
 #'                 %in% unique(lymphoma_test_df$PID))
 #'  lymphoma_test_exposures_df <- 
 #'    lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
-#'  make_subgroups_df(lymphoma_test_exposures_df,lymphoma_test_df)
+#'  make_subgroups_df(lymphoma_test_df,lymphoma_test_exposures_df)
 #' 
 #' @seealso \code{\link{aggregate}}
 #' 
 #' @export
 #' 
-make_subgroups_df <- function(in_exposures_df,
-                              in_vcf_like_df,
-                              in_palette=NULL,
+make_subgroups_df <- function(in_vcf_like_df,
+                              in_exposures_df = NULL,
+                              in_palette = NULL,
                               in_subgroup.field="SUBGROUP",
-                              in_PID.field="PID"){
+                              in_PID.field="PID", in_verbose = FALSE){
+  # account for input data type
+  if(!(inherits(in_vcf_like_df, "VRanges")) & 
+     !(inherits(in_vcf_like_df, "data.frame"))){
+    if(in_verbose) cat("YAPSA:::make_subgroups_df::warning: Input is neither ",
+                       "a VRanges object nor a data frame. Return NULL.\n")
+    return(NULL)
+  }
+  if(inherits(in_vcf_like_df, "VRanges")) {
+    choice_column_vector <- c("seqnames", "start", "ref", "alt",
+                              in_subgroup.field, in_PID.field)
+    in_vcf_like_df <- as.data.frame(in_vcf_like_df)
+    colum_names <- intersect(names(in_vcf_like_df),choice_column_vector)
+    in_vcf_like_df <- in_vcf_like_df[,colum_names]
+    names(in_vcf_like_df) <- 
+      gsub("seqnames", "CHROM", names(in_vcf_like_df))
+    names(in_vcf_like_df) <- 
+      gsub("start", "POS", names(in_vcf_like_df))
+    names(in_vcf_like_df) <- gsub("ref", "REF", names(in_vcf_like_df))
+    names(in_vcf_like_df) <- gsub("alt", "ALT", names(in_vcf_like_df))
+  }
   ## 1. rename the colnames in in_vcf_like_df if necessary to be able to run
   ## the aggregate command later
   subgroup_ind <- which(names(in_vcf_like_df)==in_subgroup.field)
@@ -860,9 +882,16 @@ make_subgroups_df <- function(in_exposures_df,
   PID_ind <- which(names(in_vcf_like_df)==in_PID.field)
   names(in_vcf_like_df)[PID_ind] <- "PID"
   ## 2. start work
-  this_sum_df <- data.frame(sum=apply(in_exposures_df,2,sum))
   out_subgroups_df <- aggregate(SUBGROUP~PID,data=in_vcf_like_df,
                                    function(l) return(l[1]))
+  if(!is.null(in_exposures_df)) 
+    this_sum_df <- data.frame(sum=apply(in_exposures_df,2,sum))
+  else {
+    this_sum_df <- as.data.frame(table(in_vcf_like_df[,PID_ind]))
+    rownames(this_sum_df) <- this_sum_df[,1]
+    names(this_sum_df)[2] <- "sum"
+    this_sum_df[,1] <- NULL
+  }
   out_subgroups_df <- merge(out_subgroups_df, this_sum_df,
                             by.x=in_PID.field,by.y=0)
   max_total_count <- max(out_subgroups_df$sum)

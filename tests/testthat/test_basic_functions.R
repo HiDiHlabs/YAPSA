@@ -266,7 +266,7 @@ test_that("Test make_subgroups_df with real data",{
   lymphoma_test_exposures_df <- 
     lymphoma_Nature2013_COSMIC_cutoff_exposures_df[,choice_ind]
   test_subgroups_df <- 
-    make_subgroups_df(lymphoma_test_exposures_df, lymphoma_test_df)
+    make_subgroups_df(lymphoma_test_df, lymphoma_test_exposures_df)
   real_subgroups_df <- aggregate(SUBGROUP~PID, data = lymphoma_test_df,
                                  function(l) return(l[1]))
   real_subgroups_df[,2] <- as.character(real_subgroups_df[,2])
